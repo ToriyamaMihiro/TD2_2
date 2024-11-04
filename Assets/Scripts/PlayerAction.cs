@@ -46,7 +46,7 @@ public class PlayerAction : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
         }
 
-        //神ゲー作ろう
+        //神ゲーつくった
     }
 
     //地面に付いているかの判定
