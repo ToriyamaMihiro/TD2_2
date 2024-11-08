@@ -23,5 +23,32 @@ public class SceanManaer : MonoBehaviour
 
             SceneManager.LoadScene(nowSceneIndexNumber);
         }
+        if (SceneManager.GetActiveScene().name == "Title")
+        {
+            //タイトルからゲームへ
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene(++nowSceneIndexNumber);
+            }
+        }
+        if (SceneManager.GetActiveScene().name == "Game")
+        {
+            PlayerAction player;
+            GameObject obj = GameObject.Find("Player");
+            player = obj.GetComponent<PlayerAction>();
+
+            //プレイヤーかボスが死んだらリザルト画面へ
+            if (player.isDead)
+            {
+                SceneManager.LoadScene(++nowSceneIndexNumber);
+            }
+        }
+        if (SceneManager.GetActiveScene().name == "Result")
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene("Title");
+            }
+        }
     }
 }
