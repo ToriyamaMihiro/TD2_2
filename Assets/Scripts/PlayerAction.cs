@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine;
 public class PlayerAction : MonoBehaviour
 {
     private Rigidbody2D rb;
-
+    public SpriteRenderer playerRenderer;
 
 
     public Vector3 direction;
@@ -17,9 +18,11 @@ public class PlayerAction : MonoBehaviour
     public float dashPower = 5;
 
     public int dashTime;
+    int life = 10;
 
     public bool isDash;
-
+    public bool isDead;
+    bool isHit;
 
 
 
@@ -27,7 +30,8 @@ public class PlayerAction : MonoBehaviour
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
-        direction = transform.right;
+        playerRenderer = gameObject.GetComponent<SpriteRenderer>();
+        direction = transform.right;//初期の向いている向き
     }
 
     // Update is called once per frame
@@ -37,6 +41,7 @@ public class PlayerAction : MonoBehaviour
         Jump();
         isGround();
         DashAttack();
+        Damage();
     }
 
     void Move()
@@ -120,5 +125,47 @@ public class PlayerAction : MonoBehaviour
         }
     }
 
+    void Damage()
+    {
+        if (isHit)
+        {
+            //プレイヤーの色を点滅させて無敵時間だと分かりやすくする
+            float level = Mathf.Abs(Mathf.Sin(Time.time * 10));
+            gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, level);
+        }
+    }
 
+    //無敵時間
+    IEnumerator WaitForIt()
+    {
+        // 3�b�ԏ������~�߂�
+        yield return new WaitForSeconds(1.0f);
+
+        //�P�b��_���[�W�t���O��false�ɂ��ē_�ł�߂�
+        isHit = false;
+        //プレイヤーの色を元に戻す
+        playerRenderer.color = new Color(1f, 1f, 1f, 1f);
+    }
+
+    void Dead()
+    {
+        if (life <= 0)
+        {
+            isDead = true;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Boss")
+        {
+            if (!isHit)
+            {
+                //一定時間無敵になる
+                StartCoroutine("WaitForIt");
+                life -= 1;
+                isHit = true;
+            }
+        }
+    }
 }
