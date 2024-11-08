@@ -63,7 +63,7 @@ public class AttackAction : MonoBehaviour
 
     void DashAttack()
     {
-        if (Input.GetKeyDown(KeyCode.C) && !isDashAttack)
+        if (Input.GetKeyDown(KeyCode.X) && !isDashAttack)
         {
             weponPos = transform.position;
             isDashAttack = true;

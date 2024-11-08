@@ -93,7 +93,7 @@ public class PlayerAction : MonoBehaviour
 
     void DashAttack()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.C))
         {
             //もし右を向いて居たら右にダッシュ
             if (direction == transform.right)
