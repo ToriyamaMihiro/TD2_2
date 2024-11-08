@@ -8,6 +8,8 @@ public class PlayerAction : MonoBehaviour
 {
     private Rigidbody2D rb;
 
+
+
     Vector3 direction;
 
     public float moveSpeed = 3;
@@ -29,22 +31,31 @@ public class PlayerAction : MonoBehaviour
         Move();
         Jump();
         isGround();
+        Attack();
     }
 
     void Move()
     {
+        AttackAction weapon;
+        GameObject obj = GameObject.Find("Weapon");
+        weapon = obj.GetComponent<AttackAction>();
+
         this.GetComponent<Rigidbody2D>().velocity = new Vector2(0, rb.velocity.y);
-
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        //攻撃中でなければ移動できる
+        if (!weapon.isAttack)
         {
-            rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);//y方向は今のvelicityを入れる
-            direction = -transform.right;//左を向いている
-        }
 
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-        {
-            rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
-            direction = transform.right;//右を向いている
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            {
+                rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);//y方向は今のvelicityを入れる
+                direction = -transform.right;//左を向いている
+            }
+
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            {
+                rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+                direction = transform.right;//右を向いている
+            }
         }
     }
 
