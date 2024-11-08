@@ -48,13 +48,13 @@ public class PlayerAction : MonoBehaviour
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
                 rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);//y方向は今のvelicityを入れる
-                direction = -transform.right;//左を向いている
+                transform.rotation = Quaternion.Euler(0, 0, 0);//左向いてる
             }
 
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
-                direction = transform.right;//右を向いている
+                transform.rotation = Quaternion.Euler(0, 180, 0);//右向いてる
             }
         }
     }
