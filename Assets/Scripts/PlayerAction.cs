@@ -14,7 +14,7 @@ public class PlayerAction : MonoBehaviour
 
     public float moveSpeed = 3;
     public float jumpPower = 5;
-    public float dashPower = 10;
+    public float dashPower = 5;
 
     public int dashTime;
 
@@ -112,7 +112,7 @@ public class PlayerAction : MonoBehaviour
         if (isDash)
         {
             dashTime += 1;
-            if (dashTime >= 40)
+            if (dashTime >= 10)
             {
                 isDash = false;
                 dashTime = 0;

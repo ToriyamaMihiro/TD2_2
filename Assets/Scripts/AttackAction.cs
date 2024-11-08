@@ -14,7 +14,7 @@ public class AttackAction : MonoBehaviour
     float movePower = 0.8f;
 
     public int attackTime = 0;
-    public int attackFullTime = 201;//攻撃のリセットの時間
+    public int attackFullTime = 21;//攻撃のリセットの時間
 
     public bool isAttack;
     public bool isDashAttack;

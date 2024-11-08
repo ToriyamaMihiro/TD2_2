@@ -58,8 +58,7 @@ public class BossAction : MonoBehaviour
             weapon = obj.GetComponent<AttackAction>();
 
             //UŒ‚‚ªI‚Á‚½‚çisHit‚ðfalse‚É‚µ‚ÄUŒ‚‚Ì‚½‚Ñ‚ÉƒJƒEƒ“ƒg‚³‚ê‚é‚æ‚¤‚É‚·‚é
-            //isHit‚ðfalse‚É‚·‚é‚æ‚èæ‚Éweapon.attackTime‚ª0‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚Å-1‚µ‚Ä‚¢‚é
-            if (weapon.attackTime >= weapon.attackFullTime - 1)
+            if (!weapon.isAttack && !weapon.isDashAttack)
             {
                 isHit = false;
             }
@@ -85,6 +84,7 @@ public class BossAction : MonoBehaviour
                 {
                     xCount += 1;
                     isHit = true;
+                    Debug.Log(xCount);
                 }
             }
             if (xCount == deformationCount)
