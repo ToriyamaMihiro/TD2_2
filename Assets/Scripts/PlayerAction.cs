@@ -10,10 +10,15 @@ public class PlayerAction : MonoBehaviour
 
 
 
-    Vector3 direction;
+    public Vector3 direction;
 
     public float moveSpeed = 3;
     public float jumpPower = 5;
+    public float dashPower = 10;
+
+    public int dashTime;
+
+    public bool isDash;
 
 
 
@@ -31,7 +36,7 @@ public class PlayerAction : MonoBehaviour
         Move();
         Jump();
         isGround();
-        Attack();
+        DashAttack();
     }
 
     void Move()
@@ -40,21 +45,27 @@ public class PlayerAction : MonoBehaviour
         GameObject obj = GameObject.Find("Weapon");
         weapon = obj.GetComponent<AttackAction>();
 
-        this.GetComponent<Rigidbody2D>().velocity = new Vector2(0, rb.velocity.y);
+        //ダッシュ時もxの値を0にし続けるとxを動かすダッシュができなくなってしまうため
+        if (!isDash)
+        {
+            this.GetComponent<Rigidbody2D>().velocity = new Vector2(0, rb.velocity.y);
+        }
         //攻撃中でなければ移動できる
-        if (!weapon.isAttack)
+        if (!weapon.isAttack && !isDash)
         {
 
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
                 rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);//y方向は今のvelicityを入れる
-                transform.rotation = Quaternion.Euler(0, 0, 0);//左向いてる
+                transform.rotation = Quaternion.Euler(0, 0, 0);//見た目を左向かせる
+                direction = -transform.right;//値的に左を向いている
             }
 
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
-                transform.rotation = Quaternion.Euler(0, 180, 0);//右向いてる
+                transform.rotation = Quaternion.Euler(0, 180, 0);//見た目を右向かせる
+                direction = transform.right;//値的に右を向いている
             }
         }
     }
@@ -80,9 +91,33 @@ public class PlayerAction : MonoBehaviour
 
     }
 
-    void Attack()
+    void DashAttack()
     {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            //もし右を向いて居たら右にダッシュ
+            if (direction == transform.right)
+            {
+                rb.velocity = new Vector2(dashPower, rb.velocity.y);
+            }
+            //もし左を向いて居たら左にダッシュ
+            if (direction == -transform.right)
+            {
+                rb.velocity = new Vector2(-dashPower, rb.velocity.y);
+            }
 
+            isDash = true;
+        }
+        //ダッシュのクールタイム
+        if (isDash)
+        {
+            dashTime += 1;
+            if (dashTime >= 40)
+            {
+                isDash = false;
+                dashTime = 0;
+            }
+        }
     }
 
 
