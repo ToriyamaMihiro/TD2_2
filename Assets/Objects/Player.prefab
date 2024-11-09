@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 923345619784825465}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.312, y: 0.452, z: 0}
-  m_LocalScale: {x: 0.486, y: 1.5, z: 1}
+  m_LocalScale: {x: 0.5, y: 1.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4058622806443748810}
@@ -97,7 +97,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -125,6 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ecc40e2af1e8dd4c9e50de99d3d203a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LDust: {fileID: 7472043042596435002, guid: f96a9ad96a5b08d45a06696bae657013, type: 3}
+  RDust: {fileID: 7638361356168949957, guid: 8efd5b74ca4dbb84a983c5122c2e252d, type: 3}
   attackTime: 0
   attackFullTime: 51
   isAttack: 0
@@ -297,9 +299,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0cf59302306259448966a8e4da59fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerRenderer: {fileID: 0}
   direction: {x: 0, y: 0, z: 0}
   moveSpeed: 3
   jumpPower: 5
   dashPower: 10
   dashTime: 0
   isDash: 0
+  isDead: 0

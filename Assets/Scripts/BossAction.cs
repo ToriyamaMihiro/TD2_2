@@ -9,10 +9,14 @@ public class BossAction : MonoBehaviour
     int yCount;//y方向から受けた回数、横に伸びる
 
     int deformationCount = 3;//変形するまでの回数
+    int life = 100;
+    int dustDamage = 1;
+    int attackDamage = 2;
 
     bool isXDeformation;//X方向に変形したか
     bool isYDeformation;//Y方向に変形したか
     bool isHit;
+    public bool isDead;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +29,7 @@ public class BossAction : MonoBehaviour
     {
         Deformation();
         HitRest();
+        Dead();
     }
 
     //変形
@@ -65,7 +70,15 @@ public class BossAction : MonoBehaviour
         }
     }
 
-    void OnCollisionStay2D(Collision2D collision)
+    void Dead()
+    {
+        if (life <= 0)
+        {
+            isDead = true;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Weapon")
         {
@@ -73,18 +86,20 @@ public class BossAction : MonoBehaviour
             GameObject obj = GameObject.Find("Weapon");
             weapon = obj.GetComponent<AttackAction>();
 
+            //変形のカウント
             if (!isHit)
             {
                 if (weapon.isAttack)
                 {
                     yCount += 1;
+                    life -= attackDamage;
                     isHit = true;
                 }
                 if (weapon.isDashAttack)
                 {
                     xCount += 1;
+                    life -= attackDamage;
                     isHit = true;
-                    Debug.Log(xCount);
                 }
             }
             if (xCount == deformationCount)
@@ -95,6 +110,16 @@ public class BossAction : MonoBehaviour
             {
                 isYDeformation = true;
             }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Dust")
+        {
+            life -= dustDamage;
+            //当たったオブジェクトを削除する
+            Destroy(collision.gameObject);
         }
     }
 }

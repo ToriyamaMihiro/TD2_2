@@ -37,8 +37,12 @@ public class SceanManaer : MonoBehaviour
             GameObject obj = GameObject.Find("Player");
             player = obj.GetComponent<PlayerAction>();
 
+            BossAction boss;
+            GameObject bossObj = GameObject.Find("Boss");
+            boss = bossObj.GetComponent<BossAction>();
+
             //プレイヤーかボスが死んだらリザルト画面へ
-            if (player.isDead)
+            if (player.isDead || boss.isDead)
             {
                 SceneManager.LoadScene(++nowSceneIndexNumber);
             }

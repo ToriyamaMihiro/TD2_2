@@ -8,6 +8,9 @@ public class AttackAction : MonoBehaviour
 
     private Rigidbody2D rb;
 
+    public GameObject LDust;
+    public GameObject RDust;
+
     Vector3 weponPos;//振り下ろす際の位置を取得する
     Vector3 startPos = new Vector3(-1.3f, 0.45f, 0);//初期化用の位置を取得
 
@@ -18,6 +21,7 @@ public class AttackAction : MonoBehaviour
 
     public bool isAttack;
     public bool isDashAttack;
+    bool isFloorHit;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +35,7 @@ public class AttackAction : MonoBehaviour
     {
         Attack();
         DashAttack();
+        DustCall();
     }
 
     void Attack()
@@ -58,7 +63,6 @@ public class AttackAction : MonoBehaviour
                 attackTime = 0;
             }
         }
-
     }
 
     void DashAttack()
@@ -96,6 +100,22 @@ public class AttackAction : MonoBehaviour
                 transform.localPosition = startPos;
                 attackTime = 0;
             }
+        }
+    }
+
+    //床を叩いたらチリを呼び出す
+    void DustCall()
+    {
+
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Floor")
+        {
+            //武器が床に付いたらチリがでる
+            Instantiate(RDust, transform.position, Quaternion.identity);
+            Instantiate(LDust, transform.position, Quaternion.identity);
+
         }
     }
 }
