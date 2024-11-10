@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossAction : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class BossAction : MonoBehaviour
     int dustDamage = 1;
     int attackDamage = 2;
 
+    int currentHp;
+    //Sliderを入れる
+    public Slider slider;
+
     bool isXDeformation;//X方向に変形したか
     bool isYDeformation;//Y方向に変形したか
     bool isHit;
@@ -21,7 +26,10 @@ public class BossAction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        //Sliderを満タンにする。
+        slider.value = 1;
+        //現在のHPを最大HPと同じに。
+        currentHp = life;
     }
 
     // Update is called once per frame
@@ -30,6 +38,8 @@ public class BossAction : MonoBehaviour
         Deformation();
         HitRest();
         Dead();
+        //HP計算
+        slider.value = (float)currentHp / (float)life;
     }
 
     //変形
@@ -72,12 +82,13 @@ public class BossAction : MonoBehaviour
 
     void Dead()
     {
-        if (life <= 0)
+        if (currentHp <= 0)
         {
             isDead = true;
         }
     }
 
+    //変形の処理
     void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Weapon")
@@ -92,13 +103,13 @@ public class BossAction : MonoBehaviour
                 if (weapon.isAttack)
                 {
                     yCount += 1;
-                    life -= attackDamage;
+                    currentHp = currentHp - attackDamage;
                     isHit = true;
                 }
                 if (weapon.isDashAttack)
                 {
                     xCount += 1;
-                    life -= attackDamage;
+                    currentHp = currentHp - attackDamage;
                     isHit = true;
                 }
             }
@@ -113,11 +124,12 @@ public class BossAction : MonoBehaviour
         }
     }
 
+    //Dustのダメージ処理
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Dust")
         {
-            life -= dustDamage;
+            currentHp = currentHp - dustDamage;
             //当たったオブジェクトを削除する
             Destroy(collision.gameObject);
         }

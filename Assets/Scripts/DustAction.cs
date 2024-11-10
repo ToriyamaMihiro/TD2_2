@@ -110,6 +110,7 @@ public class DustAction : MonoBehaviour
     }
 
     //地面に当たったら飛ばせるようにするにした方がいいかも
+    //ボスも同じく当たってからボスにも当たるようにしたほうがよさげ
 
     void OnTriggerEnter2D(Collider2D collision)
     {

@@ -7,6 +7,9 @@ TagManager:
   - Floor
   - Weapon
   - Boss
+  - Dust
+  - Wall
+  - Option
   layers:
   - Default
   - TransparentFX

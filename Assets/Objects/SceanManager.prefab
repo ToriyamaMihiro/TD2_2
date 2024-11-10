@@ -44,3 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7626769d08c6834784186ee2bfc57e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Clear: {fileID: 3334463743355168238, guid: 009d4f5011b133340b0c71389e2aa3cb, type: 3}
+  GameOver: {fileID: 2338878359545318652, guid: b9638f94b6aaa1146a6dd26b26fb382b, type: 3}

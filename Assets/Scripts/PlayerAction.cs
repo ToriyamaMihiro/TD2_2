@@ -18,7 +18,7 @@ public class PlayerAction : MonoBehaviour
     public float dashPower = 5;
 
     public int dashTime;
-    int life = 10;
+    int life = 1;
 
     public bool isDash;
     public bool isDead;
@@ -42,6 +42,7 @@ public class PlayerAction : MonoBehaviour
         isGround();
         DashAttack();
         Damage();
+        Dead();
     }
 
     void Move()
