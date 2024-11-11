@@ -18,8 +18,8 @@ public class BossAction : MonoBehaviour
     //Sliderを入れる
     public Slider slider;
 
-    bool isXDeformation;//X方向に変形したか
-    bool isYDeformation;//Y方向に変形したか
+    public bool isXDeformation;//X方向に変形したか
+    public bool isYDeformation;//Y方向に変形したか
     bool isHit;
     public bool isDead;
 

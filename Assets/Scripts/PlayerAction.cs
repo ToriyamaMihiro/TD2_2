@@ -4,14 +4,18 @@ using System.ComponentModel;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.XR;
 
 public class PlayerAction : MonoBehaviour
 {
     private Rigidbody2D rb;
     public SpriteRenderer playerRenderer;
-
+    private TD2_2 inputAcution;
 
     public Vector3 direction;
+
+    Vector2 inputDirection;
 
     public float moveSpeed = 3;
     public float jumpPower = 5;
@@ -32,6 +36,9 @@ public class PlayerAction : MonoBehaviour
         rb = this.GetComponent<Rigidbody2D>();
         playerRenderer = gameObject.GetComponent<SpriteRenderer>();
         direction = transform.right;//初期の向いている向き
+        //コントローラーを使うためのもの
+        inputAcution = new TD2_2();
+        inputAcution.Enable();
     }
 
     // Update is called once per frame
@@ -59,20 +66,38 @@ public class PlayerAction : MonoBehaviour
         //攻撃中でなければ移動できる
         if (!weapon.isAttack && !isDash)
         {
+            rb.velocity = new Vector2(inputDirection.x * moveSpeed, rb.velocity.y);
 
-            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-            {
-                rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);//y方向は今のvelicityを入れる
-                transform.rotation = Quaternion.Euler(0, 0, 0);//見た目を左向かせる
-                direction = -transform.right;//値的に左を向いている
-            }
 
-            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-            {
-                rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
-                transform.rotation = Quaternion.Euler(0, 180, 0);//見た目を右向かせる
-                direction = transform.right;//値的に右を向いている
-            }
+            //if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            //{
+            //    rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);//y方向は今のvelicityを入れる
+            //    transform.rotation = Quaternion.Euler(0, 0, 0);//見た目を左向かせる
+            //    direction = -transform.right;//値的に左を向いている
+            //}
+
+            //if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            //{
+            //    rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+            //    transform.rotation = Quaternion.Euler(0, 180, 0);//見た目を右向かせる
+            //    direction = transform.right;//値的に右を向いている
+            //}
+        }
+    }
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        //移動方向の入力情報がInputdirectionの中に入るようにする
+        inputDirection = context.ReadValue<Vector2>();
+        if (inputDirection.x < 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);//見た目を左向かせる
+            direction = -transform.right;//値的に左を向いている
+        }
+        if (inputDirection.x > 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);//見た目を右向かせる
+            direction = transform.right;//値的に右を向いている
         }
     }
 
