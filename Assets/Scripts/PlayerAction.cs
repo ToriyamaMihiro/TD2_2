@@ -183,7 +183,21 @@ public class PlayerAction : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Boss"|| collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.tag == "Boss")
+        {
+            if (!isHit)
+            {
+                //一定時間無敵になる
+                StartCoroutine("WaitForIt");
+                life -= 1;
+                isHit = true;
+            }
+        }
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        //何かに当たったら消す
+        if (collision.gameObject.tag == "Bullet")
         {
             if (!isHit)
             {
