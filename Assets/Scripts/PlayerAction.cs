@@ -22,7 +22,7 @@ public class PlayerAction : MonoBehaviour
     public float dashPower = 5;
 
     public int dashTime;
-    int life = 1;
+    int life = 10;
 
     public bool isDash;
     public bool isDead;

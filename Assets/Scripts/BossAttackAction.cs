@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class BossAttackAction : MonoBehaviour
 {
-    Vector2 defaultPos = new Vector2(0, 3f);
+    public GameObject Bullet;
+
+    Vector2 defaultPos = new Vector2(-6.5f, 3f);
+
     float moveSpeed;
 
     public float MoveSpeed = 5;//横移動の速さ
@@ -25,6 +29,24 @@ public class BossAttackAction : MonoBehaviour
     int upDownCount;
     int upDownCountMax = 3;
 
+
+    struct Side
+    {
+        public float LeftTime;//横突進するまでの追尾の時間
+        public float RightTime;//横突進するまでの追尾の時間
+
+        public int TrackWaitTime;//追尾後の上での待機時間
+
+        public bool isTrackWait;
+        public bool isRight;
+        public bool isLeft;
+        public bool isWait;
+    }
+
+    Side side;
+    int sideCount;
+    int sideCountMax = 3;
+
     struct Move
     {
         public int time;
@@ -37,12 +59,24 @@ public class BossAttackAction : MonoBehaviour
     Vector2 rightPos = new Vector2(-4, 0);
     Vector2 leftPos = new Vector2(4, 0);
 
+    //TrackBullet
+    struct TrackBullet
+    {
+        public int IntervalTime;
+
+    }
+    TrackBullet trackBullet;
+
+    int trackBulletCount;
+    int trackBulletCountMax = 3;
+
     ActionMode nowMode;
 
     enum ActionMode
     {
         Moving,
         UpDown,
+        SideTackle,
         TrackBullet,
     }
 
@@ -50,12 +84,13 @@ public class BossAttackAction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        nowMode = ActionMode.UpDown;
+        nowMode = ActionMode.TrackBullet;
     }
 
     // Update is called once per frame
     void Update()
     {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
         switch (nowMode)
         {
             case ActionMode.Moving: // 移動中
@@ -87,7 +122,7 @@ public class BossAttackAction : MonoBehaviour
                         // move.isRight = true;
                     }
                 }
-                if(move.time >= 201)
+                if (move.time >= 201)
                 {
                     move = default;
                     //次のシーン
@@ -100,9 +135,9 @@ public class BossAttackAction : MonoBehaviour
                 upDown.TrackTime += 1;
                 if (upDown.TrackTime <= 200 && !upDown.isTrackWait)
                 {
-                    GameObject player = GameObject.FindGameObjectWithTag("Player");
+
                     //プレイヤーを一定時間追尾
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(player.transform.position.x,transform.position.y, transform.position.z), moveSpeed + 5 * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(player.transform.position.x, transform.position.y, transform.position.z), moveSpeed + 5 * Time.deltaTime);
                 }
                 else
                 {
@@ -138,7 +173,7 @@ public class BossAttackAction : MonoBehaviour
 
                 if (upDown.isUp)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, 3, transform.position.z), moveSpeed + 5 * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, defaultPos.y, transform.position.z), moveSpeed + 5 * Time.deltaTime);
                     //定位置まで戻ったら
                     if (transform.position.y >= defaultPos.y)
                     {
@@ -156,12 +191,70 @@ public class BossAttackAction : MonoBehaviour
 
                 break;
 
-            case ActionMode.TrackBullet: //緩い追尾の弾を出す
+            case ActionMode.SideTackle:
 
+                side.LeftTime += 1;
+                //追尾
+                if (side.LeftTime <= 200)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(defaultPos.x, player.transform.position.y + 1, transform.position.z), moveSpeed + 5 * Time.deltaTime);
+                    side.isLeft = true;
+                }
 
+                //突進
+                if (side.LeftTime >= 201 && side.isLeft)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(-defaultPos.x, transform.position.y, transform.position.z), moveSpeed + 5 * Time.deltaTime);
+                }
+                //右端にきたら
+                if (transform.position.x >= -defaultPos.x)
+                {
+                    side.isRight = true;
+                    side.isLeft = false;
+                }
+                if (side.isRight)
+                {
+                    side.RightTime += 1;
+                }
+                if (side.RightTime <= 200 && side.isRight)
+                {
+                    //追尾
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(-defaultPos.x, player.transform.position.y + 2, transform.position.z), moveSpeed + 5 * Time.deltaTime);
+                }
+                if (side.RightTime >= 201 && side.isRight)
+                {
+                    //左に突進
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(defaultPos.x, transform.position.y, transform.position.z), moveSpeed + 5 * Time.deltaTime);
+                }
+                if (transform.position.x <= defaultPos.x && side.isRight)
+                {
+                    side = default;
+                    sideCount += 1;
+                }
+                if (sideCount == sideCountMax)
+                {
+                    nowMode = ActionMode.Moving;
+                }
+                break;
+
+            case ActionMode.TrackBullet: //放物線を描いた追尾の弾を出す
+         
+                trackBullet.IntervalTime += 1;
+                if (trackBullet.IntervalTime >= 200)
+                {
+                    Instantiate(Bullet, transform.position, Quaternion.identity);
+                    trackBullet.IntervalTime = 0;
+                    trackBulletCount += 1;
+                }
+                if (trackBulletCount == trackBulletCountMax)
+                {
+
+                }
                 break;
         }
     }
+
+
 
     void OnCollisionEnter2D(Collision2D collision)
     {
