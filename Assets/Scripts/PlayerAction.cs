@@ -183,7 +183,7 @@ public class PlayerAction : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Boss")
+        if (collision.gameObject.tag == "Boss"|| collision.gameObject.tag == "Bullet")
         {
             if (!isHit)
             {

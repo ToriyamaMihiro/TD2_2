@@ -39,4 +39,13 @@ public class BulletAction : MonoBehaviour
 
         StartCoroutine("ThrowBall");
     }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        //âΩÇ©Ç…ìñÇΩÇ¡ÇΩÇÁè¡Ç∑
+        if (collision.gameObject.tag == "Player"|| collision.gameObject.tag == "Wall"|| collision.gameObject.tag == "Floor")
+        {
+            Destroy(this.gameObject);
+           
+        }
+    }
 }
