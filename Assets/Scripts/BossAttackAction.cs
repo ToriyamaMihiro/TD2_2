@@ -102,7 +102,7 @@ public class BossAttackAction : MonoBehaviour
                 {
                     GameObject player = GameObject.FindGameObjectWithTag("Player");
                     //プレイヤーを一定時間追尾
-                    transform.position = Vector2.MoveTowards(transform.position, new Vector2(player.transform.position.x, transform.position.y), moveSpeed * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(player.transform.position.x,transform.position.y, transform.position.z), moveSpeed + 5 * Time.deltaTime);
                 }
                 else
                 {
@@ -138,7 +138,7 @@ public class BossAttackAction : MonoBehaviour
 
                 if (upDown.isUp)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, defaultPos.y, transform.position.z), moveSpeed * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, 3, transform.position.z), moveSpeed + 5 * Time.deltaTime);
                     //定位置まで戻ったら
                     if (transform.position.y >= defaultPos.y)
                     {
