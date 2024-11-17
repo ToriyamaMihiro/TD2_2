@@ -18,10 +18,15 @@ public class BossAction : MonoBehaviour
     //Sliderを入れる
     public Slider slider;
 
+    float knockBackPower = 1;
+
     public bool isXDeformation;//X方向に変形したか
     public bool isYDeformation;//Y方向に変形したか
     bool isHit;
+    bool isFloor;
+    bool isWall;
     public bool isDead;
+    bool isKnockBack;
 
     // Start is called before the first frame update
     void Start()
@@ -38,8 +43,24 @@ public class BossAction : MonoBehaviour
         Deformation();
         HitRest();
         Dead();
+        Range();
         //HP計算
         slider.value = (float)currentHp / (float)life;
+    }
+
+    //ノックバックで外に行かないようにする
+    void Range()
+    {
+        //現在のポジションを保持する
+        Vector3 currentPos = transform.position;
+
+        //Mathf.ClampでX,Yの値それぞれが最小～最大の範囲内に収める。
+        //物理挙動のあるisTriggerにしたいが、床は突き抜けてほしくないので無理やり範囲を決めて落ちないようにする
+        currentPos.x = Mathf.Clamp(currentPos.x,-7.5f, 7.5f);
+
+        //positionをcurrentPosにする
+        transform.position = currentPos;
+
     }
 
     //変形
@@ -97,9 +118,19 @@ public class BossAction : MonoBehaviour
             GameObject obj = GameObject.Find("Weapon");
             weapon = obj.GetComponent<AttackAction>();
 
-            //変形のカウント
             if (!isHit)
             {
+                //コンボがマックスかつ横攻撃だったかつ床にいた場合ノックバックする
+                if (weapon.comboCount == weapon.comboCountMax && weapon.isDashAttack&& isFloor)
+                {
+                    //コンボでのノックバック
+                    Vector3 distination = (transform.position - collision.transform.position).normalized;
+
+                    transform.Translate(distination.x * knockBackPower,0f,0f);
+                    weapon.comboCount = 0;
+                }
+
+                //変形のカウント
                 if (weapon.isAttack)
                 {
                     yCount += 1;
@@ -132,6 +163,27 @@ public class BossAction : MonoBehaviour
             currentHp = currentHp - dustDamage;
             //当たったオブジェクトを削除する
             Destroy(collision.gameObject);
+        }
+    }
+    //床に居たらノックバックする
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Floor")
+        {
+            if (!isFloor)
+            {
+                isFloor = true;
+            }
+        }
+    }
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Floor")
+        {
+            if (isFloor)
+            {
+                isFloor = false;
+            }
         }
     }
 }

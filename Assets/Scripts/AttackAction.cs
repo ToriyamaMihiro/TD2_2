@@ -18,9 +18,14 @@ public class AttackAction : MonoBehaviour
 
     public int attackTime = 0;
     public int attackFullTime = 21;//攻撃のリセットの時間
+    int comboTime = 0;
+    int comboMaxTime = 200;
+    public int comboCount = 0;
+    public int comboCountMax = 4;
 
     public bool isAttack;
     public bool isDashAttack;
+    bool isCombo;
     bool isFloorHit;
 
     // Start is called before the first frame update
@@ -36,6 +41,7 @@ public class AttackAction : MonoBehaviour
         Attack();
         DashAttack();
         DustCall();
+        Combo();
     }
 
     void Attack()
@@ -46,6 +52,9 @@ public class AttackAction : MonoBehaviour
             transform.Rotate(0, 0, 90);
             weponPos = transform.position;
             isAttack = true;
+            //コンボ途切れる時間のリセット
+            comboTime = 0;
+            comboCount += 1;
         }
         if (isAttack)
         {
@@ -71,6 +80,9 @@ public class AttackAction : MonoBehaviour
         {
             weponPos = transform.position;
             isDashAttack = true;
+            //コンボ途切れる時間のリセット
+            comboTime = 0;
+            comboCount += 1;
         }
         if (isDashAttack)
         {
@@ -99,6 +111,31 @@ public class AttackAction : MonoBehaviour
                 isDashAttack = false;
                 transform.localPosition = startPos;
                 attackTime = 0;
+            }
+        }
+    }
+
+    void Combo()
+    {
+        //なにかしら攻撃をしたとき
+        if (isAttack || isDashAttack)
+        {
+            isCombo = true;
+        }
+        if (isCombo)
+        {
+        Debug.Log(comboCount);
+            comboTime += 1;
+            //コンボ終了時間まで次の攻撃がなかったらコンボをリセットする
+            if (comboTime >= comboMaxTime)
+            {
+                isCombo = false;
+                comboCount = 0;
+            }
+            if (comboCount == comboCountMax + 1)
+            {
+                isCombo = false;
+                comboCount = 0;
             }
         }
     }

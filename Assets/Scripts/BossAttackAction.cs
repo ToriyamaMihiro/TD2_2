@@ -14,6 +14,8 @@ public class BossAttackAction : MonoBehaviour
     public float MoveSpeed = 5;//横移動の速さ
 
     bool isFloorHit;
+    public bool isFloor;//別スクリプトで使用するノックバックできるかを決める変数
+    bool isFinish;//攻撃が終わったか
     struct UpDown
     {
         public float TrackTime;//UpDownするまでの追尾の時間
@@ -80,15 +82,58 @@ public class BossAttackAction : MonoBehaviour
         TrackBullet,
     }
 
+    enum AttackPattern
+    {
+        one,
+        two,
+        three,
+        max
+    }
+    AttackPattern pattern;
+
+    int patternCount;//次のパターンに移動するときに使う
 
     // Start is called before the first frame update
     void Start()
     {
-        nowMode = ActionMode.TrackBullet;
+        pattern = AttackPattern.one;
     }
 
     // Update is called once per frame
     void Update()
+    {
+        AttackManager();
+        Attack();
+    }
+    void AttackManager()
+    {
+        if (patternCount == 3)
+        {
+            int random = Random.Range(0, (int)AttackPattern.max);
+            pattern = (AttackPattern)random;
+        }
+        switch (pattern)
+        {
+            case AttackPattern.one:
+
+                if (patternCount == 0)
+                {
+                    nowMode = ActionMode.SideTackle;
+                }
+                if (patternCount == 1)
+                {
+                    nowMode = ActionMode.UpDown;
+                }
+                if (patternCount == 2)
+                {
+                    nowMode = ActionMode.TrackBullet;
+                }
+                break;
+        }
+    }
+
+
+    void Attack()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         switch (nowMode)
@@ -125,7 +170,7 @@ public class BossAttackAction : MonoBehaviour
                 if (move.time >= 201)
                 {
                     move = default;
-                    //次のシーン
+                    patternCount += 1;
                 }
                 break;
 
@@ -186,7 +231,7 @@ public class BossAttackAction : MonoBehaviour
 
                 if (upDownCount == upDownCountMax)
                 {
-                    //別の動きに変える
+                    patternCount += 1;
                 }
 
                 break;
@@ -233,12 +278,12 @@ public class BossAttackAction : MonoBehaviour
                 }
                 if (sideCount == sideCountMax)
                 {
-                    nowMode = ActionMode.Moving;
+                    patternCount += 1;
                 }
                 break;
 
             case ActionMode.TrackBullet: //放物線を描いた追尾の弾を出す
-         
+
                 trackBullet.IntervalTime += 1;
                 if (trackBullet.IntervalTime >= 200)
                 {
@@ -248,7 +293,7 @@ public class BossAttackAction : MonoBehaviour
                 }
                 if (trackBulletCount == trackBulletCountMax)
                 {
-
+                    patternCount += 1;
                 }
                 break;
         }
@@ -266,4 +311,5 @@ public class BossAttackAction : MonoBehaviour
             }
         }
     }
+
 }
