@@ -16,6 +16,8 @@ public class BossAttackAction : MonoBehaviour
     bool isFloorHit;
     public bool isFloor;//別スクリプトで使用するノックバックできるかを決める変数
     bool isFinish;//攻撃が終わったか
+    public bool isDeformationFinish;
+
     struct UpDown
     {
         public float TrackTime;//UpDownするまでの追尾の時間
@@ -29,7 +31,7 @@ public class BossAttackAction : MonoBehaviour
     }
     UpDown upDown;
     int upDownCount;
-    int upDownCountMax = 3;
+    int upDownCountMax = 1;
 
 
     struct Side
@@ -47,7 +49,7 @@ public class BossAttackAction : MonoBehaviour
 
     Side side;
     int sideCount;
-    int sideCountMax = 3;
+    int sideCountMax = 1;
 
     struct Move
     {
@@ -96,17 +98,19 @@ public class BossAttackAction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        pattern = AttackPattern.one;
+        nowMode = ActionMode.TrackBullet;
     }
 
     // Update is called once per frame
     void Update()
     {
+        Deformation();
         AttackManager();
         Attack();
     }
     void AttackManager()
     {
+
         if (patternCount == 3)
         {
             int random = Random.Range(0, (int)AttackPattern.max);
@@ -119,19 +123,37 @@ public class BossAttackAction : MonoBehaviour
                 if (patternCount == 0)
                 {
                     nowMode = ActionMode.SideTackle;
+                    isFinish = false;
                 }
                 if (patternCount == 1)
                 {
                     nowMode = ActionMode.UpDown;
+                    isFinish = false;
                 }
                 if (patternCount == 2)
                 {
                     nowMode = ActionMode.TrackBullet;
+                    isFinish = false;
                 }
                 break;
         }
     }
 
+    //ボスの攻撃中でなければ元に戻す
+    void Deformation()
+    {
+        BossAction boss = GetComponent<BossAction>();
+        if (boss.deformationTime <= 1 && isFinish)
+        {
+            isDeformationFinish = false;
+        }
+        if (boss.deformationTime >= 200 && isFinish)
+        {
+            transform.localScale = new Vector3(2, 2, 1);
+            isDeformationFinish = true;
+            isFinish = false;
+        }
+    }
 
     void Attack()
     {
@@ -171,6 +193,7 @@ public class BossAttackAction : MonoBehaviour
                 {
                     move = default;
                     patternCount += 1;
+                    isFinish = true;
                 }
                 break;
 
@@ -180,9 +203,8 @@ public class BossAttackAction : MonoBehaviour
                 upDown.TrackTime += 1;
                 if (upDown.TrackTime <= 200 && !upDown.isTrackWait)
                 {
-
                     //プレイヤーを一定時間追尾
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(player.transform.position.x, transform.position.y, transform.position.z), moveSpeed + 5 * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(player.transform.position.x, defaultPos.y, transform.position.z), moveSpeed + 5 * Time.deltaTime);
                 }
                 else
                 {
@@ -232,6 +254,7 @@ public class BossAttackAction : MonoBehaviour
                 if (upDownCount == upDownCountMax)
                 {
                     patternCount += 1;
+                    isFinish = true;
                 }
 
                 break;
@@ -264,7 +287,7 @@ public class BossAttackAction : MonoBehaviour
                 if (side.RightTime <= 200 && side.isRight)
                 {
                     //追尾
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(-defaultPos.x, player.transform.position.y + 2, transform.position.z), moveSpeed + 5 * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(-defaultPos.x, player.transform.position.y + 1, transform.position.z), moveSpeed + 5 * Time.deltaTime);
                 }
                 if (side.RightTime >= 201 && side.isRight)
                 {
@@ -279,12 +302,14 @@ public class BossAttackAction : MonoBehaviour
                 if (sideCount == sideCountMax)
                 {
                     patternCount += 1;
+                    isFinish = true;
                 }
                 break;
 
             case ActionMode.TrackBullet: //放物線を描いた追尾の弾を出す
 
                 trackBullet.IntervalTime += 1;
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -3.1f, transform.position.z), moveSpeed + 5 * Time.deltaTime);
                 if (trackBullet.IntervalTime >= 200)
                 {
                     Instantiate(Bullet, transform.position, Quaternion.identity);
@@ -294,6 +319,7 @@ public class BossAttackAction : MonoBehaviour
                 if (trackBulletCount == trackBulletCountMax)
                 {
                     patternCount += 1;
+                    isFinish = true;
                 }
                 break;
         }

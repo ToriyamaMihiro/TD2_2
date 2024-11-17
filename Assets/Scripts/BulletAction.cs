@@ -23,7 +23,7 @@ public class BulletAction : MonoBehaviour
         float b = Mathf.Tan(deg * Mathf.Deg2Rad);
         float a = (target.y - b * target.x) / (target.x * target.x);
 
-        for (float x = 0; x <= this.target.x+5; x += speed)
+        for (float x = 0; x <= this.target.x + 5; x += speed)
         {
             float y = a * x * x + b * x;
             transform.position = new Vector3(x, y, 0) + offset;
@@ -42,10 +42,10 @@ public class BulletAction : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         //‰½‚©‚É“–‚½‚Á‚½‚çÁ‚·
-        if (collision.gameObject.tag == "Player"|| collision.gameObject.tag == "Wall"|| collision.gameObject.tag == "Floor")
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Wall" || collision.gameObject.tag == "Floor")
         {
             Destroy(this.gameObject);
-           
+
         }
     }
 }

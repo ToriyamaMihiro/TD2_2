@@ -13,6 +13,7 @@ public class BossAction : MonoBehaviour
     int life = 100;
     int dustDamage = 1;
     int attackDamage = 2;
+    public int deformationTime;
 
     int currentHp;
     //Sliderを入れる
@@ -56,7 +57,7 @@ public class BossAction : MonoBehaviour
 
         //Mathf.ClampでX,Yの値それぞれが最小～最大の範囲内に収める。
         //物理挙動のあるisTriggerにしたいが、床は突き抜けてほしくないので無理やり範囲を決めて落ちないようにする
-        currentPos.x = Mathf.Clamp(currentPos.x,-7.5f, 7.5f);
+        currentPos.x = Mathf.Clamp(currentPos.x, -7.5f, 7.5f);
 
         //positionをcurrentPosにする
         transform.position = currentPos;
@@ -71,8 +72,17 @@ public class BossAction : MonoBehaviour
         {
             xCount = 0;
             yCount = 0;
+            deformationTime += 1;
         }
 
+        //ボスの攻撃中でなければ元に戻す
+        BossAttackAction bossAttack = GetComponent<BossAttackAction>();
+        if (bossAttack.isDeformationFinish)
+        {
+            isXDeformation = false;
+            isYDeformation = false;
+            deformationTime = 0;
+        }
         //それぞれの方向へ変形
         if (isXDeformation)
         {
@@ -121,25 +131,31 @@ public class BossAction : MonoBehaviour
             if (!isHit)
             {
                 //コンボがマックスかつ横攻撃だったかつ床にいた場合ノックバックする
-                if (weapon.comboCount == weapon.comboCountMax && weapon.isDashAttack&& isFloor)
+                if (weapon.comboCount == weapon.comboCountMax && weapon.isDashAttack && isFloor)
                 {
                     //コンボでのノックバック
                     Vector3 distination = (transform.position - collision.transform.position).normalized;
 
-                    transform.Translate(distination.x * knockBackPower,0f,0f);
+                    transform.Translate(distination.x * knockBackPower, 0f, 0f);
                     weapon.comboCount = 0;
                 }
 
                 //変形のカウント
                 if (weapon.isAttack)
                 {
-                    yCount += 1;
+                    if (!isXDeformation && !isYDeformation)
+                    {
+                        yCount += 1;
+                    }
                     currentHp = currentHp - attackDamage;
                     isHit = true;
                 }
                 if (weapon.isDashAttack)
                 {
-                    xCount += 1;
+                    if (!isXDeformation && !isYDeformation)
+                    {
+                        xCount += 1;
+                    }
                     currentHp = currentHp - attackDamage;
                     isHit = true;
                 }
