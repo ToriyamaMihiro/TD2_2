@@ -122,6 +122,15 @@ public class BossAction : MonoBehaviour
     //変形の処理
     void OnTriggerStay2D(Collider2D collision)
     {
+        //床に居たらノックバックする
+        if (collision.gameObject.tag == "Floor")
+        {
+            if (!isFloor)
+            {
+                isFloor = true;
+            }
+        }
+
         if (collision.gameObject.tag == "Weapon")
         {
             AttackAction weapon;
@@ -181,18 +190,9 @@ public class BossAction : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }
-    //床に居たらノックバックする
-    void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Floor")
-        {
-            if (!isFloor)
-            {
-                isFloor = true;
-            }
-        }
-    }
-    void OnCollisionExit2D(Collision2D collision)
+   
+   
+    void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Floor")
         {

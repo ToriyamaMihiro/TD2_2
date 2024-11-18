@@ -50,6 +50,7 @@ public class PlayerAction : MonoBehaviour
         DashAttack();
         Damage();
         Dead();
+        Range();
     }
 
     void Move()
@@ -151,6 +152,20 @@ public class PlayerAction : MonoBehaviour
         }
     }
 
+    void Range()
+    {
+        //現在のポジションを保持する
+        Vector3 currentPos = transform.position;
+
+        //Mathf.ClampでX,Yの値それぞれが最小～最大の範囲内に収める。
+        //物理挙動のあるisTriggerにしたいが、床は突き抜けてほしくないので無理やり範囲を決めて落ちないようにする
+        currentPos.y = Mathf.Clamp(currentPos.y, -3.6f, 6);
+
+        //positionをcurrentPosにする
+        transform.position = currentPos;
+
+    }
+
     void Damage()
     {
         if (isHit)
@@ -158,6 +173,7 @@ public class PlayerAction : MonoBehaviour
             //プレイヤーの色を点滅させて無敵時間だと分かりやすくする
             float level = Mathf.Abs(Mathf.Sin(Time.time * 10));
             gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, level);
+            
         }
     }
 
@@ -169,6 +185,7 @@ public class PlayerAction : MonoBehaviour
 
         //�P�b��_���[�W�t���O��false�ɂ��ē_�ł�߂�
         isHit = false;
+
         //プレイヤーの色を元に戻す
         playerRenderer.color = new Color(1f, 1f, 1f, 1f);
     }
@@ -181,7 +198,7 @@ public class PlayerAction : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Boss")
         {

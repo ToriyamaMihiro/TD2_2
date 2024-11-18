@@ -129,6 +129,8 @@ MonoBehaviour:
   RDust: {fileID: 7638361356168949957, guid: 8efd5b74ca4dbb84a983c5122c2e252d, type: 3}
   attackTime: 0
   attackFullTime: 51
+  comboCount: 0
+  comboCountMax: 4
   isAttack: 0
   isDashAttack: 0
 --- !u!50 &4911061348698133264
@@ -300,6 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0cf59302306259448966a8e4da59fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coll: {fileID: 4058622806443748812}
   playerRenderer: {fileID: 0}
   direction: {x: 0, y: 0, z: 0}
   moveSpeed: 3
@@ -409,6 +412,18 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 97306be8-08e5-4123-8f7f-aa1d49e03a98
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: da6aa34b-6fd6-4cb0-b194-5834f78b7b4e
+    m_ActionName: Player/Jump
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: eea09ba0-a3e3-4b42-ab7b-8a97629e4743
+    m_ActionName: Player/Attack
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d766d41b-f22a-43f2-b2fe-c679b15ca223
+    m_ActionName: Player/DashAttack
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
