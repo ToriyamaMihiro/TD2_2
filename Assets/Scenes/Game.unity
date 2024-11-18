@@ -1141,7 +1141,6 @@ MonoBehaviour:
   Bullet: {fileID: 6651625903067708298, guid: d92dc8d3ae8cd174ba0b1df4283aae56, type: 3}
   MoveSpeed: 5
   isFloor: 0
-  isDeformationFinish: 0
 --- !u!1 &1550417385
 GameObject:
   m_ObjectHideFlags: 0

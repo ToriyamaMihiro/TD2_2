@@ -1,4 +1,4 @@
-using System.Collections;
+susing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
@@ -11,13 +11,13 @@ public class AttackAction : MonoBehaviour
     public GameObject LDust;
     public GameObject RDust;
 
-    Vector3 weponPos;//U‚è‰º‚ë‚·Û‚ÌˆÊ’u‚ğæ“¾‚·‚é
-    Vector3 startPos = new Vector3(-1.3f, 0.45f, 0);//‰Šú‰»—p‚ÌˆÊ’u‚ğæ“¾
+    Vector3 weponPos;//æŒ¯ã‚Šä¸‹ã‚ã™éš›ã®ä½ç½®ã‚’å–å¾—ã™ã‚‹
+    Vector3 startPos = new Vector3(-1.3f, 0.45f, 0);//åˆæœŸåŒ–ç”¨ã®ä½ç½®ã‚’å–å¾—
 
     float movePower = 0.8f;
 
     public int attackTime = 0;
-    public int attackFullTime = 21;//UŒ‚‚ÌƒŠƒZƒbƒg‚ÌŠÔ
+    public int attackFullTime = 21;//æ”»æ’ƒã®ãƒªã‚»ãƒƒãƒˆã®æ™‚é–“
     int comboTime = 0;
     int comboMaxTime = 200;
     public int comboCount = 0;
@@ -46,24 +46,24 @@ public class AttackAction : MonoBehaviour
 
     void Attack()
     {
-        ////ƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚ç90“x‰ñ“]‚³‚¹‚ÄU‚è‰º‚ë‚·
+        ////ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ãŸã‚‰90åº¦å›è»¢ã•ã›ã¦æŒ¯ã‚Šä¸‹ã‚ã™
         if (Input.GetKeyDown(KeyCode.Z) && !isAttack)
         {
             transform.Rotate(0, 0, 90);
             weponPos = transform.position;
             isAttack = true;
-            //ƒRƒ“ƒ{“rØ‚ê‚éŠÔ‚ÌƒŠƒZƒbƒg
+            //ã‚³ãƒ³ãƒœé€”åˆ‡ã‚Œã‚‹æ™‚é–“ã®ãƒªã‚»ãƒƒãƒˆ
             comboTime = 0;
             comboCount += 1;
         }
         if (isAttack)
         {
-            //U‚è‰º‚ë‚µ‚Ä‚¢‚éŠÔ‚ğƒJƒEƒ“ƒg
+            //æŒ¯ã‚Šä¸‹ã‚ã—ã¦ã„ã‚‹æ™‚é–“ã‚’ã‚«ã‚¦ãƒ³ãƒˆ
             attackTime += 1;
 
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x, weponPos.y - movePower, weponPos.z), 2 * Time.deltaTime);
 
-            //U‚è‰º‚ë‚µI‚í‚Á‚½‚çƒŠƒZƒbƒg‚·‚é
+            //æŒ¯ã‚Šä¸‹ã‚ã—çµ‚ã‚ã£ãŸã‚‰ãƒªã‚»ãƒƒãƒˆã™ã‚‹
             if (attackTime >= attackFullTime)
             {
                 isAttack = false;
@@ -80,7 +80,7 @@ public class AttackAction : MonoBehaviour
         {
             weponPos = transform.position;
             isDashAttack = true;
-            //ƒRƒ“ƒ{“rØ‚ê‚éŠÔ‚ÌƒŠƒZƒbƒg
+            //ã‚³ãƒ³ãƒœé€”åˆ‡ã‚Œã‚‹æ™‚é–“ã®ãƒªã‚»ãƒƒãƒˆ
             comboTime = 0;
             comboCount += 1;
         }
@@ -90,22 +90,22 @@ public class AttackAction : MonoBehaviour
             GameObject obj = GameObject.Find("Player");
             player = obj.GetComponent<PlayerAction>();
 
-            //UŒ‚‚µ‚Ä‚¢‚éŠÔ‚ğƒJƒEƒ“ƒg
+            //æ”»æ’ƒã—ã¦ã„ã‚‹æ™‚é–“ã‚’ã‚«ã‚¦ãƒ³ãƒˆ
             attackTime += 1;
 
-            //ƒvƒŒƒCƒ„[‚ª‰E‚ğŒü‚¢‚Ä‚¢‚½‚ç
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå³ã‚’å‘ã„ã¦ã„ãŸã‚‰
             if (player.direction == player.transform.right)
             {
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x + movePower, weponPos.y, weponPos.z), 2 * Time.deltaTime);
             }
 
-            //ƒvƒŒƒCƒ„[‚ª¶‚ğŒü‚¢‚Ä‚¢‚½‚ç
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå·¦ã‚’å‘ã„ã¦ã„ãŸã‚‰
             if (player.direction == -player.transform.right)
             {
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x - movePower, weponPos.y, weponPos.z), 2 * Time.deltaTime);
             }
 
-            //UŒ‚‚ªI‚í‚Á‚½‚çƒŠƒZƒbƒg‚·‚é
+            //æ”»æ’ƒãŒçµ‚ã‚ã£ãŸã‚‰ãƒªã‚»ãƒƒãƒˆã™ã‚‹
             if (attackTime >= attackFullTime)
             {
                 isDashAttack = false;
@@ -117,7 +117,7 @@ public class AttackAction : MonoBehaviour
 
     void Combo()
     {
-        //‚È‚É‚©‚µ‚çUŒ‚‚ğ‚µ‚½‚Æ‚«
+        //ãªã«ã‹ã—ã‚‰æ”»æ’ƒã‚’ã—ãŸã¨ã
         if (isAttack || isDashAttack)
         {
             isCombo = true;
@@ -126,7 +126,7 @@ public class AttackAction : MonoBehaviour
         {
         Debug.Log(comboCount);
             comboTime += 1;
-            //ƒRƒ“ƒ{I—¹ŠÔ‚Ü‚ÅŸ‚ÌUŒ‚‚ª‚È‚©‚Á‚½‚çƒRƒ“ƒ{‚ğƒŠƒZƒbƒg‚·‚é
+            //ã‚³ãƒ³ãƒœçµ‚äº†æ™‚é–“ã¾ã§æ¬¡ã®æ”»æ’ƒãŒãªã‹ã£ãŸã‚‰ã‚³ãƒ³ãƒœã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
             if (comboTime >= comboMaxTime)
             {
                 isCombo = false;
@@ -140,7 +140,7 @@ public class AttackAction : MonoBehaviour
         }
     }
 
-    //°‚ğ’@‚¢‚½‚çƒ`ƒŠ‚ğŒÄ‚Ño‚·
+    //åºŠã‚’å©ã„ãŸã‚‰ãƒãƒªã‚’å‘¼ã³å‡ºã™
     void DustCall()
     {
 
@@ -149,7 +149,7 @@ public class AttackAction : MonoBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
-            //•Ší‚ª°‚É•t‚¢‚½‚çƒ`ƒŠ‚ª‚Å‚é
+            //æ­¦å™¨ãŒåºŠã«ä»˜ã„ãŸã‚‰ãƒãƒªãŒã§ã‚‹
             Instantiate(RDust, transform.position, Quaternion.identity);
             Instantiate(LDust, transform.position, Quaternion.identity);
 
