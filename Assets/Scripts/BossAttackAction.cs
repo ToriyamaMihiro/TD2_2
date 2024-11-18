@@ -12,10 +12,12 @@ public class BossAttackAction : MonoBehaviour
     float moveSpeed;
 
     public float MoveSpeed = 5;//横移動の速さ
+    int wallTime;
 
     bool isFloorHit;
     public bool isFloor;//別スクリプトで使用するノックバックできるかを決める変数
     bool isFinish;//攻撃が終わったか
+    bool isWall;
     public bool isDeformationFinish;
 
     struct UpDown
@@ -49,7 +51,7 @@ public class BossAttackAction : MonoBehaviour
 
     Side side;
     int sideCount;
-    int sideCountMax = 1;
+    int sideCountMax = 2;
 
     struct Move
     {
@@ -107,6 +109,7 @@ public class BossAttackAction : MonoBehaviour
         Deformation();
         AttackManager();
         Attack();
+        WallStan();
     }
     void AttackManager()
     {
@@ -263,19 +266,19 @@ public class BossAttackAction : MonoBehaviour
 
                 side.LeftTime += 1;
                 //追尾
-                if (side.LeftTime <= 200)
+                if (side.LeftTime <= 220)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(defaultPos.x, player.transform.position.y + 1, transform.position.z), moveSpeed + 5 * Time.deltaTime);
                     side.isLeft = true;
                 }
 
                 //突進
-                if (side.LeftTime >= 201 && side.isLeft)
+                if (side.LeftTime >= 221 && side.isLeft)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(-defaultPos.x, transform.position.y, transform.position.z), moveSpeed + 5 * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(7.5f, transform.position.y, transform.position.z), moveSpeed + 5 * Time.deltaTime);
                 }
-                //右端にきたら
-                if (transform.position.x >= -defaultPos.x)
+                //右端にきて壁に当たってスタンが終ったら
+                if (transform.position.x >= 7.5f && !isWall)
                 {
                     side.isRight = true;
                     side.isLeft = false;
@@ -284,17 +287,17 @@ public class BossAttackAction : MonoBehaviour
                 {
                     side.RightTime += 1;
                 }
-                if (side.RightTime <= 200 && side.isRight)
+                if (side.RightTime <= 220 && side.isRight)
                 {
                     //追尾
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(-defaultPos.x, player.transform.position.y + 1, transform.position.z), moveSpeed + 5 * Time.deltaTime);
                 }
-                if (side.RightTime >= 201 && side.isRight)
+                if (side.RightTime >= 221 && side.isRight)
                 {
                     //左に突進
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(defaultPos.x, transform.position.y, transform.position.z), moveSpeed + 5 * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(-7.5f, transform.position.y, transform.position.z), moveSpeed + 5 * Time.deltaTime);
                 }
-                if (transform.position.x <= defaultPos.x && side.isRight)
+                if (transform.position.x <= -7.5f && side.isRight && !isWall)
                 {
                     side = default;
                     sideCount += 1;
@@ -325,6 +328,18 @@ public class BossAttackAction : MonoBehaviour
         }
     }
 
+    void WallStan()
+    {
+        if (isWall)
+        {
+            wallTime += 1;
+            if (wallTime >= 100)
+            {
+                isWall = false;
+                wallTime = 0;
+            }
+        }
+    }
 
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -334,6 +349,13 @@ public class BossAttackAction : MonoBehaviour
             if (!isFloorHit)
             {
                 isFloorHit = true;
+            }
+        }
+        if (collision.gameObject.tag == "Wall")
+        {
+            if (!isWall)
+            {
+                isWall = true;
             }
         }
     }
