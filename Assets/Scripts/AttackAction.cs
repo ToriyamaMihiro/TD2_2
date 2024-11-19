@@ -60,7 +60,7 @@ public class AttackAction : MonoBehaviour
         {
             //振り下ろしている時間をカウント
             attackTime += 1;
-
+            //武器の移動
             transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x, weponPos.y - movePower, weponPos.z), 2 * Time.deltaTime);
 
             //振り下ろし終わったらリセットする
@@ -96,12 +96,14 @@ public class AttackAction : MonoBehaviour
             //プレイヤーが右を向いていたら
             if (player.direction == player.transform.right)
             {
+                //武器の移動
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x + movePower, weponPos.y, weponPos.z), 2 * Time.deltaTime);
             }
 
             //プレイヤーが左を向いていたら
             if (player.direction == -player.transform.right)
             {
+                //武器の移動
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x - movePower, weponPos.y, weponPos.z), 2 * Time.deltaTime);
             }
 
