@@ -59,7 +59,7 @@ public class BossAttackAction : MonoBehaviour
     int upDownCount;
     int upDownCountMax = 3;
     int upDownMoveTime = 200;
-    int upDownWaitTime = 100;
+    int upDownWaitTime = 150;
 
 
     struct Side
