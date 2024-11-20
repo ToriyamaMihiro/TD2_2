@@ -72,31 +72,37 @@ public class PlayerAction : MonoBehaviour
             this.GetComponent<Rigidbody2D>().velocity = new Vector2(0, rb.velocity.y);
         }
         //攻撃中でなければ移動できる
-        if (!weapon.isAttack && !isDash)
+        if (!weapon.isAttack && !weapon.isDashAttack && !isDash)
         {
-            // rb.velocity = new Vector2(inputDirection.x * moveSpeed, rb.velocity.y);
+            rb.velocity = new Vector2(inputDirection.x * moveSpeed, rb.velocity.y);
+            nowSpeed = moveSpeed;
 
-
-            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            //ボタン押してなかったら
+            if (inputDirection.x == 0)
             {
-                rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);//y方向は今のvelicityを入れる
-                transform.rotation = Quaternion.Euler(0, 0, 0);//見た目を左向かせる
-                direction = -transform.right;//値的に左を向いている
-                nowSpeed = moveSpeed;//今のスピード
-            }
-            else
-            {
-                nowSpeed = 0;//今のスピード
+                nowSpeed = 0;//スピードを０にして立ち止まらせる
             }
 
-                if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-            {
-                rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
-                transform.rotation = Quaternion.Euler(0, 180, 0);//見た目を右向かせる
-                direction = transform.right;//値的に右を向いている
-                nowSpeed = moveSpeed;//今のスピード
-            }
-           
+            //if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            //{
+            //    rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);//y方向は今のvelicityを入れる
+            //    transform.rotation = Quaternion.Euler(0, 0, 0);//見た目を左向かせる
+            //    direction = -transform.right;//値的に左を向いている
+            //    nowSpeed = moveSpeed;//今のスピード
+            //}
+            //else
+            //{
+            //    nowSpeed = 0;//今のスピード
+            //}
+
+            //    if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            //{
+            //    rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+            //    transform.rotation = Quaternion.Euler(0, 180, 0);//見た目を右向かせる
+            //    direction = transform.right;//値的に右を向いている
+            //    nowSpeed = moveSpeed;//今のスピード
+            //}
+
 
         }
     }
@@ -119,18 +125,18 @@ public class PlayerAction : MonoBehaviour
 
     void Jump()
     {
-        animator.SetBool("isJump",isJump);//ジャンプアニメに変更
+        animator.SetBool("isJump", isJump);//ジャンプアニメに変更
 
         //もし地面についていたらジャンプできる
-        if (Input.GetKeyDown(KeyCode.Space) && isGround())
+        if (inputAcution.Player.Jump.IsPressed() && isGround())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
         }
 
         //アニメ用のジャンプ処理
-        if (isGround()) 
+        if (isGround())
         {
-           isJump = false;//ジャンプ
+            isJump = false;//ジャンプ
         }
         else
         {
@@ -198,7 +204,7 @@ public class PlayerAction : MonoBehaviour
             //プレイヤーの色を点滅させて無敵時間だと分かりやすくする
             float level = Mathf.Abs(Mathf.Sin(Time.time * 10));
             gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, level);
-            
+
         }
     }
 

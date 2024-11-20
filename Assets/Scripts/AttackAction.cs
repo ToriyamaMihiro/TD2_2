@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static UnityEngine.GraphicsBuffer;
 
 public class AttackAction : MonoBehaviour
@@ -11,10 +12,13 @@ public class AttackAction : MonoBehaviour
     public GameObject LDust;
     public GameObject RDust;
 
-    Vector3 weponPos;//振り下ろす際の位置を取得する
-    Vector3 startPos = new Vector3(-1.3f, 0.45f, 0);//初期化用の位置を取得
+    private TD2_2 inputAcution;
 
-    float movePower = 0.8f;
+    Vector3 weponPos;//振り下ろす際の位置を取得する
+    Vector3 startPos = new Vector3(-1f, 0.5f, 0);//初期化用の位置を取得
+
+    public float movePower = 1.3f;
+    float moveSpeed = 3;
 
     public int attackTime = 0;
     public int attackFullTime = 21;//攻撃のリセットの時間
@@ -32,7 +36,8 @@ public class AttackAction : MonoBehaviour
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
-
+        inputAcution = new TD2_2();
+        inputAcution.Enable();
     }
 
     // Update is called once per frame
@@ -47,7 +52,7 @@ public class AttackAction : MonoBehaviour
     void Attack()
     {
         ////ボタンを押したら90度回転させて振り下ろす
-        if (Input.GetKeyDown(KeyCode.Z) && !isAttack)
+        if (inputAcution.Player.Attack.IsPressed() && !isAttack)
         {
             transform.Rotate(0, 0, 90);
             weponPos = transform.position;
@@ -58,10 +63,17 @@ public class AttackAction : MonoBehaviour
         }
         if (isAttack)
         {
+            PlayerAction player;
+            GameObject obj = GameObject.Find("Player");
+            player = obj.GetComponent<PlayerAction>();
             //振り下ろしている時間をカウント
             attackTime += 1;
+
+            //攻撃している間は歩かない
+            player.nowSpeed = 0;
+
             //武器の移動
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x, weponPos.y - movePower, weponPos.z), 2 * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x, weponPos.y - movePower, weponPos.z), moveSpeed * Time.deltaTime); ;
 
             //振り下ろし終わったらリセットする
             if (attackTime >= attackFullTime)
@@ -76,7 +88,7 @@ public class AttackAction : MonoBehaviour
 
     void DashAttack()
     {
-        if (Input.GetKeyDown(KeyCode.X) && !isDashAttack)
+        if (inputAcution.Player.DashAttack.IsPressed() && !isDashAttack)
         {
             weponPos = transform.position;
             isDashAttack = true;
@@ -93,11 +105,14 @@ public class AttackAction : MonoBehaviour
             //攻撃している時間をカウント
             attackTime += 1;
 
+            //攻撃している間は歩かない
+            player.nowSpeed = 0;
+
             //プレイヤーが右を向いていたら
             if (player.direction == player.transform.right)
             {
                 //武器の移動
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x + movePower, weponPos.y, weponPos.z), 2 * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x + movePower, weponPos.y, weponPos.z), moveSpeed * Time.deltaTime);
             }
 
             //プレイヤーが左を向いていたら
@@ -126,7 +141,7 @@ public class AttackAction : MonoBehaviour
         }
         if (isCombo)
         {
-        Debug.Log(comboCount);
+            Debug.Log(comboCount);
             comboTime += 1;
             //コンボ終了時間まで次の攻撃がなかったらコンボをリセットする
             if (comboTime >= comboMaxTime)

@@ -366,7 +366,18 @@
                 {
                     "name": "",
                     "id": "ccecb65f-9a0e-49e5-abfd-7cee6287b57f",
-                    "path": "",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "42266f38-9714-4dbb-a3e4-b1f7b4141794",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -377,7 +388,18 @@
                 {
                     "name": "",
                     "id": "1d6ab11b-09b5-423f-aeb0-5bb09c8fbfbf",
-                    "path": "",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "429a1125-e5ac-4223-91c1-fcc7a3881090",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -388,7 +410,18 @@
                 {
                     "name": "",
                     "id": "dd7bfe7d-ee8a-4034-b4d7-957f25afe588",
-                    "path": "",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "DashAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3eabf5dd-79bb-4c90-ae67-d0e619c3872b",
+                    "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

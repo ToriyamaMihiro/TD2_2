@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class OptionAction : MonoBehaviour
 {
+    private TD2_2 inputAcution;
+
     public GameObject Retry;
     public GameObject Title;
 
@@ -12,18 +14,19 @@ public class OptionAction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        inputAcution = new TD2_2();
+        inputAcution.Enable();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+        if (inputAcution.Player.Left.IsPressed())
         {
             isRight = false;
         }
 
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+        if (inputAcution.Player.Right.IsPressed())
         {
             isRight = true;
         }
