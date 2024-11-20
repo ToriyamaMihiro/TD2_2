@@ -28,6 +28,10 @@ public class PlayerAction : MonoBehaviour
     public bool isDead;
     bool isHit;
 
+    //アニメ
+    public float nowSpeed;//判定用のスピード
+    public bool isJump;
+    private Animator animator;
 
 
     // Start is called before the first frame update
@@ -39,6 +43,7 @@ public class PlayerAction : MonoBehaviour
         //コントローラーを使うためのもの
         inputAcution = new TD2_2();
         inputAcution.Enable();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -59,6 +64,8 @@ public class PlayerAction : MonoBehaviour
         GameObject obj = GameObject.Find("Weapon");
         weapon = obj.GetComponent<AttackAction>();
 
+        animator.SetFloat("Speed", nowSpeed);//移動アニメ
+
         //ダッシュ時もxの値を0にし続けるとxを動かすダッシュができなくなってしまうため
         if (!isDash)
         {
@@ -67,7 +74,7 @@ public class PlayerAction : MonoBehaviour
         //攻撃中でなければ移動できる
         if (!weapon.isAttack && !isDash)
         {
-           // rb.velocity = new Vector2(inputDirection.x * moveSpeed, rb.velocity.y);
+            // rb.velocity = new Vector2(inputDirection.x * moveSpeed, rb.velocity.y);
 
 
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
@@ -75,14 +82,22 @@ public class PlayerAction : MonoBehaviour
                 rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);//y方向は今のvelicityを入れる
                 transform.rotation = Quaternion.Euler(0, 0, 0);//見た目を左向かせる
                 direction = -transform.right;//値的に左を向いている
+                nowSpeed = moveSpeed;//今のスピード
+            }
+            else
+            {
+                nowSpeed = 0;//今のスピード
             }
 
-            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+                if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
                 transform.rotation = Quaternion.Euler(0, 180, 0);//見た目を右向かせる
                 direction = transform.right;//値的に右を向いている
+                nowSpeed = moveSpeed;//今のスピード
             }
+           
+
         }
     }
 
@@ -104,13 +119,23 @@ public class PlayerAction : MonoBehaviour
 
     void Jump()
     {
+        animator.SetBool("isJump",isJump);//ジャンプアニメに変更
+
         //もし地面についていたらジャンプできる
         if (Input.GetKeyDown(KeyCode.Space) && isGround())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
         }
 
-        //神ゲーつくった
+        //アニメ用のジャンプ処理
+        if (isGround()) 
+        {
+           isJump = false;//ジャンプ
+        }
+        else
+        {
+            isJump = true;
+        }
     }
 
     //地面に付いているかの判定
@@ -118,7 +143,7 @@ public class PlayerAction : MonoBehaviour
     {
         int layerMask = 1 << 6;
         //オブジェクトのレイヤーに該当するLayerをつけ忘れないように
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, layerMask);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.8f, layerMask);
         return hit.collider != null;
 
     }

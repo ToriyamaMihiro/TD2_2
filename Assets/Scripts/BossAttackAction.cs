@@ -12,15 +12,19 @@ public class BossAttackAction : MonoBehaviour
     Vector2 defaultPos = new Vector2(-7.5f, 3.1f);
     Vector2 objectScale;
 
-    public float MoveSpeed = 5;//‰¡ˆÚ“®‚Ì‘¬‚³
+    public float MoveSpeed = 5;//æ¨ªç§»å‹•ã®é€Ÿã•
     int wallTime;
     int randomValue;
 
     bool isFloorHit;
-    public bool isFloor;//•ÊƒXƒNƒŠƒvƒg‚Åg—p‚·‚éƒmƒbƒNƒoƒbƒN‚Å‚«‚é‚©‚ğŒˆ‚ß‚é•Ï”
-    bool isFinish;//UŒ‚‚ªI‚í‚Á‚½‚©
+    public bool isFloor;//åˆ¥ã‚¹ã‚¯ãƒªãƒ—ãƒˆã§ä½¿ç”¨ã™ã‚‹ãƒãƒƒã‚¯ãƒãƒƒã‚¯ã§ãã‚‹ã‹ã‚’æ±ºã‚ã‚‹å¤‰æ•°
+    bool isFinish;//æ”»æ’ƒãŒçµ‚ã‚ã£ãŸã‹
     bool isWall;
     public bool isDeformationFinish;
+
+    //ãƒœã‚¹ã‚µã‚¤ã‚º
+    public Vector3 bossSize = new Vector3(3, 3, 1);
+
     struct Move
     {
         public int rightTime;
@@ -40,10 +44,10 @@ public class BossAttackAction : MonoBehaviour
 
     struct UpDown
     {
-        public float TrackTime;//UpDown‚·‚é‚Ü‚Å‚Ì’Ç”ö‚ÌŠÔ
+        public float TrackTime;//UpDownã™ã‚‹ã¾ã§ã®è¿½å°¾ã®æ™‚é–“
 
-        public int WaitTime;//Ÿ‚ÌUŒ‚‚Ü‚Å‚Ì‘Ò‹@ŠÔ
-        public int TrackWaitTime;//’Ç”öŒã‚Ìã‚Å‚Ì‘Ò‹@ŠÔ
+        public int WaitTime;//æ¬¡ã®æ”»æ’ƒã¾ã§ã®å¾…æ©Ÿæ™‚é–“
+        public int TrackWaitTime;//è¿½å°¾å¾Œã®ä¸Šã§ã®å¾…æ©Ÿæ™‚é–“
 
         public bool isTrackWait;
         public bool isUp;
@@ -56,10 +60,10 @@ public class BossAttackAction : MonoBehaviour
 
     struct Side
     {
-        public float LeftTime;//‰¡“Ëi‚·‚é‚Ü‚Å‚Ì’Ç”ö‚ÌŠÔ
-        public float RightTime;//‰¡“Ëi‚·‚é‚Ü‚Å‚Ì’Ç”ö‚ÌŠÔ
+        public float LeftTime;//æ¨ªçªé€²ã™ã‚‹ã¾ã§ã®è¿½å°¾ã®æ™‚é–“
+        public float RightTime;//æ¨ªçªé€²ã™ã‚‹ã¾ã§ã®è¿½å°¾ã®æ™‚é–“
 
-        public int TrackWaitTime;//’Ç”öŒã‚Ìã‚Å‚Ì‘Ò‹@ŠÔ
+        public int TrackWaitTime;//è¿½å°¾å¾Œã®ä¸Šã§ã®å¾…æ©Ÿæ™‚é–“
 
         public bool isTrackWait;
         public bool isRight;
@@ -103,7 +107,7 @@ public class BossAttackAction : MonoBehaviour
     }
     AttackPattern pattern;
 
-    int patternCount;//Ÿ‚Ìƒpƒ^[ƒ“‚ÉˆÚ“®‚·‚é‚Æ‚«‚Ég‚¤
+    int patternCount;//æ¬¡ã®ãƒ‘ã‚¿ãƒ¼ãƒ³ã«ç§»å‹•ã™ã‚‹ã¨ãã«ä½¿ã†
 
     // Start is called before the first frame update
     void Start()
@@ -127,7 +131,7 @@ public class BossAttackAction : MonoBehaviour
     {
         BossAction boss = GetComponent<BossAction>();
 
-        //‰¡‚É•ÏŒ`
+        //æ¨ªã«å¤‰å½¢
         if (boss.isXDeformation)
         {
             if (randomValue < 61)
@@ -143,7 +147,7 @@ public class BossAttackAction : MonoBehaviour
                 pattern = AttackPattern.three;
             }
         }
-        //c‚É•ÏŒ`‚µ‚Ä‚¢‚­
+        //ç¸¦ã«å¤‰å½¢ã—ã¦ã„ã
         else if (boss.isYDeformation)
         {
             if (randomValue < 61)
@@ -159,7 +163,7 @@ public class BossAttackAction : MonoBehaviour
                 pattern = AttackPattern.one;
             }
         }
-        //•ÏŒ`‚µ‚Ä‚È‚¢‚Æ‚«
+        //å¤‰å½¢ã—ã¦ãªã„ã¨ã
         else
         {
             if (randomValue < 35)
@@ -247,7 +251,7 @@ public class BossAttackAction : MonoBehaviour
     }
 
 
-    //ƒ{ƒX‚ÌUŒ‚’†‚Å‚È‚¯‚ê‚ÎŒ³‚É–ß‚·
+    //ãƒœã‚¹ã®æ”»æ’ƒä¸­ã§ãªã‘ã‚Œã°å…ƒã«æˆ»ã™
     void Deformation()
     {
         BossAction boss = GetComponent<BossAction>();
@@ -257,7 +261,7 @@ public class BossAttackAction : MonoBehaviour
         }
         if (boss.deformationTime >= 200 && isFinish)
         {
-            transform.localScale = new Vector3(2, 2, 1);
+            transform.localScale = bossSize;
             isDeformationFinish = true;
             isFinish = false;
         }
@@ -268,12 +272,12 @@ public class BossAttackAction : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         switch (nowMode)
         {
-            case ActionMode.Moving: // ˆÚ“®’†
+            case ActionMode.Moving: // ç§»å‹•ä¸­
 
                 move.rightTime += 1;
                 if (move.rightTime <= 200)
                 {
-                    //‰E‚És‚­
+                    //å³ã«è¡Œã
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(rightPos.x, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
                 else if(move.rightTime >= 201&&!move.isRight&&!move.isLeft)
@@ -281,7 +285,7 @@ public class BossAttackAction : MonoBehaviour
                     move.isRight = true;
                     move.isWait = true;
                 }
-                //‘Ò‚¿ŠÔ‚É‚È‚Á‚½‚çˆê’U~‚Ü‚é
+                //å¾…ã¡æ™‚é–“ã«ãªã£ãŸã‚‰ä¸€æ—¦æ­¢ã¾ã‚‹
                 if (move.isWait && move.isRight)
                 {
                     move.waitTime += 1;
@@ -297,7 +301,7 @@ public class BossAttackAction : MonoBehaviour
                 {
                     move.leftTime += 1;
                 }
-                //¶‚ÉˆÚ“®
+                //å·¦ã«ç§»å‹•
                 if (move.isLeft && !move.isWait && move.leftTime < 100)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(leftPos.x, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
@@ -322,39 +326,39 @@ public class BossAttackAction : MonoBehaviour
                 }
                 break;
 
-            case ActionMode.UpDown: // ƒvƒŒƒCƒ„[‚ğˆê’èŠÔ’Ç”öŒãƒvƒŒƒXUŒ‚
+            case ActionMode.UpDown: // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸€å®šæ™‚é–“è¿½å°¾å¾Œãƒ—ãƒ¬ã‚¹æ”»æ’ƒ
 
 
                 upDown.TrackTime += 1;
                 if (upDown.TrackTime <= 200 && !upDown.isTrackWait)
                 {
-                    //ƒvƒŒƒCƒ„[‚ğˆê’èŠÔ’Ç”ö
+                    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸€å®šæ™‚é–“è¿½å°¾
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(player.transform.position.x, defaultPos.y - objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
                 else
                 {
                     upDown.isTrackWait = true;
                 }
-                //‚»‚ê‚ªI‚Á‚½‚çã‚Å‘Ò‹@
+                //ãã‚ŒãŒçµ‚ã£ãŸã‚‰ä¸Šã§å¾…æ©Ÿ
                 if (upDown.isTrackWait && !upDown.isWait)
                 {
                     upDown.TrackWaitTime += 1;
                     if (upDown.TrackWaitTime >= 100 && !isFloorHit)
                     {
-                        //‘Ò‹@ŠÔ‚ğ‰ß‚¬‚½‚ç‰º‚É‰º‚ª‚é
+                        //å¾…æ©Ÿæ™‚é–“ã‚’éããŸã‚‰ä¸‹ã«ä¸‹ãŒã‚‹
                         transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4, transform.position.z), MoveSpeed * Time.deltaTime);
                     }
                 }
-                //°‚É“–‚½‚Á‚½‚ç
+                //åºŠã«å½“ãŸã£ãŸã‚‰
                 if (isFloorHit)
                 {
                     upDown.isWait = true;
                 }
-                //Œ„ŠÔ
+                //éš™æ™‚é–“
                 if (upDown.isWait)
                 {
                     upDown.WaitTime += 1;
-                    //Œ„ŠÔ‚ªI‚Á‚½‚çã‚É–ß‚·
+                    //éš™æ™‚é–“ãŒçµ‚ã£ãŸã‚‰ä¸Šã«æˆ»ã™
                     if (upDown.WaitTime >= 100)
                     {
                         upDown.isUp = true;
@@ -366,11 +370,11 @@ public class BossAttackAction : MonoBehaviour
                 if (upDown.isUp)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, defaultPos.y - objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
-                    //’èˆÊ’u‚Ü‚Å–ß‚Á‚½‚ç
+                    //å®šä½ç½®ã¾ã§æˆ»ã£ãŸã‚‰
                     if (transform.position.y >= defaultPos.y - objectScale.y / 2)
                     {
                         upDownCount += 1;
-                        //‰Šú‰»‚µ‚Ä\‘¢‘Ì‚Ì’†‚Ì’l‚ğ0‚É–ß‚·
+                        //åˆæœŸåŒ–ã—ã¦æ§‹é€ ä½“ã®ä¸­ã®å€¤ã‚’0ã«æˆ»ã™
                         upDown = default;
                     }
                 }
@@ -389,19 +393,19 @@ public class BossAttackAction : MonoBehaviour
 
                 side.LeftTime += 1;
                 Vector2 sidePos = new Vector2(8.5f, 0);
-                //’Ç”ö
+                //è¿½å°¾
                 if (side.LeftTime <= 220 && !isWall)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(defaultPos.x + objectScale.x / 2, player.transform.position.y + objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                     side.isLeft = true;
                 }
 
-                //•Ç‚É“–‚½‚é‚Ü‚Å“Ëi
+                //å£ã«å½“ãŸã‚‹ã¾ã§çªé€²
                 if (side.LeftTime >= 221 && side.isLeft)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(sidePos.x - objectScale.x / 2, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
-                //‰E’[‚É‚«‚Ä•Ç‚É“–‚½‚Á‚ÄƒXƒ^ƒ“‚ªI‚Á‚½‚ç
+                //å³ç«¯ã«ãã¦å£ã«å½“ãŸã£ã¦ã‚¹ã‚¿ãƒ³ãŒçµ‚ã£ãŸã‚‰
                 if (transform.position.x >= sidePos.x - objectScale.x / 2)
                 {
                     side.isRight = true;
@@ -414,12 +418,12 @@ public class BossAttackAction : MonoBehaviour
                 WallStan();
                 if (side.RightTime <= 220 && side.isRight && !isWall)
                 {
-                    //’Ç”ö
+                    //è¿½å°¾
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(-defaultPos.x - objectScale.x / 2, player.transform.position.y + objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
                 if (side.RightTime >= 221 && side.isRight && !isWall)
                 {
-                    //¶‚É“Ëi
+                    //å·¦ã«çªé€²
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(-sidePos.x + objectScale.x / 2, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
                 WallStan();
@@ -436,7 +440,7 @@ public class BossAttackAction : MonoBehaviour
                 }
                 break;
 
-            case ActionMode.TrackBullet: //•ú•¨ü‚ğ•`‚¢‚½’Ç”ö‚Ì’e‚ğo‚·
+            case ActionMode.TrackBullet: //æ”¾ç‰©ç·šã‚’æã„ãŸè¿½å°¾ã®å¼¾ã‚’å‡ºã™
 
                 trackBullet.IntervalTime += 1;
                 if (!trackBullet.isWait)

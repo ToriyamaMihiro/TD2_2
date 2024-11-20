@@ -6,35 +6,39 @@ using UnityEngine.UI;
 public class BossAction : MonoBehaviour
 {
 
-    int xCount;//x•ûŒü‚©‚çó‚¯‚½‰ñ”Ac‚ÉL‚Ñ‚é
-    int yCount;//y•ûŒü‚©‚çó‚¯‚½‰ñ”A‰¡‚ÉL‚Ñ‚é
+    int xCount;//xæ–¹å‘ã‹ã‚‰å—ã‘ãŸå›æ•°ã€ç¸¦ã«ä¼¸ã³ã‚‹
+    int yCount;//yæ–¹å‘ã‹ã‚‰å—ã‘ãŸå›æ•°ã€æ¨ªã«ä¼¸ã³ã‚‹
 
-    int deformationCount = 3;//•ÏŒ`‚·‚é‚Ü‚Å‚Ì‰ñ”
+    int deformationCount = 3;//å¤‰å½¢ã™ã‚‹ã¾ã§ã®å›æ•°
     int life = 100;
     int dustDamage = 1;
     int attackDamage = 2;
     public int deformationTime;
 
     int currentHp;
-    //Slider‚ğ“ü‚ê‚é
+    //Sliderã‚’å…¥ã‚Œã‚‹
     public Slider slider;
 
     float knockBackPower = 1;
 
-    public bool isXDeformation;//X•ûŒü‚É•ÏŒ`‚µ‚½‚©
-    public bool isYDeformation;//Y•ûŒü‚É•ÏŒ`‚µ‚½‚©
+    public bool isXDeformation;//Xæ–¹å‘ã«å¤‰å½¢ã—ãŸã‹
+    public bool isYDeformation;//Yæ–¹å‘ã«å¤‰å½¢ã—ãŸã‹
     bool isHit;
     bool isFloor;
     bool isWall;
     public bool isDead;
     bool isKnockBack;
 
+    //ãƒœã‚¹å¤‰å½¢ã‚µã‚¤ã‚º
+    public Vector3 varticalBossSize = new Vector3(1.5f, 4, 1);
+    public Vector3 besideBossSize = new Vector3(4, 1.5f, 1);
+
     // Start is called before the first frame update
     void Start()
     {
-        //Slider‚ğ–ƒ^ƒ“‚É‚·‚éB
+        //Sliderã‚’æº€ã‚¿ãƒ³ã«ã™ã‚‹ã€‚
         slider.value = 1;
-        //Œ»İ‚ÌHP‚ğÅ‘åHP‚Æ“¯‚¶‚ÉB
+        //ç¾åœ¨ã®HPã‚’æœ€å¤§HPã¨åŒã˜ã«ã€‚
         currentHp = life;
     }
 
@@ -45,29 +49,29 @@ public class BossAction : MonoBehaviour
         HitRest();
         Dead();
         Range();
-        //HPŒvZ
+        //HPè¨ˆç®—
         slider.value = (float)currentHp / (float)life;
     }
 
-    //ƒmƒbƒNƒoƒbƒN‚ÅŠO‚És‚©‚È‚¢‚æ‚¤‚É‚·‚é
+    //ãƒãƒƒã‚¯ãƒãƒƒã‚¯ã§å¤–ã«è¡Œã‹ãªã„ã‚ˆã†ã«ã™ã‚‹
     void Range()
     {
-        //Œ»İ‚Ìƒ|ƒWƒVƒ‡ƒ“‚ğ•Û‚·‚é
+        //ç¾åœ¨ã®ãƒã‚¸ã‚·ãƒ§ãƒ³ã‚’ä¿æŒã™ã‚‹
         Vector3 currentPos = transform.position;
 
-        //Mathf.Clamp‚ÅX,Y‚Ì’l‚»‚ê‚¼‚ê‚ªÅ¬`Å‘å‚Ì”ÍˆÍ“à‚Éû‚ß‚éB
-        //•¨—‹““®‚Ì‚ ‚éisTrigger‚É‚µ‚½‚¢‚ªA°‚Í“Ë‚«”²‚¯‚Ä‚Ù‚µ‚­‚È‚¢‚Ì‚Å–³—‚â‚è”ÍˆÍ‚ğŒˆ‚ß‚Ä—‚¿‚È‚¢‚æ‚¤‚É‚·‚é
+        //Mathf.Clampã§X,Yã®å€¤ãã‚Œãã‚ŒãŒæœ€å°ï½æœ€å¤§ã®ç¯„å›²å†…ã«åã‚ã‚‹ã€‚
+        //ç‰©ç†æŒ™å‹•ã®ã‚ã‚‹isTriggerã«ã—ãŸã„ãŒã€åºŠã¯çªãæŠœã‘ã¦ã»ã—ããªã„ã®ã§ç„¡ç†ã‚„ã‚Šç¯„å›²ã‚’æ±ºã‚ã¦è½ã¡ãªã„ã‚ˆã†ã«ã™ã‚‹
         currentPos.x = Mathf.Clamp(currentPos.x, -7.5f, 7.5f);
 
-        //position‚ğcurrentPos‚É‚·‚é
+        //positionã‚’currentPosã«ã™ã‚‹
         transform.position = currentPos;
 
     }
 
-    //•ÏŒ`
+    //å¤‰å½¢
     void Deformation()
     {
-        //•ÏŒ`‚µ‚½‚çƒJƒEƒ“ƒg‚ğƒŠƒZƒbƒg
+        //å¤‰å½¢ã—ãŸã‚‰ã‚«ã‚¦ãƒ³ãƒˆã‚’ãƒªã‚»ãƒƒãƒˆ
         if (isXDeformation || isYDeformation)
         {
             xCount = 0;
@@ -75,7 +79,7 @@ public class BossAction : MonoBehaviour
             deformationTime += 1;
         }
 
-        //ƒ{ƒX‚ÌUŒ‚’†‚Å‚È‚¯‚ê‚ÎŒ³‚É–ß‚·
+        //ãƒœã‚¹ã®æ”»æ’ƒä¸­ã§ãªã‘ã‚Œã°å…ƒã«æˆ»ã™
         BossAttackAction bossAttack = GetComponent<BossAttackAction>();
         if (bossAttack.isDeformationFinish)
         {
@@ -83,18 +87,18 @@ public class BossAction : MonoBehaviour
             isYDeformation = false;
             deformationTime = 0;
         }
-        //‚»‚ê‚¼‚ê‚Ì•ûŒü‚Ö•ÏŒ`
+        //ãã‚Œãã‚Œã®æ–¹å‘ã¸å¤‰å½¢
         if (isXDeformation)
         {
-            transform.localScale = new Vector3(1.5f, 4, 1);
+            transform.localScale = varticalBossSize;
         }
         if (isYDeformation)
         {
-            transform.localScale = new Vector3(4, 1.5f, 1);
+            transform.localScale = besideBossSize;
         }
     }
 
-    //UŒ‚‚Ì‚½‚Ñ‚ÉƒJƒEƒ“ƒg‚³‚¹‚é‚½‚ß‚ÌƒŠƒZƒbƒg
+    //æ”»æ’ƒã®ãŸã³ã«ã‚«ã‚¦ãƒ³ãƒˆã•ã›ã‚‹ãŸã‚ã®ãƒªã‚»ãƒƒãƒˆ
     void HitRest()
     {
         if (isHit)
@@ -103,7 +107,7 @@ public class BossAction : MonoBehaviour
             GameObject obj = GameObject.Find("Weapon");
             weapon = obj.GetComponent<AttackAction>();
 
-            //UŒ‚‚ªI‚Á‚½‚çisHit‚ğfalse‚É‚µ‚ÄUŒ‚‚Ì‚½‚Ñ‚ÉƒJƒEƒ“ƒg‚³‚ê‚é‚æ‚¤‚É‚·‚é
+            //æ”»æ’ƒãŒçµ‚ã£ãŸã‚‰isHitã‚’falseã«ã—ã¦æ”»æ’ƒã®ãŸã³ã«ã‚«ã‚¦ãƒ³ãƒˆã•ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹
             if (!weapon.isAttack && !weapon.isDashAttack)
             {
                 isHit = false;
@@ -119,10 +123,10 @@ public class BossAction : MonoBehaviour
         }
     }
 
-    //•ÏŒ`‚Ìˆ—
+    //å¤‰å½¢ã®å‡¦ç†
     void OnTriggerStay2D(Collider2D collision)
     {
-        //°‚É‹‚½‚çƒmƒbƒNƒoƒbƒN‚·‚é
+        //åºŠã«å±…ãŸã‚‰ãƒãƒƒã‚¯ãƒãƒƒã‚¯ã™ã‚‹
         if (collision.gameObject.tag == "Floor")
         {
             if (!isFloor)
@@ -139,17 +143,17 @@ public class BossAction : MonoBehaviour
 
             if (!isHit)
             {
-                //ƒRƒ“ƒ{‚ªƒ}ƒbƒNƒX‚©‚Â‰¡UŒ‚‚¾‚Á‚½‚©‚Â°‚É‚¢‚½ê‡ƒmƒbƒNƒoƒbƒN‚·‚é
+                //ã‚³ãƒ³ãƒœãŒãƒãƒƒã‚¯ã‚¹ã‹ã¤æ¨ªæ”»æ’ƒã ã£ãŸã‹ã¤åºŠã«ã„ãŸå ´åˆãƒãƒƒã‚¯ãƒãƒƒã‚¯ã™ã‚‹
                 if (weapon.comboCount == weapon.comboCountMax && weapon.isDashAttack && isFloor)
                 {
-                    //ƒRƒ“ƒ{‚Å‚ÌƒmƒbƒNƒoƒbƒN
+                    //ã‚³ãƒ³ãƒœã§ã®ãƒãƒƒã‚¯ãƒãƒƒã‚¯
                     Vector3 distination = (transform.position - collision.transform.position).normalized;
 
                     transform.Translate(distination.x * knockBackPower, 0f, 0f);
                     weapon.comboCount = 0;
                 }
 
-                //•ÏŒ`‚ÌƒJƒEƒ“ƒg
+                //å¤‰å½¢ã®ã‚«ã‚¦ãƒ³ãƒˆ
                 if (weapon.isAttack)
                 {
                     if (!isXDeformation && !isYDeformation)
@@ -180,13 +184,13 @@ public class BossAction : MonoBehaviour
         }
     }
 
-    //Dust‚Ìƒ_ƒ[ƒWˆ—
+    //Dustã®ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Dust")
         {
             currentHp = currentHp - dustDamage;
-            //“–‚½‚Á‚½ƒIƒuƒWƒFƒNƒg‚ğíœ‚·‚é
+            //å½“ãŸã£ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å‰Šé™¤ã™ã‚‹
             Destroy(collision.gameObject);
         }
     }
