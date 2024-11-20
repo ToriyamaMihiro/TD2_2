@@ -67,22 +67,22 @@ public class PlayerAction : MonoBehaviour
         //攻撃中でなければ移動できる
         if (!weapon.isAttack && !isDash)
         {
-            rb.velocity = new Vector2(inputDirection.x * moveSpeed, rb.velocity.y);
+           // rb.velocity = new Vector2(inputDirection.x * moveSpeed, rb.velocity.y);
 
 
-            //if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-            //{
-            //    rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);//y方向は今のvelicityを入れる
-            //    transform.rotation = Quaternion.Euler(0, 0, 0);//見た目を左向かせる
-            //    direction = -transform.right;//値的に左を向いている
-            //}
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            {
+                rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);//y方向は今のvelicityを入れる
+                transform.rotation = Quaternion.Euler(0, 0, 0);//見た目を左向かせる
+                direction = -transform.right;//値的に左を向いている
+            }
 
-            //if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-            //{
-            //    rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
-            //    transform.rotation = Quaternion.Euler(0, 180, 0);//見た目を右向かせる
-            //    direction = transform.right;//値的に右を向いている
-            //}
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            {
+                rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+                transform.rotation = Quaternion.Euler(0, 180, 0);//見た目を右向かせる
+                direction = transform.right;//値的に右を向いている
+            }
         }
     }
 
