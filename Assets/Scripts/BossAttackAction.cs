@@ -41,6 +41,8 @@ public class BossAttackAction : MonoBehaviour
     Vector2 leftPos = new Vector2(6, 0);
     int moveMaxCount = 1;
     int moveCount;
+    int moveTime = 200;
+    int moveWaitTime = 100;
 
     struct UpDown
     {
@@ -55,7 +57,9 @@ public class BossAttackAction : MonoBehaviour
     }
     UpDown upDown;
     int upDownCount;
-    int upDownCountMax = 1;
+    int upDownCountMax = 3;
+    int upDownMoveTime = 200;
+    int upDownWaitTime = 100;
 
 
     struct Side
@@ -73,7 +77,8 @@ public class BossAttackAction : MonoBehaviour
 
     Side side;
     int sideCount;
-    int sideCountMax = 1;
+    int sideCountMax = 3;
+    int sideWaitTime = 150;
 
 
     //TrackBullet
@@ -85,8 +90,9 @@ public class BossAttackAction : MonoBehaviour
     }
     TrackBullet trackBullet;
 
+    int trackBulletTime = 220;
     int trackBulletCount;
-    int trackBulletCountMax = 1;
+    int trackBulletCountMax = 3;
 
     ActionMode nowMode;
 
@@ -276,12 +282,12 @@ public class BossAttackAction : MonoBehaviour
             case ActionMode.Moving: // 移動中
 
                 move.rightTime += 1;
-                if (move.rightTime <= 200)
+                if (move.rightTime <= moveTime)
                 {
                     //右に行く
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(rightPos.x, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
-                else if (move.rightTime >= 201 && !move.isRight && !move.isLeft)
+                else if (move.rightTime >= moveTime+1 && !move.isRight && !move.isLeft)
                 {
                     move.isRight = true;
                     move.isWait = true;
@@ -290,7 +296,7 @@ public class BossAttackAction : MonoBehaviour
                 if (move.isWait && move.isRight)
                 {
                     move.waitTime += 1;
-                    if (move.waitTime >= 100)
+                    if (move.waitTime >= moveWaitTime)
                     {
                         move.isWait = false;
                         move.isRight = false;
@@ -303,17 +309,17 @@ public class BossAttackAction : MonoBehaviour
                     move.leftTime += 1;
                 }
                 //左に移動
-                if (move.isLeft && !move.isWait && move.leftTime < 100)
+                if (move.isLeft && !move.isWait && move.leftTime < moveTime)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(leftPos.x, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
-                else if (move.leftTime > 101)
+                else if (move.leftTime > moveTime+1)
                 {
                     move.isWait = true;
                     if (move.isWait && move.isLeft)
                     {
                         move.waitTime += 1;
-                        if (move.waitTime >= 100)
+                        if (move.waitTime >= moveWaitTime)
                         {
                             moveCount += 1;
                             move = default;
@@ -331,7 +337,7 @@ public class BossAttackAction : MonoBehaviour
 
 
                 upDown.TrackTime += 1;
-                if (upDown.TrackTime <= 200 && !upDown.isTrackWait)
+                if (upDown.TrackTime <= upDownMoveTime && !upDown.isTrackWait)
                 {
                     //プレイヤーを一定時間追尾
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(player.transform.position.x, defaultPos.y - objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
@@ -344,7 +350,7 @@ public class BossAttackAction : MonoBehaviour
                 if (upDown.isTrackWait && !upDown.isWait)
                 {
                     upDown.TrackWaitTime += 1;
-                    if (upDown.TrackWaitTime >= 100 && !isFloorHit && !upDown.isUp)
+                    if (upDown.TrackWaitTime >= upDownWaitTime && !isFloorHit && !upDown.isUp)
                     {
                         //待機時間を過ぎたら下に下がる
                         transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4, transform.position.z), MoveSpeed * Time.deltaTime);
@@ -361,7 +367,7 @@ public class BossAttackAction : MonoBehaviour
                 {
                     upDown.WaitTime += 1;
                     //隙時間が終ったら上に戻す
-                    if (upDown.WaitTime >= 100)
+                    if (upDown.WaitTime >= upDownWaitTime)
                     {
                         upDown.isUp = true;
                         isFloorHit = false;
@@ -404,16 +410,16 @@ public class BossAttackAction : MonoBehaviour
             case ActionMode.SideTackle:
 
                 side.LeftTime += 1;
-                Vector2 sidePos = new Vector2(8.5f, 0);
+                Vector2 sidePos = new Vector2(8.7f, 0);
                 //追尾
-                if (side.LeftTime <= 220 && !isWall)
+                if (side.LeftTime <= trackBulletTime && !isWall)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(defaultPos.x + objectScale.x / 2, player.transform.position.y + objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                     side.isLeft = true;
                 }
 
                 //壁に当たるまで突進
-                if (side.LeftTime >= 221 && side.isLeft)
+                if (side.LeftTime >= trackBulletTime+1 && side.isLeft)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(sidePos.x - objectScale.x / 2, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
@@ -423,17 +429,17 @@ public class BossAttackAction : MonoBehaviour
                     side.isRight = true;
                     side.isLeft = false;
                 }
+                WallStan();
                 if (side.isRight && !isWall)
                 {
                     side.RightTime += 1;
                 }
-                WallStan();
-                if (side.RightTime <= 220 && side.isRight && !isWall)
+                if (side.RightTime <= trackBulletTime && side.isRight && !isWall)
                 {
                     //追尾
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(-defaultPos.x - objectScale.x / 2, player.transform.position.y + objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
-                if (side.RightTime >= 221 && side.isRight && !isWall)
+                if (side.RightTime >= trackBulletTime+1 && side.isRight && !isWall)
                 {
                     //左に突進
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(-sidePos.x + objectScale.x / 2, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
@@ -508,7 +514,7 @@ public class BossAttackAction : MonoBehaviour
         if (isWall)
         {
             wallTime += 1;
-            if (wallTime >= 100)
+            if (wallTime >= sideWaitTime)
             {
                 isWall = false;
                 wallTime = 0;

@@ -17,11 +17,11 @@ public class AttackAction : MonoBehaviour
     Vector3 weponPos;//振り下ろす際の位置を取得する
     Vector3 startPos = new Vector3(-1f, 0.5f, 0);//初期化用の位置を取得
 
-    public float movePower = 1.3f;
-    float moveSpeed = 3;
+    public float movePower = 1.2f;
+    float moveSpeed = 4;
 
     public int attackTime = 0;
-    public int attackFullTime = 21;//攻撃のリセットの時間
+    public int attackFullTime = 10;//攻撃のリセットの時間
     int comboTime = 0;
     int comboMaxTime = 200;
     public int comboCount = 0;
@@ -119,7 +119,7 @@ public class AttackAction : MonoBehaviour
             if (player.direction == -player.transform.right)
             {
                 //武器の移動
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x - movePower, weponPos.y, weponPos.z), 2 * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x - movePower, weponPos.y, weponPos.z), moveSpeed * Time.deltaTime);
             }
 
             //攻撃が終わったらリセットする
