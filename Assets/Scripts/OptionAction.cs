@@ -9,7 +9,7 @@ public class OptionAction : MonoBehaviour
     public GameObject Retry;
     public GameObject Title;
 
-    public bool isRight = false;//‰E‚ğ‘I‘ğ‚µ‚Ä‚¢‚é‚©
+    public bool isRight = false;//å³ã‚’é¸æŠã—ã¦ã„ã‚‹ã‹
 
     // Start is called before the first frame update
     void Start()
@@ -32,15 +32,15 @@ public class OptionAction : MonoBehaviour
         }
         if (isRight)
         {
-            //Šg‘åŠgkƒAƒjƒ[ƒVƒ‡ƒ“
-            Title.transform.localScale = new Vector3(1f, 1f, 1f);
-            Retry.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+            //æ‹¡å¤§æ‹¡ç¸®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+            Title.transform.localScale = new Vector3(2f, 2f, 2f);
+            Retry.transform.localScale = new Vector3(1f, 1f, 1f);
         }
         if (!isRight)
         {
-            //Šg‘åŠgkƒAƒjƒ[ƒVƒ‡ƒ“
-            Title.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-            Retry.transform.localScale = new Vector3(1f, 1f, 1f);
+            //æ‹¡å¤§æ‹¡ç¸®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+            Title.transform.localScale = new Vector3(1f, 1f, 1f);
+            Retry.transform.localScale = new Vector3(2f, 2f, 2f);
         }
     }
 }
