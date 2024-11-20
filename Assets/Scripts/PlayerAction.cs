@@ -23,6 +23,7 @@ public class PlayerAction : MonoBehaviour
 
     public int dashTime;
     int life = 10;
+    int jumpCount;
 
     public bool isDash;
     public bool isDead;
@@ -109,17 +110,24 @@ public class PlayerAction : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        AttackAction weapon;
+        GameObject obj = GameObject.Find("Weapon");
+        weapon = obj.GetComponent<AttackAction>();
+
         //移動方向の入力情報がInputdirectionの中に入るようにする
         inputDirection = context.ReadValue<Vector2>();
-        if (inputDirection.x < 0)
+        if (!weapon.isAttack && !weapon.isDashAttack)
         {
-            transform.rotation = Quaternion.Euler(0, 0, 0);//見た目を左向かせる
-            direction = -transform.right;//値的に左を向いている
-        }
-        if (inputDirection.x > 0)
-        {
-            transform.rotation = Quaternion.Euler(0, 180, 0);//見た目を右向かせる
-            direction = transform.right;//値的に右を向いている
+            if (inputDirection.x < 0)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);//見た目を左向かせる
+                direction = -transform.right;//値的に左を向いている
+            }
+            if (inputDirection.x > 0)
+            {
+                transform.rotation = Quaternion.Euler(0, 180, 0);//見た目を右向かせる
+                direction = transform.right;//値的に右を向いている
+            }
         }
     }
 
@@ -127,16 +135,23 @@ public class PlayerAction : MonoBehaviour
     {
         animator.SetBool("isJump", isJump);//ジャンプアニメに変更
 
+        AttackAction weapon;
+        GameObject obj = GameObject.Find("Weapon");
+        weapon = obj.GetComponent<AttackAction>();
+
         //もし地面についていたらジャンプできる
-        if (inputAcution.Player.Jump.IsPressed() && isGround())
+        if (inputAcution.Player.Jump.WasPressedThisFrame() &&  jumpCount < 1)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            jumpCount += 1;
         }
 
         //アニメ用のジャンプ処理
         if (isGround())
         {
             isJump = false;//ジャンプ
+            jumpCount = 0;
+
         }
         else
         {

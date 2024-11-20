@@ -51,8 +51,11 @@ public class AttackAction : MonoBehaviour
 
     void Attack()
     {
+        PlayerAction player;
+        GameObject obj = GameObject.Find("Player");
+        player = obj.GetComponent<PlayerAction>();
         ////ボタンを押したら90度回転させて振り下ろす
-        if (inputAcution.Player.Attack.IsPressed() && !isAttack)
+        if (inputAcution.Player.Attack.IsPressed() && !isAttack && !player.isJump)
         {
             transform.Rotate(0, 0, 90);
             weponPos = transform.position;
@@ -63,9 +66,6 @@ public class AttackAction : MonoBehaviour
         }
         if (isAttack)
         {
-            PlayerAction player;
-            GameObject obj = GameObject.Find("Player");
-            player = obj.GetComponent<PlayerAction>();
             //振り下ろしている時間をカウント
             attackTime += 1;
 
@@ -88,7 +88,10 @@ public class AttackAction : MonoBehaviour
 
     void DashAttack()
     {
-        if (inputAcution.Player.DashAttack.IsPressed() && !isDashAttack)
+        PlayerAction player;
+        GameObject obj = GameObject.Find("Player");
+        player = obj.GetComponent<PlayerAction>();
+        if (inputAcution.Player.DashAttack.IsPressed() && !isDashAttack && !player.isJump)
         {
             weponPos = transform.position;
             isDashAttack = true;
@@ -98,9 +101,6 @@ public class AttackAction : MonoBehaviour
         }
         if (isDashAttack)
         {
-            PlayerAction player;
-            GameObject obj = GameObject.Find("Player");
-            player = obj.GetComponent<PlayerAction>();
 
             //攻撃している時間をカウント
             attackTime += 1;

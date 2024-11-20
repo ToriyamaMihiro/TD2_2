@@ -119,7 +119,7 @@ public class BossAttackAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //AttackRandom();
+        AttackRandom();
         Deformation();
         AttackManager();
         Attack();
@@ -195,7 +195,7 @@ public class BossAttackAction : MonoBehaviour
 
                 if (patternCount == 0)
                 {
-                    nowMode = ActionMode.TrackBullet;
+                    nowMode = ActionMode.SideTackle;
                     isFinish = false;
                 }
                 if (patternCount == 1)
