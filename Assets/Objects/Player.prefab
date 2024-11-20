@@ -127,6 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LDust: {fileID: 7472043042596435002, guid: f96a9ad96a5b08d45a06696bae657013, type: 3}
   RDust: {fileID: 7638361356168949957, guid: 8efd5b74ca4dbb84a983c5122c2e252d, type: 3}
+  movePower: 1.2
   attackTime: 0
   attackFullTime: 51
   comboCount: 0
@@ -303,14 +304,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0cf59302306259448966a8e4da59fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerRenderer: {fileID: 0}
+  image: {fileID: 6435081224148188661, guid: 4b879497234c8a54db1db1dcb7d6528e, type: 3}
   direction: {x: 0, y: 0, z: 0}
   moveSpeed: 3
   jumpPower: 7
   dashPower: 10
-  dashTime: 0
-  isDash: 0
+  life: 10
   isDead: 0
+  isHit: 0
   nowSpeed: 0
   isJump: 0
 --- !u!114 &-2931495669491154429

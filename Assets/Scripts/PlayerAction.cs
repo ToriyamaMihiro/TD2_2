@@ -6,12 +6,17 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
+using UnityEngine.UI;
 
 public class PlayerAction : MonoBehaviour
 {
     private Rigidbody2D rb;
-    public SpriteRenderer playerRenderer;
+    SpriteRenderer playerRenderer;
     private TD2_2 inputAcution;
+
+    public Image image;
+
+    bool isDamage;
 
     public Vector3 direction;
 
@@ -21,13 +26,14 @@ public class PlayerAction : MonoBehaviour
     public float jumpPower = 5;
     public float dashPower = 5;
 
-    public int dashTime;
-    int life = 10;
+    int dashTime;
+    public int life = 10;
     int jumpCount;
 
-    public bool isDash;
+    bool isDash;
+    int hitTime;
     public bool isDead;
-    bool isHit;
+    public bool isHit;
 
     //アニメ
     public float nowSpeed;//判定用のスピード
@@ -45,7 +51,9 @@ public class PlayerAction : MonoBehaviour
         inputAcution = new TD2_2();
         inputAcution.Enable();
         animator = GetComponent<Animator>();
+        image = GetComponent<Image>();
     }
+
 
     // Update is called once per frame
     void Update()
@@ -140,7 +148,7 @@ public class PlayerAction : MonoBehaviour
         weapon = obj.GetComponent<AttackAction>();
 
         //もし地面についていたらジャンプできる
-        if (inputAcution.Player.Jump.WasPressedThisFrame() &&  jumpCount < 1)
+        if (inputAcution.Player.Jump.WasPressedThisFrame() && jumpCount < 1)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
             jumpCount += 1;
@@ -219,7 +227,13 @@ public class PlayerAction : MonoBehaviour
             //プレイヤーの色を点滅させて無敵時間だと分かりやすくする
             float level = Mathf.Abs(Mathf.Sin(Time.time * 10));
             gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, level);
-
+            
+            //毎フレーム呼び出させないため
+            hitTime += 1;
+            if (hitTime == 1)
+            {
+                Invoke("WaitFor", 1.5f);
+            }
         }
     }
 
@@ -227,13 +241,28 @@ public class PlayerAction : MonoBehaviour
     IEnumerator WaitForIt()
     {
         // 3�b�ԏ������~�߂�
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.5f);
 
         //�P�b��_���[�W�t���O��false�ɂ��ē_�ł�߂�
         isHit = false;
 
         //プレイヤーの色を元に戻す
         playerRenderer.color = new Color(1f, 1f, 1f, 1f);
+       
+    }
+
+    void WaitFor()
+    {
+        PlayerHPImage playerHP;
+        GameObject obj = GameObject.Find("PlayerHPTop");
+        playerHP = obj.GetComponent<PlayerHPImage>();
+
+        isHit = false;
+        //該当スクリプト内でするとisDamageがfalseになるより速くまたisHitになってしまうため
+        playerHP.isDamage = false;
+        //プレイヤーの色を元に戻す
+        playerRenderer.color = new Color(1f, 1f, 1f, 1f);
+        hitTime = 0;
     }
 
     void Dead()
@@ -250,10 +279,10 @@ public class PlayerAction : MonoBehaviour
         {
             if (!isHit)
             {
-                //一定時間無敵になる
-                StartCoroutine("WaitForIt");
                 life -= 1;
+                //一定時間無敵になる
                 isHit = true;
+
             }
         }
     }
