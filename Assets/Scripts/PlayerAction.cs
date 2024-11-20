@@ -39,7 +39,7 @@ public class PlayerAction : MonoBehaviour
     {
         rb = this.GetComponent<Rigidbody2D>();
         playerRenderer = gameObject.GetComponent<SpriteRenderer>();
-        direction = transform.right;//初期の向いている向き
+        direction = -transform.right;//初期の向いている向き
         //コントローラーを使うためのもの
         inputAcution = new TD2_2();
         inputAcution.Enable();

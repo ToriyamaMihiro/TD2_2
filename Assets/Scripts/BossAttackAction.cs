@@ -195,7 +195,7 @@ public class BossAttackAction : MonoBehaviour
 
                 if (patternCount == 0)
                 {
-                    nowMode = ActionMode.Moving;
+                    nowMode = ActionMode.TrackBullet;
                     isFinish = false;
                 }
                 if (patternCount == 1)
@@ -270,6 +270,7 @@ public class BossAttackAction : MonoBehaviour
     void Attack()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+        BossAction boss = GetComponent<BossAction>();
         switch (nowMode)
         {
             case ActionMode.Moving: // 移動中
@@ -280,7 +281,7 @@ public class BossAttackAction : MonoBehaviour
                     //右に行く
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(rightPos.x, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
-                else if(move.rightTime >= 201&&!move.isRight&&!move.isLeft)
+                else if (move.rightTime >= 201 && !move.isRight && !move.isLeft)
                 {
                     move.isRight = true;
                     move.isWait = true;
@@ -343,10 +344,11 @@ public class BossAttackAction : MonoBehaviour
                 if (upDown.isTrackWait && !upDown.isWait)
                 {
                     upDown.TrackWaitTime += 1;
-                    if (upDown.TrackWaitTime >= 100 && !isFloorHit)
+                    if (upDown.TrackWaitTime >= 100 && !isFloorHit && !upDown.isUp)
                     {
                         //待機時間を過ぎたら下に下がる
                         transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4, transform.position.z), MoveSpeed * Time.deltaTime);
+
                     }
                 }
                 //床に当たったら
@@ -363,8 +365,18 @@ public class BossAttackAction : MonoBehaviour
                     {
                         upDown.isUp = true;
                         isFloorHit = false;
-
+                        upDown.isWait = false;
                     }
+                    //もしこの間に変形したらそれに合わせる
+                    if (boss.isXDeformation)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4 + objectScale.y / 2, transform.position.z), MoveSpeed + 5 * Time.deltaTime);
+                    }
+                    if (boss.isYDeformation)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4 + objectScale.y / 2, transform.position.z), MoveSpeed + 5 * Time.deltaTime);
+                    }
+
                 }
 
                 if (upDown.isUp)
@@ -426,7 +438,9 @@ public class BossAttackAction : MonoBehaviour
                     //左に突進
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(-sidePos.x + objectScale.x / 2, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
+
                 WallStan();
+
                 if (transform.position.x <= -sidePos.x + objectScale.x / 2 && side.isRight)
                 {
                     side = default;
@@ -445,6 +459,7 @@ public class BossAttackAction : MonoBehaviour
                 trackBullet.IntervalTime += 1;
                 if (!trackBullet.isWait)
                 {
+                    //地面に当たるまで下に行く
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4, transform.position.z), MoveSpeed * Time.deltaTime);
 
                 }
@@ -452,12 +467,26 @@ public class BossAttackAction : MonoBehaviour
                 {
                     trackBullet.isWait = true;
                 }
+
+                //もしこの間に変形したらそれに合わせる
+                if (boss.isXDeformation)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4 + objectScale.y / 2, transform.position.z), MoveSpeed + 5 * Time.deltaTime);
+                }
+                if (boss.isYDeformation)
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4 + objectScale.y / 2, transform.position.z), MoveSpeed + 5 * Time.deltaTime);
+                }
+
+                //時間になったら弾を出す
                 if (trackBullet.IntervalTime >= 200 && trackBulletCount < trackBulletCountMax)
                 {
                     Instantiate(Bullet, transform.position, Quaternion.identity);
                     trackBullet.IntervalTime = 0;
                     trackBulletCount += 1;
                 }
+
+                //弾を吐くと同時に動くのを防ぐため
                 if (trackBullet.IntervalTime >= 200 && trackBulletCount == trackBulletCountMax)
                 {
                     trackBulletCount += 1;
