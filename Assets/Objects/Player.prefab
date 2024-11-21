@@ -127,13 +127,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LDust: {fileID: 7472043042596435002, guid: f96a9ad96a5b08d45a06696bae657013, type: 3}
   RDust: {fileID: 7638361356168949957, guid: 8efd5b74ca4dbb84a983c5122c2e252d, type: 3}
-  movePower: 1.2
+  movePower: 1.4
   attackTime: 0
   attackFullTime: 51
   comboCount: 0
   comboCountMax: 4
   isAttack: 0
   isDashAttack: 0
+  isAttackShake: 0
 --- !u!50 &4911061348698133264
 Rigidbody2D:
   serializedVersion: 4

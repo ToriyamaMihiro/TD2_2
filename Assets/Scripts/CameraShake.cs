@@ -11,10 +11,13 @@ public class CameraShake : MonoBehaviour
     [SerializeField] private Vector3 rotationStrength=new(2,2,2);
     private float shakeDuration = 0.3f;
 
+    
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        // FPSを設定(1秒 = 60fps)
+        Application.targetFrameRate = 60;
     }
     private void CameraShaker()
     {
@@ -27,6 +30,19 @@ public class CameraShake : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        //床に手が当たったらシェイク
+        AttackAction playerscript;
+        GameObject obj = GameObject.Find("Weapon"); 
+        playerscript = obj.GetComponent<AttackAction>();
+
+        if (playerscript.isAttackShake)
+        {
+            CameraShaker();
+            playerscript.isAttackShake = false;
+        }
+        
+
         //ここにシェイクのタイミング描く
         if (Input.GetKeyDown(KeyCode.Q))
         {

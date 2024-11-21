@@ -36,6 +36,9 @@ public class AttackAction : MonoBehaviour
     bool isCombo;
     bool isFloorHit;
 
+    //シェイク用
+    public bool isAttackShake = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -199,8 +202,10 @@ public class AttackAction : MonoBehaviour
             //武器が床に付いたらチリがでる
             Instantiate(RDust, transform.position, Quaternion.identity);
             Instantiate(LDust, transform.position, Quaternion.identity);
-
+            //シェイクする
+            isAttackShake = true;
         }
+        
     }
 }
 
