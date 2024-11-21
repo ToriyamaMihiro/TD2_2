@@ -60,7 +60,7 @@ public class BossAttackAction : MonoBehaviour
     int upDownCountMax = 3;
     int upDownMoveTime = 150;
     int upWaitTime = 100;
-    int downWaitTime = 250;
+    int downWaitTime = 300;
     float downSpeed = 9;
 
 

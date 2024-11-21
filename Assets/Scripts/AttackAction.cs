@@ -16,9 +16,13 @@ public class AttackAction : MonoBehaviour
 
     Vector3 weponPos;//振り下ろす際の位置を取得する
     Vector3 startPos = new Vector3(-1f, 0.5f, 0);//初期化用の位置を取得
+    Vector3 weaponStartPos;//振り下ろす前の初期位置
 
-    public float movePower = 1.2f;
-    float moveSpeed = 4;
+    float moveSpeed = 7;
+    public float upPos = 1f;//どれだけ高いところから手を振り下ろすか
+    public float sidePos = 0.8f;//どれだけ高いところから手を振り下ろすか
+    public float attackMovePower = 1.3f;
+    public float dashAttackMovePower = 1.3f;
 
     public int attackTime = 0;
     public int attackFullTime = 10;//攻撃のリセットの時間
@@ -38,6 +42,9 @@ public class AttackAction : MonoBehaviour
         rb = this.GetComponent<Rigidbody2D>();
         inputAcution = new TD2_2();
         inputAcution.Enable();
+        //手を上にあげた分下までの力を変化させるため
+        attackMovePower += upPos;
+        dashAttackMovePower += sidePos;
     }
 
     // Update is called once per frame
@@ -58,7 +65,13 @@ public class AttackAction : MonoBehaviour
         if (inputAcution.Player.Attack.IsPressed() && !isAttack && !player.isJump)
         {
             transform.Rotate(0, 0, 90);
+            //武器の初期位置を上目にする
+            weaponStartPos = transform.position;
+            weaponStartPos.y += upPos;
+            transform.position = weaponStartPos;
+            //武器の位置の取得
             weponPos = transform.position;
+
             isAttack = true;
             //コンボ途切れる時間のリセット
             comboTime = 0;
@@ -73,7 +86,7 @@ public class AttackAction : MonoBehaviour
             player.nowSpeed = 0;
 
             //武器の移動
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x, weponPos.y - movePower, weponPos.z), moveSpeed * Time.deltaTime); ;
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x, weponPos.y - attackMovePower, weponPos.z), moveSpeed * Time.deltaTime);
 
             //振り下ろし終わったらリセットする
             if (attackTime >= attackFullTime)
@@ -93,6 +106,23 @@ public class AttackAction : MonoBehaviour
         player = obj.GetComponent<PlayerAction>();
         if (inputAcution.Player.DashAttack.IsPressed() && !isDashAttack && !player.isJump)
         {
+
+            //武器の初期位置を上目にする
+            weaponStartPos = transform.position;
+            if (player.direction == player.transform.right)
+            {
+                //武器の移動
+                weaponStartPos.x -= sidePos;
+
+            }
+
+            //プレイヤーが左を向いていたら
+            if (player.direction == -player.transform.right)
+            {
+                //武器の移動
+                weaponStartPos.x += sidePos;
+            }
+            transform.position = weaponStartPos;
             weponPos = transform.position;
             isDashAttack = true;
             //コンボ途切れる時間のリセット
@@ -112,14 +142,14 @@ public class AttackAction : MonoBehaviour
             if (player.direction == player.transform.right)
             {
                 //武器の移動
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x + movePower, weponPos.y, weponPos.z), moveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x + dashAttackMovePower, weponPos.y, weponPos.z), moveSpeed * Time.deltaTime);
             }
 
             //プレイヤーが左を向いていたら
             if (player.direction == -player.transform.right)
             {
                 //武器の移動
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x - movePower, weponPos.y, weponPos.z), moveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(weponPos.x - dashAttackMovePower, weponPos.y, weponPos.z), moveSpeed * Time.deltaTime);
             }
 
             //攻撃が終わったらリセットする
@@ -141,7 +171,7 @@ public class AttackAction : MonoBehaviour
         }
         if (isCombo)
         {
-         
+
             comboTime += 1;
             //コンボ終了時間まで次の攻撃がなかったらコンボをリセットする
             if (comboTime >= comboMaxTime)
