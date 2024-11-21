@@ -205,7 +205,6 @@ public class AttackAction : MonoBehaviour
             //シェイクする
             isAttackShake = true;
         }
-        
     }
 }
 

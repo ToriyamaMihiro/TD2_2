@@ -1337,7 +1337,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2768184041090967564, guid: c1105026879830a4b914884b2b7d45cb, type: 3}
       propertyPath: upPos
-      value: 0.5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2768184041090967564, guid: c1105026879830a4b914884b2b7d45cb, type: 3}
+      propertyPath: sidePos
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2768184041090967564, guid: c1105026879830a4b914884b2b7d45cb, type: 3}
+      propertyPath: comboCountMax
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2768184041090967564, guid: c1105026879830a4b914884b2b7d45cb, type: 3}
+      propertyPath: attackMovePower
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 4058622806443748808, guid: c1105026879830a4b914884b2b7d45cb, type: 3}
       propertyPath: m_Name

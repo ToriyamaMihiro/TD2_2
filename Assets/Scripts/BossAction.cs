@@ -12,6 +12,7 @@ public class BossAction : MonoBehaviour
     int deformationCount = 10;//変形するまでの回数
     int life = 150;
     int dustDamage = 1;
+    int needleDamage = 1;
     int attackDamage = 2;
     public int deformationTime;
 
@@ -190,6 +191,12 @@ public class BossAction : MonoBehaviour
         if (collision.gameObject.tag == "Dust")
         {
             currentHp = currentHp - dustDamage;
+            //当たったオブジェクトを削除する
+            Destroy(collision.gameObject);
+        }
+        if (collision.gameObject.tag == "Needle")
+        {
+            currentHp = currentHp - needleDamage;
             //当たったオブジェクトを削除する
             Destroy(collision.gameObject);
         }
