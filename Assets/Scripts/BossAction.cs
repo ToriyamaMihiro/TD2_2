@@ -9,8 +9,8 @@ public class BossAction : MonoBehaviour
     int xCount;//x方向から受けた回数、縦に伸びる
     int yCount;//y方向から受けた回数、横に伸びる
 
-    int deformationCount = 3;//変形するまでの回数
-    int life = 100;
+    int deformationCount = 10;//変形するまでの回数
+    int life = 150;
     int dustDamage = 1;
     int attackDamage = 2;
     public int deformationTime;
@@ -61,7 +61,7 @@ public class BossAction : MonoBehaviour
 
         //Mathf.ClampでX,Yの値それぞれが最小～最大の範囲内に収める。
         //物理挙動のあるisTriggerにしたいが、床は突き抜けてほしくないので無理やり範囲を決めて落ちないようにする
-        currentPos.x = Mathf.Clamp(currentPos.x, -7.5f, 7.5f);
+        currentPos.x = Mathf.Clamp(currentPos.x, -8.1f, 8.1f);
 
         //positionをcurrentPosにする
         transform.position = currentPos;

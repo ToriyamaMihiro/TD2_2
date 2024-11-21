@@ -9,7 +9,7 @@ public class BossAttackAction : MonoBehaviour
 {
     public GameObject Bullet;
 
-    Vector2 defaultPos = new Vector2(-7.3f, 3.1f);
+    Vector2 defaultPos = new Vector2(-7.5f, 3.1f);
     Vector2 objectScale;
 
     public float MoveSpeed = 5;//横移動の速さ
@@ -58,8 +58,10 @@ public class BossAttackAction : MonoBehaviour
     UpDown upDown;
     int upDownCount;
     int upDownCountMax = 3;
-    int upDownMoveTime = 200;
-    int upDownWaitTime = 150;
+    int upDownMoveTime = 150;
+    int upWaitTime = 100;
+    int downWaitTime = 250;
+    float downSpeed = 9;
 
 
     struct Side
@@ -79,6 +81,7 @@ public class BossAttackAction : MonoBehaviour
     int sideCount;
     int sideCountMax = 3;
     int sideWaitTime = 150;
+    int sideMoveSpeed = 8;
 
 
     //TrackBullet
@@ -125,7 +128,7 @@ public class BossAttackAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        AttackRandom();
+
         Deformation();
         AttackManager();
         Attack();
@@ -137,7 +140,7 @@ public class BossAttackAction : MonoBehaviour
     {
         BossAction boss = GetComponent<BossAction>();
 
-        //横に変形
+        //縦に変形
         if (boss.isXDeformation)
         {
             if (randomValue < 61)
@@ -153,7 +156,7 @@ public class BossAttackAction : MonoBehaviour
                 pattern = AttackPattern.three;
             }
         }
-        //縦に変形していく
+        //横に変形していく
         else if (boss.isYDeformation)
         {
             if (randomValue < 61)
@@ -193,6 +196,7 @@ public class BossAttackAction : MonoBehaviour
         if (patternCount == 3)
         {
             randomValue = Random.Range(0, 101);
+            AttackRandom();
             patternCount = 0;
         }
         switch (pattern)
@@ -201,7 +205,7 @@ public class BossAttackAction : MonoBehaviour
 
                 if (patternCount == 0)
                 {
-                    nowMode = ActionMode.SideTackle;
+                    nowMode = ActionMode.UpDown;
                     isFinish = false;
                 }
                 if (patternCount == 1)
@@ -287,7 +291,7 @@ public class BossAttackAction : MonoBehaviour
                     //右に行く
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(rightPos.x, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
-                else if (move.rightTime >= moveTime+1 && !move.isRight && !move.isLeft)
+                else if (move.rightTime >= moveTime + 1 && !move.isRight && !move.isLeft)
                 {
                     move.isRight = true;
                     move.isWait = true;
@@ -313,7 +317,7 @@ public class BossAttackAction : MonoBehaviour
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(leftPos.x, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
-                else if (move.leftTime > moveTime+1)
+                else if (move.leftTime > moveTime + 1)
                 {
                     move.isWait = true;
                     if (move.isWait && move.isLeft)
@@ -350,10 +354,10 @@ public class BossAttackAction : MonoBehaviour
                 if (upDown.isTrackWait && !upDown.isWait)
                 {
                     upDown.TrackWaitTime += 1;
-                    if (upDown.TrackWaitTime >= upDownWaitTime && !isFloorHit && !upDown.isUp)
+                    if (upDown.TrackWaitTime >= upWaitTime && !isFloorHit && !upDown.isUp)
                     {
                         //待機時間を過ぎたら下に下がる
-                        transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4, transform.position.z), MoveSpeed * Time.deltaTime);
+                        transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4, transform.position.z), downSpeed * Time.deltaTime);
 
                     }
                 }
@@ -367,7 +371,7 @@ public class BossAttackAction : MonoBehaviour
                 {
                     upDown.WaitTime += 1;
                     //隙時間が終ったら上に戻す
-                    if (upDown.WaitTime >= upDownWaitTime)
+                    if (upDown.WaitTime >= downWaitTime)
                     {
                         upDown.isUp = true;
                         isFloorHit = false;
@@ -419,9 +423,9 @@ public class BossAttackAction : MonoBehaviour
                 }
 
                 //壁に当たるまで突進
-                if (side.LeftTime >= trackBulletTime+1 && side.isLeft)
+                if (side.LeftTime >= trackBulletTime + 1 && side.isLeft)
                 {
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(sidePos.x - objectScale.x / 2, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(sidePos.x - objectScale.x / 2, transform.position.y, transform.position.z), sideMoveSpeed * Time.deltaTime);
                 }
                 //右端にきて壁に当たってスタンが終ったら
                 if (transform.position.x >= sidePos.x - objectScale.x / 2)
@@ -429,7 +433,9 @@ public class BossAttackAction : MonoBehaviour
                     side.isRight = true;
                     side.isLeft = false;
                 }
+
                 WallStan();
+
                 if (side.isRight && !isWall)
                 {
                     side.RightTime += 1;
@@ -439,10 +445,10 @@ public class BossAttackAction : MonoBehaviour
                     //追尾
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(-defaultPos.x - objectScale.x / 2, player.transform.position.y + objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
-                if (side.RightTime >= trackBulletTime+1 && side.isRight && !isWall)
+                if (side.RightTime >= trackBulletTime + 1 && side.isRight && !isWall)
                 {
                     //左に突進
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(-sidePos.x + objectScale.x / 2, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(-sidePos.x + objectScale.x / 2, transform.position.y, transform.position.z), sideMoveSpeed * Time.deltaTime);
                 }
 
                 WallStan();

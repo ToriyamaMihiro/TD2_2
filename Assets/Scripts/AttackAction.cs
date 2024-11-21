@@ -25,7 +25,7 @@ public class AttackAction : MonoBehaviour
     int comboTime = 0;
     int comboMaxTime = 200;
     public int comboCount = 0;
-    public int comboCountMax = 4;
+    public int comboCountMax = 2;
 
     public bool isAttack;
     public bool isDashAttack;
@@ -141,7 +141,7 @@ public class AttackAction : MonoBehaviour
         }
         if (isCombo)
         {
-            Debug.Log(comboCount);
+         
             comboTime += 1;
             //コンボ終了時間まで次の攻撃がなかったらコンボをリセットする
             if (comboTime >= comboMaxTime)

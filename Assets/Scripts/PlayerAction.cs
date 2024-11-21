@@ -22,7 +22,7 @@ public class PlayerAction : MonoBehaviour
 
     Vector2 inputDirection;
 
-    public float moveSpeed = 3;
+    public float moveSpeed = 5;
     public float jumpPower = 5;
     public float dashPower = 5;
 
@@ -114,16 +114,8 @@ public class PlayerAction : MonoBehaviour
 
 
         }
-    }
 
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        AttackAction weapon;
-        GameObject obj = GameObject.Find("Weapon");
-        weapon = obj.GetComponent<AttackAction>();
-
-        //移動方向の入力情報がInputdirectionの中に入るようにする
-        inputDirection = context.ReadValue<Vector2>();
+       
         if (!weapon.isAttack && !weapon.isDashAttack)
         {
             if (inputDirection.x < 0)
@@ -137,6 +129,14 @@ public class PlayerAction : MonoBehaviour
                 direction = transform.right;//値的に右を向いている
             }
         }
+    }
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        //移動方向の入力情報がInputdirectionの中に入るようにする
+        inputDirection = context.ReadValue<Vector2>();
+
+       
     }
 
     void Jump()
