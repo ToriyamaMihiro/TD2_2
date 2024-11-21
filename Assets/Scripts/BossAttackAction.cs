@@ -9,7 +9,7 @@ public class BossAttackAction : MonoBehaviour
 {
     public GameObject Bullet;
 
-    Vector2 defaultPos = new Vector2(-7.5f, 3.1f);
+    Vector2 defaultPos = new Vector2(-7.3f, 3.1f);
     Vector2 objectScale;
 
     public float MoveSpeed = 5;//横移動の速さ
@@ -410,7 +410,7 @@ public class BossAttackAction : MonoBehaviour
             case ActionMode.SideTackle:
 
                 side.LeftTime += 1;
-                Vector2 sidePos = new Vector2(8.7f, 0);
+                Vector2 sidePos = new Vector2(9f, 0);
                 //追尾
                 if (side.LeftTime <= trackBulletTime && !isWall)
                 {
