@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.GraphicsBuffer;
+using DG.Tweening;
 
 public class AttackAction : MonoBehaviour
 {
@@ -36,6 +37,8 @@ public class AttackAction : MonoBehaviour
     bool isCombo;
     bool isFloorHit;
 
+    Tweener tween;
+
     //シェイク用
     public bool isAttackShake = false;
 
@@ -48,6 +51,9 @@ public class AttackAction : MonoBehaviour
         //手を上にあげた分下までの力を変化させるため
         attackMovePower += upPos;
         dashAttackMovePower += sidePos;
+
+        tween = transform.DOLocalMoveY(0.9f, 1.5f).SetLoops(-1, LoopType.Yoyo);
+
     }
 
     // Update is called once per frame
@@ -59,6 +65,13 @@ public class AttackAction : MonoBehaviour
         Combo();
     }
 
+
+    //演出上の上下
+    void Move()
+    {
+        tween = transform.DOLocalMoveY(1f, 1.5f).SetLoops(-1, LoopType.Yoyo);
+    }
+
     void Attack()
     {
         PlayerAction player;
@@ -68,6 +81,7 @@ public class AttackAction : MonoBehaviour
         if (inputAcution.Player.Attack.IsPressed() && !isAttack && !player.isJump)
         {
             transform.Rotate(0, 0, 90);
+            transform.localPosition = startPos;
             //武器の初期位置を上目にする
             weaponStartPos = transform.position;
             weaponStartPos.y += upPos;
@@ -97,11 +111,11 @@ public class AttackAction : MonoBehaviour
                 isAttack = false;
                 transform.Rotate(0, 0, -90);
                 transform.localPosition = startPos;
+                Move();
                 attackTime = 0;
             }
         }
     }
-
     void DashAttack()
     {
         PlayerAction player;
@@ -109,7 +123,7 @@ public class AttackAction : MonoBehaviour
         player = obj.GetComponent<PlayerAction>();
         if (inputAcution.Player.DashAttack.IsPressed() && !isDashAttack && !player.isJump)
         {
-
+            transform.localPosition = startPos;
             //武器の初期位置を上目にする
             weaponStartPos = transform.position;
             if (player.direction == player.transform.right)
@@ -160,6 +174,7 @@ public class AttackAction : MonoBehaviour
             {
                 isDashAttack = false;
                 transform.localPosition = startPos;
+                Move();
                 attackTime = 0;
             }
         }
@@ -171,6 +186,7 @@ public class AttackAction : MonoBehaviour
         if (isAttack || isDashAttack)
         {
             isCombo = true;
+            tween.Kill();
         }
         if (isCombo)
         {

@@ -1,18 +1,17 @@
-using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class BossAttackAction : MonoBehaviour
 {
     public GameObject Bullet;
+    public GameObject RNeedle;
+    public GameObject LNeedle;
 
     Vector2 defaultPos = new Vector2(-7.5f, 3.1f);
     Vector2 objectScale;
 
     public float MoveSpeed = 5;//横移動の速さ
+    float XRange = 7.5f;
+    float YRange = 2.5f;
     int wallTime;
     int randomValue;
 
@@ -21,6 +20,7 @@ public class BossAttackAction : MonoBehaviour
     bool isFinish;//攻撃が終わったか
     bool isWall;
     public bool isDeformationFinish;
+    public bool isShake;
 
     //ボスサイズ
     public Vector3 bossSize = new Vector3(3, 3, 1);
@@ -57,11 +57,12 @@ public class BossAttackAction : MonoBehaviour
     }
     UpDown upDown;
     int upDownCount;
-    int upDownCountMax = 3;
+    int upDownCountMax = 1;
     int upDownMoveTime = 150;
     int upWaitTime = 100;
     int downWaitTime = 300;
     float downSpeed = 9;
+   public bool isNeedleSpawn;
 
 
     struct Side
@@ -79,7 +80,7 @@ public class BossAttackAction : MonoBehaviour
 
     Side side;
     int sideCount;
-    int sideCountMax = 3;
+    int sideCountMax = 1;
     int sideWaitTime = 150;
     int sideMoveSpeed = 8;
 
@@ -95,9 +96,14 @@ public class BossAttackAction : MonoBehaviour
 
     int trackBulletTime = 220;
     int trackBulletCount;
-    int trackBulletCountMax = 3;
+    int trackBulletCountMax = 1;
 
     ActionMode nowMode;
+
+    int needleRandom;
+    float needlePosInterval = 2;
+   public bool isNeedle;//すでにでているか
+
 
     enum ActionMode
     {
@@ -133,7 +139,40 @@ public class BossAttackAction : MonoBehaviour
         AttackManager();
         Attack();
         WallStan();
+        Range();
         objectScale = transform.localScale;
+    }
+
+    //ノックバックで外に行かないようにする
+    void Range()
+    {
+        //現在のポジションを保持する
+        Vector3 currentPos = transform.position;
+
+        BossAction boss = GetComponent<BossAction>();
+        //大きさによって範囲の決定
+        if (boss.isXDeformation)
+        {
+            XRange = 8.1f;
+        }
+        else if (boss.isYDeformation)
+        {
+            YRange = 3.2f;
+        }
+        else
+        {
+            XRange = 7.5f;
+            YRange = 2.5f;
+        }
+        //Mathf.ClampでX,Yの値それぞれが最小～最大の範囲内に収める。
+        //物理挙動のあるisTriggerにしたいが、床は突き抜けてほしくないので無理やり範囲を決めて落ちないようにする
+        currentPos.x = Mathf.Clamp(currentPos.x, -XRange, XRange);
+        currentPos.y = Mathf.Clamp(currentPos.y, -YRange, 3);
+
+
+        //positionをcurrentPosにする
+        transform.position = currentPos;
+
     }
 
     void AttackRandom()
@@ -191,9 +230,10 @@ public class BossAttackAction : MonoBehaviour
 
 
     }
+
     void AttackManager()
     {
-        if (patternCount == 3)
+        if (patternCount == 4)
         {
             randomValue = Random.Range(0, 101);
             AttackRandom();
@@ -210,7 +250,7 @@ public class BossAttackAction : MonoBehaviour
                 }
                 if (patternCount == 1)
                 {
-                    nowMode = ActionMode.UpDown;
+                    nowMode = ActionMode.SideTackle;
                     isFinish = false;
                 }
                 if (patternCount == 2)
@@ -218,21 +258,32 @@ public class BossAttackAction : MonoBehaviour
                     nowMode = ActionMode.TrackBullet;
                     isFinish = false;
                 }
+                if (patternCount == 3)
+                {
+                    nowMode = ActionMode.Moving;
+                    isFinish = false;
+                }
+
                 break;
 
             case AttackPattern.two:
 
                 if (patternCount == 0)
                 {
-                    nowMode = ActionMode.UpDown;
+                    nowMode = ActionMode.TrackBullet;
                     isFinish = false;
                 }
                 if (patternCount == 1)
                 {
-                    nowMode = ActionMode.TrackBullet;
+                    nowMode = ActionMode.Moving;
                     isFinish = false;
                 }
                 if (patternCount == 2)
+                {
+                    nowMode = ActionMode.SideTackle;
+                    isFinish = false;
+                }
+                if (patternCount == 3)
                 {
                     nowMode = ActionMode.UpDown;
                     isFinish = false;
@@ -256,16 +307,20 @@ public class BossAttackAction : MonoBehaviour
                     nowMode = ActionMode.SideTackle;
                     isFinish = false;
                 }
+                if (patternCount == 3)
+                {
+                    nowMode = ActionMode.Moving;
+                    isFinish = false;
+                }
                 break;
         }
     }
-
 
     //ボスの攻撃中でなければ元に戻す
     void Deformation()
     {
         BossAction boss = GetComponent<BossAction>();
-        if (boss.deformationTime <= 1 && isFinish)
+        if (boss.deformationTime <= 1 && !isFinish)
         {
             isDeformationFinish = false;
         }
@@ -289,7 +344,7 @@ public class BossAttackAction : MonoBehaviour
                 if (move.rightTime <= moveTime)
                 {
                     //右に行く
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(rightPos.x, transform.position.y, transform.position.z), MoveSpeed * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(rightPos.x, defaultPos.y, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
                 else if (move.rightTime >= moveTime + 1 && !move.isRight && !move.isLeft)
                 {
@@ -339,13 +394,19 @@ public class BossAttackAction : MonoBehaviour
 
             case ActionMode.UpDown: // プレイヤーを一定時間追尾後プレス攻撃
 
-
                 upDown.TrackTime += 1;
+                //上まで着いたら追尾の幅を限定する
+                if (transform.position.y >= defaultPos.y - objectScale.y / 2)
+                {
+                    XRange = 5.5f;
+                }
+
                 if (upDown.TrackTime <= upDownMoveTime && !upDown.isTrackWait)
                 {
                     //プレイヤーを一定時間追尾
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(player.transform.position.x, defaultPos.y - objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
+
                 else
                 {
                     upDown.isTrackWait = true;
@@ -358,18 +419,29 @@ public class BossAttackAction : MonoBehaviour
                     {
                         //待機時間を過ぎたら下に下がる
                         transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4, transform.position.z), downSpeed * Time.deltaTime);
-
                     }
                 }
                 //床に当たったら
                 if (isFloorHit)
                 {
                     upDown.isWait = true;
+                    XRange = 7.5f;
                 }
                 //隙時間
                 if (upDown.isWait)
                 {
                     upDown.WaitTime += 1;
+                    if (upDown.WaitTime == 2 && upDownCount == 0)
+                    {
+                        //シェイクさせる
+                        isShake = true;
+                        if (!isNeedleSpawn)
+                        {
+                            //針をだす
+                            NeedleSpawn();
+                            isNeedleSpawn = true;
+                        }
+                    }
                     //隙時間が終ったら上に戻す
                     if (upDown.WaitTime >= downWaitTime)
                     {
@@ -386,7 +458,6 @@ public class BossAttackAction : MonoBehaviour
                     {
                         transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4 + objectScale.y / 2, transform.position.z), MoveSpeed + 5 * Time.deltaTime);
                     }
-
                 }
 
                 if (upDown.isUp)
@@ -400,7 +471,6 @@ public class BossAttackAction : MonoBehaviour
                         upDown = default;
                     }
                 }
-
 
                 if (upDownCount == upDownCountMax)
                 {
@@ -515,11 +585,30 @@ public class BossAttackAction : MonoBehaviour
         }
     }
 
+    void NeedleSpawn()
+    {
+        Vector2 needlePos = new Vector2(9.4f, 2);
+        //左側
+        for (int i = 0; i < 4; i++)
+        {
+            Instantiate(LNeedle, new Vector2(-needlePos.x, -needlePos.y + needlePosInterval * i), Quaternion.identity);
+        }
+        //右側
+        for (int i = 0; i < 4; i++)
+        {
+            Instantiate(RNeedle, new Vector2(needlePos.x, -needlePos.y + needlePosInterval * i), Quaternion.identity);
+        }
+    }
+
     void WallStan()
     {
         if (isWall)
         {
             wallTime += 1;
+            if (wallTime == 2)
+            {
+                isShake = true;
+            }
             if (wallTime >= sideWaitTime)
             {
                 isWall = false;
@@ -536,6 +625,7 @@ public class BossAttackAction : MonoBehaviour
             if (!isFloorHit)
             {
                 isFloorHit = true;
+                
             }
         }
         if (collision.gameObject.tag == "Wall")

@@ -9,14 +9,14 @@ public class BossAction : MonoBehaviour
     int xCount;//x方向から受けた回数、縦に伸びる
     int yCount;//y方向から受けた回数、横に伸びる
 
-    int deformationCount = 10;//変形するまでの回数
-    int life = 150;
+    int deformationCount = 5;//変形するまでの回数
+    public int life = 150;
     int dustDamage = 1;
     int needleDamage = 1;
     int attackDamage = 2;
     public int deformationTime;
 
-    int currentHp;
+    public int currentHp;
     //Sliderを入れる
     public Slider slider;
 
@@ -49,53 +49,41 @@ public class BossAction : MonoBehaviour
         Deformation();
         HitRest();
         Dead();
-        Range();
         //HP計算
         slider.value = (float)currentHp / (float)life;
-    }
-
-    //ノックバックで外に行かないようにする
-    void Range()
-    {
-        //現在のポジションを保持する
-        Vector3 currentPos = transform.position;
-
-        //Mathf.ClampでX,Yの値それぞれが最小～最大の範囲内に収める。
-        //物理挙動のあるisTriggerにしたいが、床は突き抜けてほしくないので無理やり範囲を決めて落ちないようにする
-        currentPos.x = Mathf.Clamp(currentPos.x, -8.1f, 8.1f);
-
-        //positionをcurrentPosにする
-        transform.position = currentPos;
-
     }
 
     //変形
     void Deformation()
     {
+
+
+        //ボスの攻撃中でなければ元に戻す
+        BossAttackAction bossAttack = GetComponent<BossAttackAction>();
+
+        if (bossAttack.isDeformationFinish)
+        {
+            isXDeformation = false;
+            isYDeformation = false;
+            deformationTime = 0;
+            attackDamage = 2;
+        }
+        //それぞれの方向へ変形
+        if (isXDeformation)
+        {
+            transform.localScale = varticalBossSize;
+            attackDamage = 3;
+        }
+        if (isYDeformation)
+        {
+            transform.localScale = besideBossSize;
+        }
         //変形したらカウントをリセット
         if (isXDeformation || isYDeformation)
         {
             xCount = 0;
             yCount = 0;
             deformationTime += 1;
-        }
-
-        //ボスの攻撃中でなければ元に戻す
-        BossAttackAction bossAttack = GetComponent<BossAttackAction>();
-        if (bossAttack.isDeformationFinish)
-        {
-            isXDeformation = false;
-            isYDeformation = false;
-            deformationTime = 0;
-        }
-        //それぞれの方向へ変形
-        if (isXDeformation)
-        {
-            transform.localScale = varticalBossSize;
-        }
-        if (isYDeformation)
-        {
-            transform.localScale = besideBossSize;
         }
     }
 
@@ -201,8 +189,8 @@ public class BossAction : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }
-   
-   
+
+
     void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Floor")

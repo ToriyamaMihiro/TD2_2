@@ -5,13 +5,13 @@ using DG.Tweening;
 
 public class CameraShake : MonoBehaviour
 {
-   
+
     [SerializeField] private Transform cam;
-    [SerializeField] private Vector3 positionStrength=new(0,0,0);
-    [SerializeField] private Vector3 rotationStrength=new(2,2,2);
+    [SerializeField] private Vector3 positionStrength = new(0, 0, 0);
+    [SerializeField] private Vector3 rotationStrength = new(2, 2, 2);
     private float shakeDuration = 0.3f;
 
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +21,7 @@ public class CameraShake : MonoBehaviour
     }
     private void CameraShaker()
     {
-       
+
         cam.DOComplete();
         cam.DOShakePosition(shakeDuration, positionStrength);
         cam.DOShakeRotation(shakeDuration, rotationStrength);
@@ -33,7 +33,7 @@ public class CameraShake : MonoBehaviour
 
         //床に手が当たったらシェイク
         AttackAction playerscript;
-        GameObject obj = GameObject.Find("Weapon"); 
+        GameObject obj = GameObject.Find("Weapon");
         playerscript = obj.GetComponent<AttackAction>();
 
         if (playerscript.isAttackShake)
@@ -41,7 +41,17 @@ public class CameraShake : MonoBehaviour
             CameraShaker();
             playerscript.isAttackShake = false;
         }
-        
+
+        //ボスが上から攻撃したとき
+        BossAttackAction boss;
+        GameObject objB = GameObject.Find("Boss");
+        boss = objB.GetComponent<BossAttackAction>();
+
+        if (boss.isShake)
+        {
+            CameraShaker();
+            boss.isShake = false;
+        }
 
         //ここにシェイクのタイミング描く
         if (Input.GetKeyDown(KeyCode.Q))

@@ -5,17 +5,14 @@ using static UnityEngine.GraphicsBuffer;
 
 public class BulletAction : MonoBehaviour
 {
-    Vector3 offset;
-    //Vector3 target;
-    float deg;
-    float speed = 0.2f;
+   
     GameObject target;
 
     Rigidbody2D m_rigidbody;
 
     int time;//このオブジェクトが呼び出されてからの時間
 
-    float power = 45;
+    float power = 50;
     // Start is called before the first frame update
     void Start()
     {

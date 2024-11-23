@@ -39,7 +39,7 @@ public class DustAction : MonoBehaviour
 
         //Mathf.Clamp‚ÅX,Y‚Ì’l‚»‚ê‚¼‚ê‚ªÅ¬`Å‘å‚Ì”ÍˆÍ“à‚Éû‚ß‚éB
         //•¨—‹““®‚Ì‚ ‚éisTrigger‚É‚µ‚½‚¢‚ªA°‚Í“Ë‚«”²‚¯‚Ä‚Ù‚µ‚­‚È‚¢‚Ì‚Å–³—‚â‚è”ÍˆÍ‚ğŒˆ‚ß‚Ä—‚¿‚È‚¢‚æ‚¤‚É‚·‚é
-        currentPos.y = Mathf.Clamp(currentPos.y, -3.85f, yUpRange);
+        currentPos.y = Mathf.Clamp(currentPos.y, -3.6f, yUpRange);
 
         //position‚ğcurrentPos‚É‚·‚é
         transform.position = currentPos;

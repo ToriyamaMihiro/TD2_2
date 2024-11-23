@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 7744133006762394401}
   - component: {fileID: 3623377128672691674}
+  - component: {fileID: -2704811043885028569}
   - component: {fileID: 4604560341879720362}
   - component: {fileID: 5816941870214103895}
   m_Layer: 0
-  m_Name: Needle
+  m_Name: RNeedle
   m_TagString: Needle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,6 +87,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-2704811043885028569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 398236290883632571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b7e722528f721e42b7c0dc0a11f9f0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxTime: 2500
 --- !u!58 &4604560341879720362
 CircleCollider2D:
   m_ObjectHideFlags: 0
