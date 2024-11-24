@@ -3509,7 +3509,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6453044997455362952, guid: a4ea72b37b152b148a579c25fae76eff, type: 3}
       propertyPath: life
-      value: 3
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 6453044997455362952, guid: a4ea72b37b152b148a579c25fae76eff, type: 3}
       propertyPath: slider
