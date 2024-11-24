@@ -23,8 +23,8 @@ public class CameraShake : MonoBehaviour
     {
 
         cam.DOComplete();
-        cam.DOShakePosition(shakeDuration, positionStrength);
-        cam.DOShakeRotation(shakeDuration, rotationStrength);
+        cam.DOShakePosition(shakeDuration, positionStrength).SetLink(gameObject);
+        cam.DOShakeRotation(shakeDuration, rotationStrength).SetLink(gameObject);
     }
 
     // Update is called once per frame

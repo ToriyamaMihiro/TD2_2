@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Clear: {fileID: 3334463743355168238, guid: 009d4f5011b133340b0c71389e2aa3cb, type: 3}
   GameOver: {fileID: 2338878359545318652, guid: b9638f94b6aaa1146a6dd26b26fb382b, type: 3}
+  SceanChange: {fileID: 8551314388230090980, guid: c541d998faca9d24ebe15d51ea8274d0, type: 3}
   desitionAudio: {fileID: 8300000, guid: 76adad54f5a3ac24dbfe11f3b46d864f, type: 3}
   gameOverAudio: {fileID: 8300000, guid: 5f98e0764954fd54296345b8243f0887, type: 3}
   gameClearAudio: {fileID: 8300000, guid: 42b000f641292a5449e73cdc735950ad, type: 3}

@@ -7,6 +7,7 @@ public class SceanManaer : MonoBehaviour
 {
     public GameObject Clear;
     public GameObject GameOver;
+    public GameObject SceanChange;
 
     //シーンを跨いだ変数を取得するため
     public static bool isPlayerDead = false;
@@ -45,8 +46,9 @@ public class SceanManaer : MonoBehaviour
             //タイトルからゲームへ
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene(++nowSceneIndexNumber);
+                Instantiate(SceanChange, new Vector2(0, 0), Quaternion.identity);
                 audioSource.PlayOneShot(desitionAudio);//音
+                Invoke("LoadScean", 0.7f);
             }
         }
         if (SceneManager.GetActiveScene().name == "Game")
@@ -73,7 +75,8 @@ public class SceanManaer : MonoBehaviour
             //プレイヤーかボスが死んだらリザルト画面へ
             if (player.isDead || boss.isDead)
             {
-                SceneManager.LoadScene(++nowSceneIndexNumber);
+                Instantiate(SceanChange, new Vector2(0, 0), Quaternion.identity);
+                Invoke("LoadScean", 0.7f);
             }
         }
 
@@ -98,19 +101,32 @@ public class SceanManaer : MonoBehaviour
                 isPlayerDead = false;
                 isBossDead = false;
 
-                OptionAction option;
-                GameObject objOp = GameObject.FindWithTag("Option");
-                option = objOp.GetComponent<OptionAction>();
-
-                if (option.isRight)
-                {
-                    SceneManager.LoadScene("Title");
-                }
-                else
-                {
-                    SceneManager.LoadScene("Game");
-                }
+                Instantiate(SceanChange, new Vector2(0, 0), Quaternion.identity);
+                Invoke("LoadSceanResult", 0.7f);
             }
+        }
+    }
+
+    void LoadScean()
+    {
+        int nowSceneIndexNumber = SceneManager.GetActiveScene().buildIndex;
+
+        SceneManager.LoadScene(++nowSceneIndexNumber);
+    }
+    void LoadSceanResult()
+    {
+        OptionAction option;
+        GameObject objOp = GameObject.FindWithTag("Option");
+        option = objOp.GetComponent<OptionAction>();
+
+        if (option.isRight)
+        {
+
+            SceneManager.LoadScene("Title");
+        }
+        else
+        {
+            SceneManager.LoadScene("Game");
         }
     }
 }

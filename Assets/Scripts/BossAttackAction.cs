@@ -374,7 +374,7 @@ public class BossAttackAction : MonoBehaviour
             arartTimer++;
             //音
 
-            audioSource.PlayOneShot(arartAudio,0.4f);
+            audioSource.PlayOneShot(arartAudio,0.8f);
         }
         else if (!isAttackAnime)
         {
