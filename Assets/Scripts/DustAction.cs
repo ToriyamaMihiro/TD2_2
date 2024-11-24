@@ -16,6 +16,9 @@ public class DustAction : MonoBehaviour
 
     bool isHit;
 
+    //random用
+    int iconNum;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -45,6 +45,8 @@ public class AttackAction : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip hitAudio;
     public AudioClip flutterAudio;
+    //塵アイコン用
+    public bool isDust;
 
     // Start is called before the first frame update
     void Start()
@@ -225,6 +227,8 @@ public class AttackAction : MonoBehaviour
             //武器が床に付いたらチリがでる
             Instantiate(RDust, transform.position, Quaternion.identity);
             Instantiate(LDust, transform.position, Quaternion.identity);
+            //塵出た瞬間か
+            isDust = true;
             //シェイクする
             isAttackShake = true;
             //音
