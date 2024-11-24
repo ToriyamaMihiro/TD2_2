@@ -41,6 +41,10 @@ public class AttackAction : MonoBehaviour
 
     //シェイク用
     public bool isAttackShake = false;
+    //音
+    private AudioSource audioSource;
+    public AudioClip hitAudio;
+    public AudioClip flutterAudio;
 
     // Start is called before the first frame update
     void Start()
@@ -53,7 +57,7 @@ public class AttackAction : MonoBehaviour
         dashAttackMovePower += sidePos;
 
         tween = transform.DOLocalMoveY(0.9f, 1.5f).SetLoops(-1, LoopType.Yoyo);
-
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -123,6 +127,9 @@ public class AttackAction : MonoBehaviour
         player = obj.GetComponent<PlayerAction>();
         if (inputAcution.Player.DashAttack.IsPressed() && !isDashAttack && !player.isJump)
         {
+            //音
+            audioSource.PlayOneShot(flutterAudio);
+
             transform.localPosition = startPos;
             //武器の初期位置を上目にする
             weaponStartPos = transform.position;
@@ -220,6 +227,8 @@ public class AttackAction : MonoBehaviour
             Instantiate(LDust, transform.position, Quaternion.identity);
             //シェイクする
             isAttackShake = true;
+            //音
+            audioSource.PlayOneShot(hitAudio);
         }
     }
 }

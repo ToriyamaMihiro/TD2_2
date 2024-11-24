@@ -34,6 +34,10 @@ public class BossAction : MonoBehaviour
     public Vector3 varticalBossSize = new Vector3(1.5f, 4, 1);
     public Vector3 besideBossSize = new Vector3(4, 1.5f, 1);
 
+    //音
+    private AudioSource audioSource;
+    public AudioClip damageAudio;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +45,7 @@ public class BossAction : MonoBehaviour
         slider.value = 1;
         //現在のHPを最大HPと同じに。
         currentHp = life;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -137,7 +142,8 @@ public class BossAction : MonoBehaviour
                 {
                     //コンボでのノックバック
                     Vector3 distination = (transform.position - collision.transform.position).normalized;
-
+                    //音
+                    audioSource.PlayOneShot(damageAudio);
                     transform.Translate(distination.x * knockBackPower, 0f, 0f);
                     weapon.comboCount = 0;
                 }
@@ -178,12 +184,16 @@ public class BossAction : MonoBehaviour
     {
         if (collision.gameObject.tag == "Dust")
         {
+            //音
+            audioSource.PlayOneShot(damageAudio);
             currentHp = currentHp - dustDamage;
             //当たったオブジェクトを削除する
             Destroy(collision.gameObject);
         }
         if (collision.gameObject.tag == "Needle")
         {
+            //音
+            audioSource.PlayOneShot(damageAudio);
             currentHp = currentHp - needleDamage;
             //当たったオブジェクトを削除する
             Destroy(collision.gameObject);

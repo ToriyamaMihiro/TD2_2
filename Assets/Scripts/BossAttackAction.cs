@@ -24,6 +24,15 @@ public class BossAttackAction : MonoBehaviour
 
     //ボスサイズ
     public Vector3 bossSize = new Vector3(3, 3, 1);
+    //アニメ
+    private Animator animator;
+    bool isAttackAnime;
+    //音
+    private AudioSource audioSource;
+    public AudioClip arartAudio;
+    public AudioClip bulletAudio;
+    public AudioClip wallCollideAudio;
+    float arartTimer = 0;
 
     struct Move
     {
@@ -129,6 +138,8 @@ public class BossAttackAction : MonoBehaviour
     {
         nowMode = ActionMode.Moving;
         //randomValue = Random.Range(0, 101);
+        animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -336,6 +347,20 @@ public class BossAttackAction : MonoBehaviour
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         BossAction boss = GetComponent<BossAction>();
+        //アニメ
+        animator.SetBool("isAttack", isAttackAnime);//アニメ変更
+        //アラート音
+        if (isAttackAnime && arartTimer==0)
+        {
+            arartTimer++;
+            //音
+            audioSource.PlayOneShot(arartAudio);
+        }
+        else if(!isAttackAnime)
+        {
+            arartTimer = 0;
+        }
+
         switch (nowMode)
         {
             case ActionMode.Moving: // 移動中
@@ -415,10 +440,13 @@ public class BossAttackAction : MonoBehaviour
                 if (upDown.isTrackWait && !upDown.isWait)
                 {
                     upDown.TrackWaitTime += 1;
+                    isAttackAnime = true;//ボスアニメ変更
+                    
                     if (upDown.TrackWaitTime >= upWaitTime && !isFloorHit && !upDown.isUp)
                     {
                         //待機時間を過ぎたら下に下がる
                         transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4, transform.position.z), downSpeed * Time.deltaTime);
+                        
                     }
                 }
                 //床に当たったら
@@ -426,6 +454,7 @@ public class BossAttackAction : MonoBehaviour
                 {
                     upDown.isWait = true;
                     XRange = 7.5f;
+                    isAttackAnime = false;//ボスアニメ変更
                 }
                 //隙時間
                 if (upDown.isWait)
@@ -485,17 +514,21 @@ public class BossAttackAction : MonoBehaviour
 
                 side.LeftTime += 1;
                 Vector2 sidePos = new Vector2(9f, 0);
+                isAttackAnime = false;
                 //追尾
                 if (side.LeftTime <= trackBulletTime && !isWall)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(defaultPos.x + objectScale.x / 2, player.transform.position.y + objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                     side.isLeft = true;
+                    isAttackAnime = true;//ボスアニメ変更
+                    
                 }
 
                 //壁に当たるまで突進
                 if (side.LeftTime >= trackBulletTime + 1 && side.isLeft)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(sidePos.x - objectScale.x / 2, transform.position.y, transform.position.z), sideMoveSpeed * Time.deltaTime);
+                    isAttackAnime = true;//ボスアニメ変更
                 }
                 //右端にきて壁に当たってスタンが終ったら
                 if (transform.position.x >= sidePos.x - objectScale.x / 2)
@@ -509,6 +542,8 @@ public class BossAttackAction : MonoBehaviour
                 if (side.isRight && !isWall)
                 {
                     side.RightTime += 1;
+                    isAttackAnime = true;//ボスアニメ変更
+                    
                 }
                 if (side.RightTime <= trackBulletTime && side.isRight && !isWall)
                 {
@@ -539,6 +574,7 @@ public class BossAttackAction : MonoBehaviour
             case ActionMode.TrackBullet: //放物線を描いた追尾の弾を出す
 
                 trackBullet.IntervalTime += 1;
+                isAttackAnime = false;
                 if (!trackBullet.isWait)
                 {
                     //地面に当たるまで下に行く
@@ -566,6 +602,9 @@ public class BossAttackAction : MonoBehaviour
                     Instantiate(Bullet, transform.position, Quaternion.identity);
                     trackBullet.IntervalTime = 0;
                     trackBulletCount += 1;
+                    isAttackAnime = true;//ボスアニメ変更
+                    //音
+                    audioSource.PlayOneShot(bulletAudio);
                 }
 
                 //弾を吐くと同時に動くのを防ぐため
@@ -622,14 +661,17 @@ public class BossAttackAction : MonoBehaviour
     {
         if (collision.gameObject.tag == "Floor")
         {
+            //音
+            audioSource.PlayOneShot(wallCollideAudio);
             if (!isFloorHit)
             {
                 isFloorHit = true;
-                
             }
         }
         if (collision.gameObject.tag == "Wall")
         {
+            //音
+            audioSource.PlayOneShot(wallCollideAudio);
             if (!isWall)
             {
                 isWall = true;

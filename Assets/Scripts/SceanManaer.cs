@@ -8,16 +8,24 @@ public class SceanManaer : MonoBehaviour
     public GameObject Clear;
     public GameObject GameOver;
 
-    //ƒV[ƒ“‚ğŒ×‚¢‚¾•Ï”‚ğæ“¾‚·‚é‚½‚ß
+    //ã‚·ãƒ¼ãƒ³ã‚’è·¨ã„ã å¤‰æ•°ã‚’å–å¾—ã™ã‚‹ãŸã‚
     public static bool isPlayerDead = false;
     public static bool isBossDead = false;
+
+    //éŸ³
+    private AudioSource audioSource;
+    public AudioClip desitionAudio;
+    public AudioClip gameOverAudio;
+    public AudioClip gameClearAudio;
+    public AudioClip selectAudio;
 
     // Start is called before the first frame update
     void Start()
     {
-        Application.targetFrameRate = 60;//frameƒŒ[ƒg‚ÌŒÅ’è
+        Application.targetFrameRate = 60;//frameãƒ¬ãƒ¼ãƒˆã®å›ºå®š
         Clear.SetActive(false);
         GameOver.SetActive(false);
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -25,7 +33,7 @@ public class SceanManaer : MonoBehaviour
     {
         int nowSceneIndexNumber = SceneManager.GetActiveScene().buildIndex;
 
-        //ƒŠƒZƒbƒg
+        //ãƒªã‚»ãƒƒãƒˆ
         if (Input.GetKeyDown(KeyCode.R))
         {
             nowSceneIndexNumber = SceneManager.GetActiveScene().buildIndex;
@@ -34,10 +42,11 @@ public class SceanManaer : MonoBehaviour
         }
         if (SceneManager.GetActiveScene().name == "Title")
         {
-            //ƒ^ƒCƒgƒ‹‚©‚çƒQ[ƒ€‚Ö
+            //ã‚¿ã‚¤ãƒˆãƒ«ã‹ã‚‰ã‚²ãƒ¼ãƒ ã¸
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SceneManager.LoadScene(++nowSceneIndexNumber);
+                audioSource.PlayOneShot(desitionAudio);//éŸ³
             }
         }
         if (SceneManager.GetActiveScene().name == "Game")
@@ -61,7 +70,7 @@ public class SceanManaer : MonoBehaviour
                 isPlayerDead = player.isDead;
             }
 
-            //ƒvƒŒƒCƒ„[‚©ƒ{ƒX‚ª€‚ñ‚¾‚çƒŠƒUƒ‹ƒg‰æ–Ê‚Ö
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ãƒœã‚¹ãŒæ­»ã‚“ã ã‚‰ãƒªã‚¶ãƒ«ãƒˆç”»é¢ã¸
             if (player.isDead || boss.isDead)
             {
                 SceneManager.LoadScene(++nowSceneIndexNumber);
@@ -70,7 +79,7 @@ public class SceanManaer : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "Result")
         {
-            //ƒŠƒUƒ‹ƒg‚ÅŒ‹‰Ê‚ğ•\¦‚·‚é
+            //ãƒªã‚¶ãƒ«ãƒˆã§çµæœã‚’è¡¨ç¤ºã™ã‚‹
             if (isBossDead)
             {
                 Clear.SetActive(true);
@@ -85,6 +94,7 @@ public class SceanManaer : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                audioSource.PlayOneShot(desitionAudio);//éŸ³
                 isPlayerDead = false;
                 isBossDead = false;
 

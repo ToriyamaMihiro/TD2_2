@@ -39,6 +39,11 @@ public class PlayerAction : MonoBehaviour
     public float nowSpeed;//判定用のスピード
     public bool isJump;
     private Animator animator;
+    //音
+    private AudioSource audioSource;
+    public AudioClip jumpAudio;
+    public AudioClip damageAudio;
+    public AudioClip hitAudio;
 
 
     // Start is called before the first frame update
@@ -52,6 +57,7 @@ public class PlayerAction : MonoBehaviour
         inputAcution.Enable();
         animator = GetComponent<Animator>();
         image = GetComponent<Image>();
+        audioSource = GetComponent<AudioSource>();
     }
 
 
@@ -152,6 +158,7 @@ public class PlayerAction : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
             jumpCount += 1;
+            audioSource.PlayOneShot(jumpAudio);//音
         }
 
         //アニメ用のジャンプ処理
@@ -230,6 +237,8 @@ public class PlayerAction : MonoBehaviour
             
             //毎フレーム呼び出させないため
             hitTime += 1;
+            
+            
             if (hitTime == 1)
             {
                 Invoke("WaitFor", 1.5f);
@@ -282,7 +291,8 @@ public class PlayerAction : MonoBehaviour
                 life -= 1;
                 //一定時間無敵になる
                 isHit = true;
-
+                //音
+                audioSource.PlayOneShot(damageAudio);
             }
         }
     }
@@ -291,6 +301,8 @@ public class PlayerAction : MonoBehaviour
         //何かに当たったら消す
         if (collision.gameObject.tag == "Bullet")
         {
+            //音
+            audioSource.PlayOneShot(damageAudio);
             if (!isHit)
             {
                 //一定時間無敵になる
