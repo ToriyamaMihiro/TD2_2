@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TestTools;
+using DG.Tweening;
 
 public class DustAction : MonoBehaviour
 {
     private Rigidbody2D rb;
 
-    int time;//���̃I�u�W�F�N�g���Ăяo����Ă���̎���
+    int time;//このオブジェクトが呼び出されてからの時間
 
     float power = 3;
     float attackSpeed = 10;
@@ -34,27 +35,27 @@ public class DustAction : MonoBehaviour
 
     void Range()
     {
-        //���݂̃|�W�V������ێ�����
+        //現在のポジションを保持する
         Vector3 currentPos = transform.position;
 
-        //Mathf.Clamp��X,Y�̒l���ꂼ�ꂪ�ŏ��`�ő�͈͓̔��Ɏ��߂�B
-        //���������̂���isTrigger�ɂ��������A���͓˂������Ăق����Ȃ��̂Ŗ������͈͂����߂ė����Ȃ��悤�ɂ���
+        //Mathf.ClampでX,Yの値それぞれが最小～最大の範囲内に収める。
+        //物理挙動のあるisTriggerにしたいが、床は突き抜けてほしくないので無理やり範囲を決めて落ちないようにする
         currentPos.y = Mathf.Clamp(currentPos.y, -3.6f, yUpRange);
 
-        //position��currentPos�ɂ���
+        //positionをcurrentPosにする
         transform.position = currentPos;
 
     }
 
-    //�ŏ��̔�яo��
+    //最初の飛び出し
     void JumpOut()
     {
         time += 1;
 
-        //��x�����͂�������
+        //一度だけ力を加える
         if (time == 2)
         {
-            //�E�����ɍs���̂��I�u�W�F�N�g�����画��
+            //右か左に行くのかオブジェクト名から判別
             if (gameObject.name == "RDust(Clone)")
             {
                 rb.velocity = new Vector2(power, power);
@@ -65,8 +66,8 @@ public class DustAction : MonoBehaviour
             }
 
         }
-        //���ԂɂȂ�����ړ�����߂�
-        //0�ɂ��Ȃ��Ɖ��ɃX���C�h���Ă����Ă��܂�
+        //時間になったら移動をやめる
+        //0にしないと横にスライドしていってしまう
         if (time == 30)
         {
             rb.velocity = new Vector2(0, 0);
@@ -81,15 +82,15 @@ public class DustAction : MonoBehaviour
         }
     }
 
-    //���Ԃł��񂾂�����Ă���
+    //時間でだんだん消えていく
     void FadeOut()
     {
-        //�������Ă��Ȃ������炾�񂾂�����邪�����������ɔ��ł���
+        //当たっていなかったらだんだん消えるが当たったら上に飛んでいく
         if (!isHit)
         {
             if (time >= 60)
             {
-            //�_�ł����񂾂�����Ă���
+            //点滅かだんだん消えていく
 
             }
             if (time >= 120)
@@ -99,18 +100,18 @@ public class DustAction : MonoBehaviour
         }
     }
 
-    //�{�X�ɓ����炸��ɍs���������
+    //ボスに当たらず上に行ったら消す
     void Delete()
     {
-        //�w��̍��W�ȏ�ɍs������폜����
+        //指定の座標以上に行ったら削除する
         if(transform.position.y >= yUpRange)
         {
             Destroy(gameObject);
         }
     }
 
-    //�n�ʂɓ����������΂���悤�ɂ���ɂ���������������
-    //�{�X���������������Ă���{�X�ɂ�������悤�ɂ����ق����悳��
+    //地面に当たったら飛ばせるようにするにした方がいいかも
+    //ボスも同じく当たってからボスにも当たるようにしたほうがよさげ
 
     void OnTriggerEnter2D(Collider2D collision)
     {
