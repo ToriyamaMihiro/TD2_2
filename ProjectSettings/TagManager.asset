@@ -11,6 +11,8 @@ TagManager:
   - Bullet
   - Dust
   - Needle
+  - Counter
+  - Option
   layers:
   - Default
   - TransparentFX

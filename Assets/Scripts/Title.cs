@@ -15,7 +15,7 @@ public class Title : MonoBehaviour
         //ウィンドウサイズ
         Screen.SetResolution(1280, 720, false);
 
-        transform.DOScale(size, 0.5f).SetLoops(-1, LoopType.Yoyo);
+        transform.DOScale(size, 0.5f).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject);
        
     }
 

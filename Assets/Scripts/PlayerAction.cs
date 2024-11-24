@@ -121,7 +121,7 @@ public class PlayerAction : MonoBehaviour
 
         }
 
-       
+
         if (!weapon.isAttack && !weapon.isDashAttack)
         {
             if (inputDirection.x < 0)
@@ -142,7 +142,7 @@ public class PlayerAction : MonoBehaviour
         //移動方向の入力情報がInputdirectionの中に入るようにする
         inputDirection = context.ReadValue<Vector2>();
 
-       
+
     }
 
     void Jump()
@@ -234,11 +234,11 @@ public class PlayerAction : MonoBehaviour
             //プレイヤーの色を点滅させて無敵時間だと分かりやすくする
             float level = Mathf.Abs(Mathf.Sin(Time.time * 10));
             gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, level);
-            
+
             //毎フレーム呼び出させないため
             hitTime += 1;
-            
-            
+
+
             if (hitTime == 1)
             {
                 Invoke("WaitFor", 1.5f);
@@ -257,7 +257,7 @@ public class PlayerAction : MonoBehaviour
 
         //プレイヤーの色を元に戻す
         playerRenderer.color = new Color(1f, 1f, 1f, 1f);
-       
+
     }
 
     void WaitFor()
@@ -299,12 +299,12 @@ public class PlayerAction : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         //何かに当たったら消す
-        if (collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.tag == "Bullet" || collision.gameObject.tag == "Counter")
         {
-            //音
-            audioSource.PlayOneShot(damageAudio);
             if (!isHit)
             {
+                //音
+                audioSource.PlayOneShot(damageAudio);
                 //一定時間無敵になる
                 StartCoroutine("WaitForIt");
                 life -= 1;

@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.TestTools;
 
 public class BossAttackAction : MonoBehaviour
 {
     public GameObject Bullet;
     public GameObject RNeedle;
     public GameObject LNeedle;
+    public GameObject CounterParticle;
 
     Vector2 defaultPos = new Vector2(-7.5f, 3.1f);
     Vector2 objectScale;
@@ -21,6 +23,10 @@ public class BossAttackAction : MonoBehaviour
     bool isWall;
     public bool isDeformationFinish;
     public bool isShake;
+
+    float moveRange = 0.2f;
+
+    Vector3 randomPosition;
 
     //ボスサイズ
     public Vector3 bossSize = new Vector3(3, 3, 1);
@@ -69,9 +75,9 @@ public class BossAttackAction : MonoBehaviour
     int upDownCountMax = 1;
     int upDownMoveTime = 150;
     int upWaitTime = 100;
-    int downWaitTime = 300;
+    int downWaitTime = 200;
     float downSpeed = 9;
-   public bool isNeedleSpawn;
+    public bool isNeedleSpawn;
 
 
     struct Side
@@ -107,11 +113,24 @@ public class BossAttackAction : MonoBehaviour
     int trackBulletCount;
     int trackBulletCountMax = 1;
 
+    struct CounterAttack
+    {
+        public int FrontTime;//カウンター前の溜め
+        public int Time;//カウンターをしている時間
+    }
+    CounterAttack counter;
+
+    public bool isCounterFront;
+    public bool isCounter;
+    public int counterMaxTime = 200;
+    int counterFrontMaxTime = 100;
+
+
     ActionMode nowMode;
 
     int needleRandom;
     float needlePosInterval = 2;
-   public bool isNeedle;//すでにでているか
+    public bool isNeedle;//すでにでているか
 
 
     enum ActionMode
@@ -350,13 +369,14 @@ public class BossAttackAction : MonoBehaviour
         //アニメ
         animator.SetBool("isAttack", isAttackAnime);//アニメ変更
         //アラート音
-        if (isAttackAnime && arartTimer==0)
+        if (isAttackAnime && arartTimer == 0)
         {
             arartTimer++;
             //音
-            audioSource.PlayOneShot(arartAudio);
+
+            audioSource.PlayOneShot(arartAudio,0.4f);
         }
-        else if(!isAttackAnime)
+        else if (!isAttackAnime)
         {
             arartTimer = 0;
         }
@@ -440,13 +460,16 @@ public class BossAttackAction : MonoBehaviour
                 if (upDown.isTrackWait && !upDown.isWait)
                 {
                     upDown.TrackWaitTime += 1;
-                    isAttackAnime = true;//ボスアニメ変更
-                    
+                    if (upDown.TrackWaitTime >= upWaitTime / 4 && !isFloorHit && !upDown.isUp)
+                    {
+                        isAttackAnime = true;//ボスアニメ変更
+                    }
                     if (upDown.TrackWaitTime >= upWaitTime && !isFloorHit && !upDown.isUp)
                     {
                         //待機時間を過ぎたら下に下がる
                         transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4, transform.position.z), downSpeed * Time.deltaTime);
-                        
+
+                        isAttackAnime = false;//ボスアニメ変更
                     }
                 }
                 //床に当たったら
@@ -454,7 +477,6 @@ public class BossAttackAction : MonoBehaviour
                 {
                     upDown.isWait = true;
                     XRange = 7.5f;
-                    isAttackAnime = false;//ボスアニメ変更
                 }
                 //隙時間
                 if (upDown.isWait)
@@ -474,9 +496,19 @@ public class BossAttackAction : MonoBehaviour
                     //隙時間が終ったら上に戻す
                     if (upDown.WaitTime >= downWaitTime)
                     {
-                        upDown.isUp = true;
-                        isFloorHit = false;
-                        upDown.isWait = false;
+                        Counter();
+                        if (isCounter)
+                        {
+                            counter.Time += 1;
+                            if (counter.Time >= counterMaxTime)
+                            {
+                                upDown.isUp = true;
+                                isFloorHit = false;
+                                upDown.isWait = false;
+                                counter = default;
+                            }
+                        }
+
                     }
                     //もしこの間に変形したらそれに合わせる
                     if (boss.isXDeformation)
@@ -514,21 +546,24 @@ public class BossAttackAction : MonoBehaviour
 
                 side.LeftTime += 1;
                 Vector2 sidePos = new Vector2(9f, 0);
-                isAttackAnime = false;
+                //isAttackAnime = false;
                 //追尾
                 if (side.LeftTime <= trackBulletTime && !isWall)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(defaultPos.x + objectScale.x / 2, player.transform.position.y + objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                     side.isLeft = true;
+                }
+                if (side.LeftTime >= trackBulletTime - trackBulletTime / 2.5f && !isWall && !side.isRight)
+                {
                     isAttackAnime = true;//ボスアニメ変更
-                    
+
                 }
 
                 //壁に当たるまで突進
                 if (side.LeftTime >= trackBulletTime + 1 && side.isLeft)
                 {
+                    isAttackAnime = false;//ボスアニメ変更
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(sidePos.x - objectScale.x / 2, transform.position.y, transform.position.z), sideMoveSpeed * Time.deltaTime);
-                    isAttackAnime = true;//ボスアニメ変更
                 }
                 //右端にきて壁に当たってスタンが終ったら
                 if (transform.position.x >= sidePos.x - objectScale.x / 2)
@@ -542,18 +577,24 @@ public class BossAttackAction : MonoBehaviour
                 if (side.isRight && !isWall)
                 {
                     side.RightTime += 1;
-                    isAttackAnime = true;//ボスアニメ変更
-                    
                 }
                 if (side.RightTime <= trackBulletTime && side.isRight && !isWall)
                 {
+
                     //追尾
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(-defaultPos.x - objectScale.x / 2, player.transform.position.y + objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
+                if (side.RightTime >= trackBulletTime - trackBulletTime / 2.5f && side.isRight && !isWall)
+                {
+                    isAttackAnime = true;//ボスアニメ変更
+
+                }
                 if (side.RightTime >= trackBulletTime + 1 && side.isRight && !isWall)
                 {
+                    isAttackAnime = false;//ボスアニメ変更
                     //左に突進
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(-sidePos.x + objectScale.x / 2, transform.position.y, transform.position.z), sideMoveSpeed * Time.deltaTime);
+
                 }
 
                 WallStan();
@@ -596,13 +637,19 @@ public class BossAttackAction : MonoBehaviour
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4 + objectScale.y / 2, transform.position.z), MoveSpeed + 5 * Time.deltaTime);
                 }
 
+                if (trackBullet.IntervalTime >= 200 - (200 / 2.5f) && trackBulletCount < trackBulletCountMax)
+                {
+
+                    isAttackAnime = true;//ボスアニメ変更
+                }
+
                 //時間になったら弾を出す
                 if (trackBullet.IntervalTime >= 200 && trackBulletCount < trackBulletCountMax)
                 {
                     Instantiate(Bullet, transform.position, Quaternion.identity);
                     trackBullet.IntervalTime = 0;
                     trackBulletCount += 1;
-                    isAttackAnime = true;//ボスアニメ変更
+                    isAttackAnime = false;//ボスアニメ変更
                     //音
                     audioSource.PlayOneShot(bulletAudio);
                 }
@@ -636,6 +683,31 @@ public class BossAttackAction : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             Instantiate(RNeedle, new Vector2(needlePos.x, -needlePos.y + needlePosInterval * i), Quaternion.identity);
+        }
+    }
+
+    void Counter()
+    {
+        counter.FrontTime += 1;
+        if (counter.FrontTime == 1)
+        {
+            for (int i = 0; i < 15; i++)
+            {
+                randomPosition = new Vector2(Random.Range(-moveRange, moveRange),
+              Random.Range(-moveRange, moveRange));
+                Instantiate(CounterParticle, transform.position + randomPosition, Quaternion.identity);
+            }
+        }
+        //カウンター前か
+        if (counter.FrontTime <= counterFrontMaxTime)
+        {
+            isCounterFront = true;
+        }
+        //タメが終わったら攻撃
+        else
+        {
+            isCounterFront = false;
+            isCounter = true;
         }
     }
 

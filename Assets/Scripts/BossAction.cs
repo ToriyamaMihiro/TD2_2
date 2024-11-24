@@ -10,7 +10,7 @@ public class BossAction : MonoBehaviour
     int yCount;//y方向から受けた回数、横に伸びる
 
     int deformationCount = 5;//変形するまでの回数
-    public int life = 150;
+    public int life = 2;
     int dustDamage = 1;
     int needleDamage = 1;
     int attackDamage = 2;
@@ -61,8 +61,6 @@ public class BossAction : MonoBehaviour
     //変形
     void Deformation()
     {
-
-
         //ボスの攻撃中でなければ元に戻す
         BossAttackAction bossAttack = GetComponent<BossAttackAction>();
 
