@@ -51,6 +51,20 @@ public class SceanManaer : MonoBehaviour
                 Invoke("LoadScean", 0.7f);
             }
         }
+        if (SceneManager.GetActiveScene().name == "Tyutorial")
+        {
+            TyutorialManager tyutorial;
+            GameObject objT = GameObject.Find("TyutorialManager");
+            tyutorial = objT.GetComponent<TyutorialManager>();
+
+            if (tyutorial.isYAttack)
+            {
+                Instantiate(SceanChange, new Vector2(0, 0), Quaternion.identity);
+                Invoke("LoadScean", 0.7f);
+            }
+
+        }
+
         if (SceneManager.GetActiveScene().name == "Game")
         {
             PlayerAction player;

@@ -32,6 +32,9 @@ public class AttackAction : MonoBehaviour
     public int comboCount = 0;
     public int comboCountMax = 2;
 
+    public int XCount;
+    public int YCount;
+
     public bool isAttack;
     public bool isDashAttack;
     bool isCombo;
@@ -78,6 +81,7 @@ public class AttackAction : MonoBehaviour
         tween = transform.DOLocalMoveY(1f, 1.5f).SetLoops(-1, LoopType.Yoyo);
     }
 
+    //潰す
     void Attack()
     {
         PlayerAction player;
@@ -96,6 +100,8 @@ public class AttackAction : MonoBehaviour
             weponPos = transform.position;
 
             isAttack = true;
+
+            XCount += 1;
             //コンボ途切れる時間のリセット
             comboTime = 0;
             comboCount += 1;
@@ -122,6 +128,7 @@ public class AttackAction : MonoBehaviour
             }
         }
     }
+    //押す
     void DashAttack()
     {
         PlayerAction player;
@@ -151,6 +158,8 @@ public class AttackAction : MonoBehaviour
             transform.position = weaponStartPos;
             weponPos = transform.position;
             isDashAttack = true;
+            YCount += 1;
+
             //コンボ途切れる時間のリセット
             comboTime = 0;
             comboCount += 1;

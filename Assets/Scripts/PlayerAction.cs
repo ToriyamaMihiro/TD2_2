@@ -30,6 +30,8 @@ public class PlayerAction : MonoBehaviour
     public int life = 10;
     int jumpCount;
 
+    public int tyutorialJumpCount;
+
     bool isDash;
     int hitTime;
     public bool isDead;
@@ -158,6 +160,7 @@ public class PlayerAction : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
             jumpCount += 1;
+            tyutorialJumpCount += 1;
             audioSource.PlayOneShot(jumpAudio);//音
         }
 

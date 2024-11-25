@@ -106,7 +106,7 @@ public class DustAction : MonoBehaviour
             //点滅かだんだん消えていく
 
             }
-            if (time >= 120)
+            if (time >= 140)
             {
                 Destroy(gameObject);
             }

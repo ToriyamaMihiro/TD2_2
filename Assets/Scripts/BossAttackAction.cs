@@ -23,6 +23,7 @@ public class BossAttackAction : MonoBehaviour
     bool isWall;
     public bool isDeformationFinish;
     public bool isShake;
+    bool isLifeLow;//ボスのHPが少なくなっているか
 
     float moveRange = 0.2f;
 
@@ -97,6 +98,7 @@ public class BossAttackAction : MonoBehaviour
     int sideCount;
     int sideCountMax = 1;
     int sideWaitTime = 150;
+    int sideAttackWaitTime = 220;
     int sideMoveSpeed = 8;
 
 
@@ -164,12 +166,12 @@ public class BossAttackAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         Deformation();
         AttackManager();
         Attack();
         WallStan();
         Range();
+        AttackChange();
         objectScale = transform.localScale;
     }
 
@@ -280,7 +282,7 @@ public class BossAttackAction : MonoBehaviour
                 }
                 if (patternCount == 1)
                 {
-                    nowMode = ActionMode.SideTackle;
+                    nowMode = ActionMode.UpDown;
                     isFinish = false;
                 }
                 if (patternCount == 2)
@@ -374,7 +376,7 @@ public class BossAttackAction : MonoBehaviour
             arartTimer++;
             //音
 
-            audioSource.PlayOneShot(arartAudio,0.8f);
+            audioSource.PlayOneShot(arartAudio, 0.8f);
         }
         else if (!isAttackAnime)
         {
@@ -506,6 +508,7 @@ public class BossAttackAction : MonoBehaviour
                                 isFloorHit = false;
                                 upDown.isWait = false;
                                 counter = default;
+                                isCounter = false;
                             }
                         }
 
@@ -548,19 +551,19 @@ public class BossAttackAction : MonoBehaviour
                 Vector2 sidePos = new Vector2(9f, 0);
                 //isAttackAnime = false;
                 //追尾
-                if (side.LeftTime <= trackBulletTime && !isWall)
+                if (side.LeftTime <= sideAttackWaitTime && !isWall)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(defaultPos.x + objectScale.x / 2, player.transform.position.y + objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                     side.isLeft = true;
                 }
-                if (side.LeftTime >= trackBulletTime - trackBulletTime / 2.5f && !isWall && !side.isRight)
+                if (side.LeftTime >= sideAttackWaitTime - sideAttackWaitTime / 2.5f && !isWall && !side.isRight)
                 {
                     isAttackAnime = true;//ボスアニメ変更
 
                 }
 
                 //壁に当たるまで突進
-                if (side.LeftTime >= trackBulletTime + 1 && side.isLeft)
+                if (side.LeftTime >= sideAttackWaitTime + 1 && side.isLeft)
                 {
                     isAttackAnime = false;//ボスアニメ変更
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(sidePos.x - objectScale.x / 2, transform.position.y, transform.position.z), sideMoveSpeed * Time.deltaTime);
@@ -578,18 +581,18 @@ public class BossAttackAction : MonoBehaviour
                 {
                     side.RightTime += 1;
                 }
-                if (side.RightTime <= trackBulletTime && side.isRight && !isWall)
+                if (side.RightTime <= sideAttackWaitTime && side.isRight && !isWall)
                 {
 
                     //追尾
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(-defaultPos.x - objectScale.x / 2, player.transform.position.y + objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
-                if (side.RightTime >= trackBulletTime - trackBulletTime / 2.5f && side.isRight && !isWall)
+                if (side.RightTime >= sideAttackWaitTime - sideAttackWaitTime / 2.5f && side.isRight && !isWall)
                 {
                     isAttackAnime = true;//ボスアニメ変更
 
                 }
-                if (side.RightTime >= trackBulletTime + 1 && side.isRight && !isWall)
+                if (side.RightTime >= sideAttackWaitTime + 1 && side.isRight && !isWall)
                 {
                     isAttackAnime = false;//ボスアニメ変更
                     //左に突進
@@ -671,6 +674,21 @@ public class BossAttackAction : MonoBehaviour
         }
     }
 
+    //ボスのHPに応じてTimeを変える
+    void AttackChange()
+    {
+        BossAction boss = GetComponent<BossAction>();
+        //HPが4割になったら
+        if (boss.currentHp <= boss.life / 3 && !isLifeLow)
+        {
+            downWaitTime -= 100;
+            trackBulletTime -= 120;
+            moveWaitTime -= 60;
+            sideAttackWaitTime -= 50;
+            isLifeLow = true;
+        }
+    }
+
     void NeedleSpawn()
     {
         Vector2 needlePos = new Vector2(9.4f, 2);
@@ -704,7 +722,7 @@ public class BossAttackAction : MonoBehaviour
             isCounterFront = true;
         }
         //タメが終わったら攻撃
-        else
+        if (counter.FrontTime >= counterFrontMaxTime + 1)
         {
             isCounterFront = false;
             isCounter = true;
@@ -720,6 +738,7 @@ public class BossAttackAction : MonoBehaviour
             {
                 isShake = true;
             }
+            //sideWaitTime以上になったら動き出す
             if (wallTime >= sideWaitTime)
             {
                 isWall = false;

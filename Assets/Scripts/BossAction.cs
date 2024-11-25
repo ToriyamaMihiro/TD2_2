@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class BossAction : MonoBehaviour
 {
@@ -49,9 +50,12 @@ public class BossAction : MonoBehaviour
     void Start()
     {
         //登場イージング
-        transform.DOScale(new Vector3(3,3,1), 1.5f).SetEase(ease);
-        //Sliderを満タンにする。
-        slider.value = 1;
+        transform.DOScale(new Vector3(3, 3, 1), 1.5f).SetEase(ease);
+        if (SceneManager.GetActiveScene().name == "Game")
+        {
+            //Sliderを満タンにする。
+            slider.value = 1;
+        }
         //現在のHPを最大HPと同じに。
         currentHp = life;
         audioSource = GetComponent<AudioSource>();
@@ -63,22 +67,28 @@ public class BossAction : MonoBehaviour
         Deformation();
         HitRest();
         Dead();
-        //HP計算
-        slider.value = (float)currentHp / (float)life;
+        if (SceneManager.GetActiveScene().name == "Game")
+        {
+            //HP計算
+            slider.value = (float)currentHp / (float)life;
+        }
     }
 
     //変形
     void Deformation()
     {
-        //ボスの攻撃中でなければ元に戻す
-        BossAttackAction bossAttack = GetComponent<BossAttackAction>();
-
-        if (bossAttack.isDeformationFinish)
+        if (SceneManager.GetActiveScene().name == "Game")
         {
-            isXDeformation = false;
-            isYDeformation = false;
-            deformationTime = 0;
-            attackDamage = 2;
+            //ボスの攻撃中でなければ元に戻す
+            BossAttackAction bossAttack = GetComponent<BossAttackAction>();
+
+            if (bossAttack.isDeformationFinish)
+            {
+                isXDeformation = false;
+                isYDeformation = false;
+                deformationTime = 0;
+                attackDamage = 2;
+            }
         }
         //それぞれの方向へ変形
         if (isXDeformation)

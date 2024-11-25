@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class CameraShake : MonoBehaviour
 {
@@ -42,21 +43,25 @@ public class CameraShake : MonoBehaviour
             playerscript.isAttackShake = false;
         }
 
-        //ボスが上から攻撃したとき
-        BossAttackAction boss;
-        GameObject objB = GameObject.Find("Boss");
-        boss = objB.GetComponent<BossAttackAction>();
-
-        if (boss.isShake)
+        if (SceneManager.GetActiveScene().name == "Game")
         {
-            CameraShaker();
-            boss.isShake = false;
-        }
 
-        ////ここにシェイクのタイミング描く
-        //if (Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    CameraShaker();
-        //}
+            //ボスが上から攻撃したとき
+            BossAttackAction boss;
+            GameObject objB = GameObject.Find("Boss");
+            boss = objB.GetComponent<BossAttackAction>();
+
+            if (boss.isShake)
+            {
+                CameraShaker();
+                boss.isShake = false;
+            }
+
+            ////ここにシェイクのタイミング描く
+            //if (Input.GetKeyDown(KeyCode.Q))
+            //{
+            //    CameraShaker();
+            //}
+        }
     }
 }
