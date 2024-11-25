@@ -8,7 +8,7 @@ public class DustIconManager : MonoBehaviour
 
     [SerializeField] GameObject[] icon=new GameObject[6];
 
-    bool[] isSet = new bool[6];
+    public bool[] isSet = new bool[6];
     [SerializeField] int leftIconNum;
     [SerializeField] int rightIconNum;
 
@@ -21,7 +21,7 @@ public class DustIconManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //IconRandom();
+        
         //DustIcon();
     }
 
@@ -62,38 +62,80 @@ public class DustIconManager : MonoBehaviour
 
     }
 
+   
+
     void DustIcon()
     {
+        int[] time= new int[5];
         //それぞれの数の場合のアイコン決める
         if (isSet[0])
         {
-            //isSet[0] = true;
             icon[0].transform.localScale = new Vector3(0, 0, 1);
+
+            time[0] += 1;
+            if(time[0] >= 120)
+            {
+                isSet[0] = false;
+                time[0] = 0;
+            }
         }
         if (isSet[1])
         {
-            //isSet[1] = true;
             icon[1].transform.localScale = new Vector3(0, 0, 1);
+            
+            time[1] += 1;
+            if (time[1] >= 120)
+            {
+                isSet[1] = false;
+                time[1] = 0;
+            }
         }
         if (isSet[2])
         {
-            //isSet[2] = true;
+            
             icon[2].transform.localScale = new Vector3(0, 0, 1);
+            
+            time[2] += 1;
+            if (time[2] >= 120)
+            {
+                isSet[2] = false;
+                time[2] = 0;
+            }
         }
         if (isSet[3])
         {
-            //isSet[3] = true;
+            
             icon[3].transform.localScale = new Vector3(0, 0, 1);
+            
+            time[3] += 1;
+            if (time[3] >= 120)
+            {
+                isSet[3] = false;
+                time[3] = 0;
+            }
         }
         if (isSet[4])
         {
-            //isSet[4] = true;
+            
             icon[4].transform.localScale = new Vector3(0, 0, 1);
+    
+            time[4] += 1;
+            if (time[4] >= 120)
+            {
+                isSet[4] = false;
+                time[4] = 0;
+            }
         }
         if (isSet[5])
         {
-            //isSet[5] = true;
+            
             icon[5].transform.localScale = new Vector3(0, 0, 1);
+            time[5] += 1;
+            if (time[5] >= 120)
+            {
+                isSet[5] = false;
+                time[5] = 0;
+            }
         }
     }
 

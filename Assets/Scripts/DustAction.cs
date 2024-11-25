@@ -17,13 +17,22 @@ public class DustAction : MonoBehaviour
     bool isHit;
 
     //random用
-    int iconNum;
+    public int iconNum;
+    public Sprite[] icon = new Sprite[6];
+    private SpriteRenderer MainSpriteRenderer;
+    //音
+    private AudioSource audioSource;
+    public AudioClip kickAudio;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
-
+        MainSpriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
+        //ランダムに数出す
+        iconNum = Random.Range(0, 6);
+        iconSet();
     }
 
     // Update is called once per frame
@@ -34,6 +43,7 @@ public class DustAction : MonoBehaviour
         Attack();
         Delete();
         FadeOut();
+        
     }
 
     void Range()
@@ -113,6 +123,49 @@ public class DustAction : MonoBehaviour
         }
     }
 
+    //ランダム⇦使わない
+    void RandomIcon()
+    {
+        DustIconManager iconManager;
+        GameObject obj = GameObject.Find("DustIconManager");
+        iconManager = obj.GetComponent<DustIconManager>();
+        iconNum = Random.Range(0, 6);
+        while (!iconManager.isSet[iconNum])//ひだり
+        {
+            if (!iconManager.isSet[iconNum])
+            {
+                iconManager.isSet[iconNum] = true;
+            }
+            iconNum = Random.Range(0, 6);
+        }
+    }
+
+    void iconSet()
+    {
+        switch (iconNum)
+        {
+            case 0:
+                MainSpriteRenderer.sprite = icon[0];
+                break;
+            case 1:
+                MainSpriteRenderer.sprite = icon[1];
+                break;
+            case 2:
+                MainSpriteRenderer.sprite = icon[2];
+                break;
+            case 3:
+                MainSpriteRenderer.sprite = icon[3];
+                break;
+            case 4:
+                MainSpriteRenderer.sprite = icon[4];
+                break;
+            case 5:
+                MainSpriteRenderer.sprite = icon[5];
+                break;
+        }
+        
+    }
+
     //地面に当たったら飛ばせるようにするにした方がいいかも
     //ボスも同じく当たってからボスにも当たるようにしたほうがよさげ
 
@@ -120,7 +173,8 @@ public class DustAction : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-
+            //音
+            audioSource.PlayOneShot(kickAudio);
             if (time >= 60 && !isHit)
             {
                 isHit = true;
