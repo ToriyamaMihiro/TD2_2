@@ -53,10 +53,10 @@ public class CameraShake : MonoBehaviour
             boss.isShake = false;
         }
 
-        //ここにシェイクのタイミング描く
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            CameraShaker();
-        }
+        ////ここにシェイクのタイミング描く
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    CameraShaker();
+        //}
     }
 }

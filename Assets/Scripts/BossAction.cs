@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,9 +40,16 @@ public class BossAction : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip damageAudio;
 
+    //イージング
+    public Ease ease;
+    //演出用変数
+    public bool isDamage;
+
     // Start is called before the first frame update
     void Start()
     {
+        //登場イージング
+        transform.DOScale(new Vector3(3,3,1), 1.5f).SetEase(ease);
         //Sliderを満タンにする。
         slider.value = 1;
         //現在のHPを最大HPと同じに。
@@ -142,6 +151,8 @@ public class BossAction : MonoBehaviour
                     Vector3 distination = (transform.position - collision.transform.position).normalized;
                     //音
                     audioSource.PlayOneShot(damageAudio);
+                    //演出オン
+                    isDamage = true;
                     transform.Translate(distination.x * knockBackPower, 0f, 0f);
                     weapon.comboCount = 0;
                 }
@@ -153,6 +164,8 @@ public class BossAction : MonoBehaviour
                     {
                         yCount += 1;
                     }
+                    //演出オン
+                    isDamage = true;
                     currentHp = currentHp - attackDamage;
                     isHit = true;
                 }
@@ -162,6 +175,8 @@ public class BossAction : MonoBehaviour
                     {
                         xCount += 1;
                     }
+                    //演出オン
+                    isDamage = true;
                     currentHp = currentHp - attackDamage;
                     isHit = true;
                 }
@@ -184,6 +199,8 @@ public class BossAction : MonoBehaviour
         {
             //音
             audioSource.PlayOneShot(damageAudio);
+            //演出オン
+            isDamage = true;
             currentHp = currentHp - dustDamage;
             //当たったオブジェクトを削除する
             Destroy(collision.gameObject);
@@ -192,6 +209,8 @@ public class BossAction : MonoBehaviour
         {
             //音
             audioSource.PlayOneShot(damageAudio);
+            //演出オン
+            isDamage = true;
             currentHp = currentHp - needleDamage;
             //当たったオブジェクトを削除する
             Destroy(collision.gameObject);
