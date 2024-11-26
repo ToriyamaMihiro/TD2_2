@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class SceanManaer : MonoBehaviour
@@ -8,6 +9,8 @@ public class SceanManaer : MonoBehaviour
     public GameObject Clear;
     public GameObject GameOver;
     public GameObject SceanChange;
+
+    private TD2_2 inputAcution;
 
     //シーンを跨いだ変数を取得するため
     public static bool isPlayerDead = false;
@@ -27,6 +30,9 @@ public class SceanManaer : MonoBehaviour
         Clear.SetActive(false);
         GameOver.SetActive(false);
         audioSource = GetComponent<AudioSource>();
+        //コントローラーを使うためのもの
+        inputAcution = new TD2_2();
+        inputAcution.Enable();
     }
 
     // Update is called once per frame
@@ -44,8 +50,8 @@ public class SceanManaer : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "Title")
         {
             //タイトルからゲームへ
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
+            if(inputAcution.Player.Jump.WasPressedThisFrame())
+                {
                 Instantiate(SceanChange, new Vector2(0, 0), Quaternion.identity);
                 audioSource.PlayOneShot(desitionAudio);//音
                 Invoke("LoadScean", 0.7f);
@@ -109,7 +115,7 @@ public class SceanManaer : MonoBehaviour
                 GameOver.SetActive(true);
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (inputAcution.Player.Jump.WasPressedThisFrame())
             {
                 audioSource.PlayOneShot(desitionAudio);//音
                 isPlayerDead = false;
