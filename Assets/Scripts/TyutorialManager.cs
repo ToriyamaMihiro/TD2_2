@@ -1,5 +1,7 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -7,10 +9,19 @@ using UnityEngine.UI;
 public class TyutorialManager : MonoBehaviour
 {
     private TD2_2 inputAcution;
-    //Slider‚ğ“ü‚ê‚é
+    //Sliderã‚’å…¥ã‚Œã‚‹
     public Slider slider;
 
     public GameObject Boss;
+
+    public Sprite[] uiSprite = new Sprite[3];
+    //UIã¾ã‚ã‚Š
+    public GameObject tutorial_UI;
+    public Ease ease;
+    public Vector3 toSize = new Vector3(2.5f, 2.5f, 1);
+    private SpriteRenderer uiSpriteRenderer;
+    bool isFinishUI;
+    bool isStartUI;
 
     int jumpCount;
     int jumpMaxCount = 6;
@@ -29,9 +40,23 @@ public class TyutorialManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //ƒRƒ“ƒgƒ[ƒ‰[‚ğg‚¤‚½‚ß‚Ì‚à‚Ì
+        //ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’ä½¿ã†ãŸã‚ã®ã‚‚ã®
         inputAcution = new TD2_2();
         inputAcution.Enable();
+        //é–‹å§‹UI
+        uiSpriteRenderer = tutorial_UI.GetComponent<SpriteRenderer>();
+        tutorial_UI.transform.DOScale(toSize, 1f).SetEase(ease);
+    }
+
+    void ChangeSpriteHit()
+    {
+        //UIã®ç”»åƒ
+        uiSpriteRenderer.sprite = uiSprite[2];
+    }
+    void ChangeSpriteFlutter()
+    {
+        //UIã®ç”»åƒ
+        uiSpriteRenderer.sprite = uiSprite[1];
     }
 
     // Update is called once per frame
@@ -49,53 +74,80 @@ public class TyutorialManager : MonoBehaviour
         {
             jumpCount = player.tyutorialJumpCount;
         }
-        //w’è‰ñ”ˆÈã‰Ÿ‚µ‚½‚çƒWƒƒƒ“ƒv‚Ìƒ`ƒ…[ƒgƒŠƒAƒ‹I—¹
+        //æŒ‡å®šå›æ•°ä»¥ä¸ŠæŠ¼ã—ãŸã‚‰ã‚¸ãƒ£ãƒ³ãƒ—ã®ãƒãƒ¥ãƒ¼ãƒˆãƒªã‚¢ãƒ«çµ‚äº†
         if (jumpCount >= jumpMaxCount)
         {
             isJump = true;
+            
         }
-        //ƒXƒ‰ƒCƒ_[‚Ì”š‚ğƒWƒƒƒ“ƒv‚Ì”š‚É‚·‚é
+        //ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼ã®æ•°å­—ã‚’ã‚¸ãƒ£ãƒ³ãƒ—ã®æ•°å­—ã«ã™ã‚‹
         if (!isJump)
         {
-            //int‚ÅØ‚èÌ‚Ä‚ç‚ê‚¿‚á‚¤‚Ì‚ÅfloatŒ^‚É’¼‚µ‚Ä‚é
+            //intã§åˆ‡ã‚Šæ¨ã¦ã‚‰ã‚Œã¡ã‚ƒã†ã®ã§floatå‹ã«ç›´ã—ã¦ã‚‹
             slider.value = (float)jumpCount / (float)jumpMaxCount;
+            //UIã®ç”»åƒã‚’ã‚¸ãƒ£ãƒ³ãƒ—ã®ã«ã™ã‚‹
+            uiSpriteRenderer.sprite = uiSprite[0];
         }
+       
 
-        //—ûK—p‚Ìƒ{ƒX‚ğ‚¾‚·
+        //ç·´ç¿’ç”¨ã®ãƒœã‚¹ã‚’ã ã™
         if (isJump && !isBossCall)
         {
             Instantiate(Boss, new Vector2(0, -2.5f), Quaternion.identity);
+            tutorial_UI.transform.DOScale(new Vector3(0,0,0), 0.5f).SetEase(ease).SetLoops(2,LoopType.Yoyo);
+
             isBossCall = true;
         }
 
-        //‰Ÿ‚·UŒ‚
+        //æŠ¼ã™æ”»æ’ƒ
         if (inputAcution.Player.DashAttack.WasPressedThisFrame() && !weapon.isAttack && weapon.isDashAttack && isJump && XCount <= XMaxCount)
         {
             XCount += 1;
         }
-        if (XCount >= XMaxCount)
+        if (XCount >= XMaxCount)//ãŸãŸãçµ‚äº†
         {
             isXAttack = true;
+            
         }
         if (isJump && !isXAttack)
         {
             slider.value = (float)XCount / (float)XMaxCount;
         }
+        if(isJump && !isXAttack && !isYAttack)//ãŸãŸãä¸­
+        {
+            Invoke("ChangeSpriteHit", 0.75f);
+        }
+        if (isJump && isXAttack && !isYAttack)
+        {
+            if (!isFinishUI)
+            {
+                tutorial_UI.transform.DOScale(new Vector3(0, 0, 0), 1.5f).SetEase(ease).SetLoops(2, LoopType.Yoyo);
+                isFinishUI = true;
+            }
+        }
 
-        //’×‚·UŒ‚
-        if (inputAcution.Player.Attack.WasPressedThisFrame() && weapon.isAttack && !weapon.isDashAttack && isJump && isXAttack && YCount <= YMaxCount)
+
+            //æ½°ã™æ”»æ’ƒ
+            if (inputAcution.Player.Attack.WasPressedThisFrame() && weapon.isAttack && !weapon.isDashAttack && isJump && isXAttack && YCount <= YMaxCount)
         {
             YCount += 1;
         }
-        //‚à‚µ•ÏŒ`‚µ‚½‚ç‰º‚ÉˆÚ“®‚µ‚Ä•‚‚¢‚Ä‚¢‚È‚¢•—‚É‚·‚é
+        //ã‚‚ã—å¤‰å½¢ã—ãŸã‚‰ä¸‹ã«ç§»å‹•ã—ã¦æµ®ã„ã¦ã„ãªã„é¢¨ã«ã™ã‚‹
 
         if (isJump && isXAttack && !isYAttack)
         {
             slider.value = (float)YCount / (float)YMaxCount;
         }
-        if (YCount >= YMaxCount)
+        if (YCount >= YMaxCount)//ã¯ãŸãçµ‚äº†
         {
             isYAttack = true;
+            
+        }
+        if (isJump && isXAttack && !isYAttack)//ã¯ãŸãä¸­
+        {
+            Invoke("ChangeSpriteFlutter", 0.75f);
         }
     }
+
+    
 }
