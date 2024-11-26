@@ -115,7 +115,7 @@ public class TyutorialManager : MonoBehaviour
         }
         if(isJump && !isXAttack && !isYAttack)//たたく中
         {
-            Invoke("ChangeSpriteHit", 0.75f);
+            Invoke("ChangeSpriteHit", 1f);
         }
         if (isJump && isXAttack && !isYAttack)
         {
@@ -145,7 +145,7 @@ public class TyutorialManager : MonoBehaviour
         }
         if (isJump && isXAttack && !isYAttack)//はたく中
         {
-            Invoke("ChangeSpriteFlutter", 0.75f);
+            Invoke("ChangeSpriteFlutter", 1f);
         }
     }
 

@@ -9,6 +9,10 @@ public class OptionAction : MonoBehaviour
     public GameObject Retry;
     public GameObject Title;
 
+    //音
+    private AudioSource audioSource;
+    public AudioClip selectAudio;
+
     public bool isRight = false;//右を選択しているか
 
     // Start is called before the first frame update
@@ -16,6 +20,7 @@ public class OptionAction : MonoBehaviour
     {
         inputAcution = new TD2_2();
         inputAcution.Enable();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -23,11 +28,13 @@ public class OptionAction : MonoBehaviour
     {
         if (inputAcution.Player.Left.IsPressed())
         {
+            //audioSource.PlayOneShot(selectAudio);//音
             isRight = false;
         }
 
         if (inputAcution.Player.Right.IsPressed())
         {
+            //audioSource.PlayOneShot(selectAudio);//音
             isRight = true;
         }
         if (isRight)
