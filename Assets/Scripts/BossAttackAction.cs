@@ -8,7 +8,7 @@ public class BossAttackAction : MonoBehaviour
     public GameObject LNeedle;
     public GameObject CounterParticle;
 
-    Vector2 defaultPos = new Vector2(-7.5f, 4f);
+    Vector2 defaultPos = new Vector2(-7.5f, 4.2f);
     Vector2 objectScale;
 
     public float MoveSpeed = 5;//横移動の速さ
@@ -70,10 +70,11 @@ public class BossAttackAction : MonoBehaviour
         public bool isTrackWait;
         public bool isUp;
         public bool isWait;
+        public bool isDeformation;
     }
     UpDown upDown;
     int upDownCount;
-    int upDownCountMax = 1;
+    int upDownCountMax = 2;
     int upDownMoveTime = 150;
     int upWaitTime = 100;
     int downWaitTime = 200;
@@ -142,6 +143,7 @@ public class BossAttackAction : MonoBehaviour
         SideTackle,
         TrackBullet,
     }
+    ActionMode actionMode;
 
     enum AttackPattern
     {
@@ -157,7 +159,7 @@ public class BossAttackAction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        nowMode = ActionMode.Moving;
+
         //randomValue = Random.Range(0, 101);
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
@@ -181,25 +183,39 @@ public class BossAttackAction : MonoBehaviour
         //現在のポジションを保持する
         Vector3 currentPos = transform.position;
 
-        BossAction boss = GetComponent<BossAction>();
-        //大きさによって範囲の決定
-        if (boss.isXDeformation)
+        if (nowMode != ActionMode.UpDown)
+        {
+            BossAction boss = GetComponent<BossAction>();
+            //大きさによって範囲の決定
+            if (boss.isXDeformation)
+            {
+                XRange = 8.1f;
+            }
+            else if (boss.isYDeformation)
+            {
+                YRange = 3.2f;
+            }
+            else
+            {
+                XRange = 7.5f;
+                YRange = 2.5f;
+            }
+        }
+        //UpDownのときも変形したら範囲を変える
+        BossAction boss2 = GetComponent<BossAction>();
+        if (boss2.isXDeformation)
         {
             XRange = 8.1f;
         }
-        else if (boss.isYDeformation)
+        if (boss2.isYDeformation)
         {
             YRange = 3.2f;
         }
-        else
-        {
-            XRange = 7.5f;
-            YRange = 2.5f;
-        }
+
         //Mathf.ClampでX,Yの値それぞれが最小～最大の範囲内に収める。
         //物理挙動のあるisTriggerにしたいが、床は突き抜けてほしくないので無理やり範囲を決めて落ちないようにする
         currentPos.x = Mathf.Clamp(currentPos.x, -XRange, XRange);
-        currentPos.y = Mathf.Clamp(currentPos.y, -YRange, 3);
+        currentPos.y = Mathf.Clamp(currentPos.y, -YRange, YRange);
 
 
         //positionをcurrentPosにする
@@ -445,7 +461,7 @@ public class BossAttackAction : MonoBehaviour
                 //上まで着いたら追尾の幅を限定する
                 if (transform.position.y >= defaultPos.y - objectScale.y / 2)
                 {
-                    XRange = 5.5f;
+                    XRange = 5.2f;
                 }
 
                 if (upDown.TrackTime <= upDownMoveTime && !upDown.isTrackWait)
@@ -520,13 +536,16 @@ public class BossAttackAction : MonoBehaviour
                     }
                     if (boss.isYDeformation)
                     {
-                        transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4 + objectScale.y / 2, transform.position.z), MoveSpeed + 5 * Time.deltaTime);
+                        transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4f + objectScale.y / 2, transform.position.z), MoveSpeed + 5 * Time.deltaTime);
                     }
                 }
 
                 if (upDown.isUp)
                 {
+
+
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, defaultPos.y - objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
+
                     //定位置まで戻ったら
                     if (transform.position.y >= defaultPos.y - objectScale.y / 2)
                     {

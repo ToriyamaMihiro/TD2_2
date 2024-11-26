@@ -107,6 +107,24 @@ public partial class @TD2_2: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Title"",
+                    ""type"": ""Button"",
+                    ""id"": ""a4cf99a9-b126-462b-a9c7-f293d9a51cbd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skip"",
+                    ""type"": ""Button"",
+                    ""id"": ""2e56b862-fab9-4f34-a91b-97f906df9656"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -448,6 +466,39 @@ public partial class @TD2_2: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""DashAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41d70578-4667-4299-9811-daaf2963b22b"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Title"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f77964fa-610b-45ed-90f1-a91a8ed32c8b"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Skip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a034948-4933-408c-af8f-2bda7112b816"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skip"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1044,6 +1095,8 @@ public partial class @TD2_2: IInputActionCollection2, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_DashAttack = m_Player.FindAction("DashAttack", throwIfNotFound: true);
+        m_Player_Title = m_Player.FindAction("Title", throwIfNotFound: true);
+        m_Player_Skip = m_Player.FindAction("Skip", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1126,6 +1179,8 @@ public partial class @TD2_2: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_DashAttack;
+    private readonly InputAction m_Player_Title;
+    private readonly InputAction m_Player_Skip;
     public struct PlayerActions
     {
         private @TD2_2 m_Wrapper;
@@ -1139,6 +1194,8 @@ public partial class @TD2_2: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @DashAttack => m_Wrapper.m_Player_DashAttack;
+        public InputAction @Title => m_Wrapper.m_Player_Title;
+        public InputAction @Skip => m_Wrapper.m_Player_Skip;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1175,6 +1232,12 @@ public partial class @TD2_2: IInputActionCollection2, IDisposable
             @DashAttack.started += instance.OnDashAttack;
             @DashAttack.performed += instance.OnDashAttack;
             @DashAttack.canceled += instance.OnDashAttack;
+            @Title.started += instance.OnTitle;
+            @Title.performed += instance.OnTitle;
+            @Title.canceled += instance.OnTitle;
+            @Skip.started += instance.OnSkip;
+            @Skip.performed += instance.OnSkip;
+            @Skip.canceled += instance.OnSkip;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1206,6 +1269,12 @@ public partial class @TD2_2: IInputActionCollection2, IDisposable
             @DashAttack.started -= instance.OnDashAttack;
             @DashAttack.performed -= instance.OnDashAttack;
             @DashAttack.canceled -= instance.OnDashAttack;
+            @Title.started -= instance.OnTitle;
+            @Title.performed -= instance.OnTitle;
+            @Title.canceled -= instance.OnTitle;
+            @Skip.started -= instance.OnSkip;
+            @Skip.performed -= instance.OnSkip;
+            @Skip.canceled -= instance.OnSkip;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1397,6 +1466,8 @@ public partial class @TD2_2: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnDashAttack(InputAction.CallbackContext context);
+        void OnTitle(InputAction.CallbackContext context);
+        void OnSkip(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

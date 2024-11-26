@@ -340,7 +340,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 894878776, guid: e8dd0a566d338e744842a28de29e7250, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -538,6 +538,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: d766d41b-f22a-43f2-b2fe-c679b15ca223
     m_ActionName: Player/DashAttack
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a4cf99a9-b126-462b-a9c7-f293d9a51cbd
+    m_ActionName: Player/Title[/XInputControllerWindows/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2e56b862-fab9-4f34-a91b-97f906df9656
+    m_ActionName: Player/Skip[/XInputControllerWindows/buttonEast,/Keyboard/q]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

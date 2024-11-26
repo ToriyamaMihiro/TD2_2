@@ -11,6 +11,8 @@ public class TyutorialManager : MonoBehaviour
     private TD2_2 inputAcution;
     //Sliderを入れる
     public Slider slider;
+    //Sliderを入れる
+    public Slider skipSlider;
 
     public GameObject Boss;
 
@@ -32,11 +34,14 @@ public class TyutorialManager : MonoBehaviour
     int YCount;
     int YMaxCount = 5;
 
+    int skipTimer;
+
     public bool isJump;
     public bool isXAttack;
     public bool isYAttack;
     bool isBossCall;
     public bool isAttack;//攻撃しているかしていないかの判定
+    public bool isSkip;
 
     // Start is called before the first frame update
     void Start()
@@ -55,13 +60,18 @@ public class TyutorialManager : MonoBehaviour
         uiSpriteRenderer.sprite = uiSprite[2];
     }
     void ChangeSpriteFlutter()
-    {
+    { 
         //UIの画像
         uiSpriteRenderer.sprite = uiSprite[1];
     }
 
     // Update is called once per frame
     void Update()
+    {
+        Count();
+        Skip();
+    }
+    void Count()
     {
         PlayerAction player;
         GameObject obj = GameObject.Find("Player");
@@ -156,7 +166,26 @@ public class TyutorialManager : MonoBehaviour
         {
             Invoke("ChangeSpriteFlutter", 1f);
         }
+
     }
 
-
+    void Skip()
+    {
+       
+        skipSlider.value = (float)skipTimer / (float)150;
+        //押している間ゲージが溜まる
+        if (inputAcution.Player.Skip.IsPressed())
+        {
+            skipTimer += 1;
+            if (skipTimer >= 150)
+            {
+                isSkip = true;
+            }
+        }
+        //溜まるまでに離すとリセット
+        if (inputAcution.Player.Skip.WasReleasedThisFrame() && !isSkip)
+        {
+            skipTimer = 0;
+        }
+    }
 }

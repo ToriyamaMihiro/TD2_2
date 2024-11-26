@@ -47,11 +47,16 @@ public class SceanManaer : MonoBehaviour
 
             SceneManager.LoadScene(nowSceneIndexNumber);
         }
+        if (inputAcution.Player.Title.WasPressedThisFrame())
+        {
+            SceneManager.LoadScene("Title");
+        }
+
         if (SceneManager.GetActiveScene().name == "Title")
         {
             //タイトルからゲームへ
-            if(inputAcution.Player.Jump.WasPressedThisFrame())
-                {
+            if (inputAcution.Player.Jump.WasPressedThisFrame())
+            {
                 Instantiate(SceanChange, new Vector2(0, 0), Quaternion.identity);
                 audioSource.PlayOneShot(desitionAudio);//音
                 Invoke("LoadScean", 0.7f);
@@ -63,7 +68,9 @@ public class SceanManaer : MonoBehaviour
             GameObject objT = GameObject.Find("TyutorialManager");
             tyutorial = objT.GetComponent<TyutorialManager>();
 
-            if (tyutorial.isYAttack)
+
+
+            if (tyutorial.isYAttack||tyutorial.isSkip)
             {
                 Invoke("Call", 1.5f);
                 Invoke("LoadScean", 2.2f);

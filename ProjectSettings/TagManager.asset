@@ -13,6 +13,7 @@ TagManager:
   - Needle
   - Counter
   - Option
+  - Practice
   layers:
   - Default
   - TransparentFX
