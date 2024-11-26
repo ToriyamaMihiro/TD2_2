@@ -19,6 +19,7 @@ public class BossAction : MonoBehaviour
     int needleDamage = 1;
     int attackDamage = 2;
     public int deformationTime;
+    int damegeTime;
 
     public int currentHp;
     //Sliderを入れる
@@ -30,6 +31,7 @@ public class BossAction : MonoBehaviour
 
     public bool isXDeformation;//X方向に変形したか
     public bool isYDeformation;//Y方向に変形したか
+    public bool isDamageHit;
     bool isHit;
     bool isFloor;
     bool isWall;
@@ -52,7 +54,7 @@ public class BossAction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bossRenderer = gameObject.GetComponent<SpriteRenderer>();
+
 
         //登場イージング
         transform.DOScale(new Vector3(3, 3, 1), 1.5f).SetEase(ease);
@@ -72,11 +74,23 @@ public class BossAction : MonoBehaviour
         Deformation();
         HitRest();
         Dead();
-        Damage();
         if (SceneManager.GetActiveScene().name == "Game")
         {
             //HP計算
             slider.value = (float)currentHp / (float)life;
+        }
+        //ダメージを受けたときに白くする
+        if (isDamageHit)
+        {
+            damegeTime += 1;
+            if (damegeTime == 12)
+            {
+                isDamageHit = false;
+            }
+        }
+        else
+        {
+            damegeTime = 0;
         }
     }
 
@@ -140,33 +154,6 @@ public class BossAction : MonoBehaviour
         }
     }
 
-    //変形の処理
-    void Damage()
-    {
-        if (isHit)
-        {
-            //プレイヤーの色を点滅させて無敵時間だと分かりやすくする
-            float level = Mathf.Abs(Mathf.Sin(Time.time * 4));
-            gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(level, level, level, 1f);
-
-            //毎フレーム呼び出させないため
-            hitTime += 1;
-
-
-            if (hitTime == 1)
-            {
-                Invoke("WaitFor", 0.5f);
-            }
-        }
-    }
-
-    void WaitFor()
-    {
-        //ボスの色を元に戻す
-        bossRenderer.color = new UnityEngine.Color(1f, 1f, 1f, 1f);
-        hitTime = 0;
-    }
-
     void OnTriggerStay2D(Collider2D collision)
     {
         //床に居たらノックバックする
@@ -186,6 +173,7 @@ public class BossAction : MonoBehaviour
 
             if (!isHit)
             {
+               
                 //コンボがマックスかつ横攻撃だったかつ床にいた場合ノックバックする
                 if (weapon.comboCount == weapon.comboCountMax && weapon.isDashAttack && isFloor)
                 {
@@ -202,6 +190,8 @@ public class BossAction : MonoBehaviour
                 //変形のカウント
                 if (weapon.isAttack)
                 {
+                    //白くする
+                    isDamageHit = true;
                     if (!isXDeformation && !isYDeformation)
                     {
                         yCount += 1;
@@ -213,6 +203,8 @@ public class BossAction : MonoBehaviour
                 }
                 if (weapon.isDashAttack)
                 {
+                    //白くする
+                    isDamageHit = true;
                     if (!isXDeformation && !isYDeformation)
                     {
                         xCount += 1;
@@ -244,6 +236,7 @@ public class BossAction : MonoBehaviour
             //演出オン
             isDamage = true;
             currentHp = currentHp - dustDamage;
+            isDamageHit = true;
             //当たったオブジェクトを削除する
             Destroy(collision.gameObject);
         }
@@ -254,6 +247,7 @@ public class BossAction : MonoBehaviour
             //演出オン
             isDamage = true;
             currentHp = currentHp - needleDamage;
+            isDamageHit = true;
             //当たったオブジェクトを削除する
             Destroy(collision.gameObject);
         }
