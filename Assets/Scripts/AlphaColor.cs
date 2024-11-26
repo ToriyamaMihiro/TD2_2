@@ -13,7 +13,7 @@ public class AlphaColor : MonoBehaviour
     void Start()
     {
         image = GetComponent<Image>();
-        image.DOFade(low,1f).SetLoops(-1, LoopType.Yoyo);
+        image.DOFade(low,1f).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject);
     }
 
     // Update is called once per frame
