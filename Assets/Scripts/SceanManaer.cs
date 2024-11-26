@@ -65,8 +65,8 @@ public class SceanManaer : MonoBehaviour
 
             if (tyutorial.isYAttack)
             {
-                Instantiate(SceanChange, new Vector2(0, 0), Quaternion.identity);
-                Invoke("LoadScean", 0.7f);
+                Invoke("Call", 1.5f);
+                Invoke("LoadScean", 2.2f);
             }
 
         }
@@ -132,6 +132,11 @@ public class SceanManaer : MonoBehaviour
         int nowSceneIndexNumber = SceneManager.GetActiveScene().buildIndex;
 
         SceneManager.LoadScene(++nowSceneIndexNumber);
+    }
+
+    void Call()
+    {
+        Instantiate(SceanChange, new Vector2(0, 0), Quaternion.identity);
     }
     void LoadSceanResult()
     {

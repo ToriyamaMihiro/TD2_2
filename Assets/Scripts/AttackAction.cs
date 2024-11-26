@@ -88,7 +88,7 @@ public class AttackAction : MonoBehaviour
         GameObject obj = GameObject.Find("Player");
         player = obj.GetComponent<PlayerAction>();
         ////ボタンを押したら90度回転させて振り下ろす
-        if (inputAcution.Player.Attack.IsPressed() && !isAttack && !player.isJump)
+        if (inputAcution.Player.Attack.WasPressedThisFrame() && !isDashAttack && !isAttack && !player.isJump)
         {
             transform.Rotate(0, 0, 90);
             transform.localPosition = startPos;
@@ -134,7 +134,7 @@ public class AttackAction : MonoBehaviour
         PlayerAction player;
         GameObject obj = GameObject.Find("Player");
         player = obj.GetComponent<PlayerAction>();
-        if (inputAcution.Player.DashAttack.IsPressed() && !isDashAttack && !player.isJump)
+        if (inputAcution.Player.DashAttack.WasPressedThisFrame() && !isDashAttack && !isAttack && !player.isJump)
         {
             //音
             audioSource.PlayOneShot(flutterAudio);

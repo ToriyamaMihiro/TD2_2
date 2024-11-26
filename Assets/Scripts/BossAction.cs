@@ -14,7 +14,7 @@ public class BossAction : MonoBehaviour
     int yCount;//y方向から受けた回数、横に伸びる
 
     int deformationCount = 5;//変形するまでの回数
-    public int life = 2;
+    public int life = 150;
     int dustDamage = 1;
     int needleDamage = 1;
     int attackDamage = 2;

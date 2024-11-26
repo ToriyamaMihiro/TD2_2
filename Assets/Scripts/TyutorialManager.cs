@@ -24,18 +24,19 @@ public class TyutorialManager : MonoBehaviour
     bool isStartUI;
 
     int jumpCount;
-    int jumpMaxCount = 6;
+    int jumpMaxCount = 1;
 
     int XCount;
-    int XMaxCount = 4;
+    int XMaxCount = 1;
 
     int YCount;
-    int YMaxCount = 4;
+    int YMaxCount = 5;
 
-    bool isJump;
-    bool isXAttack;
+    public bool isJump;
+    public bool isXAttack;
     public bool isYAttack;
     bool isBossCall;
+    public bool isAttack;//攻撃しているかしていないかの判定
 
     // Start is called before the first frame update
     void Start()
@@ -78,7 +79,7 @@ public class TyutorialManager : MonoBehaviour
         if (jumpCount >= jumpMaxCount)
         {
             isJump = true;
-            
+
         }
         //スライダーの数字をジャンプの数字にする
         if (!isJump)
@@ -88,32 +89,40 @@ public class TyutorialManager : MonoBehaviour
             //UIの画像をジャンプのにする
             uiSpriteRenderer.sprite = uiSprite[0];
         }
-       
+
 
         //練習用のボスをだす
-        if (isJump && !isBossCall)
+        if (isJump && !isXAttack && !isBossCall)
         {
             Instantiate(Boss, new Vector2(0, -2.5f), Quaternion.identity);
-            tutorial_UI.transform.DOScale(new Vector3(0,0,0), 0.5f).SetEase(ease).SetLoops(2,LoopType.Yoyo).SetLink(gameObject);
+            tutorial_UI.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(ease).SetLoops(2, LoopType.Yoyo).SetLink(gameObject);
 
             isBossCall = true;
         }
 
+        //カウントするためのリセット
+        if (!weapon.isAttack && !weapon.isDashAttack)
+        {
+            isAttack = false;
+        }
+
         //押す攻撃
-        if (inputAcution.Player.DashAttack.WasPressedThisFrame() && !weapon.isAttack && weapon.isDashAttack && isJump && XCount <= XMaxCount)
+        if (inputAcution.Player.DashAttack.WasPressedThisFrame() && !weapon.isAttack && weapon.isDashAttack && !isAttack && isJump && XCount < XMaxCount)
         {
             XCount += 1;
+            //攻撃中に一回だけカウントするようにする
+            isAttack = true;
         }
-        if (XCount >= XMaxCount)//たたく終了
+        if (XCount >= XMaxCount && !isXAttack)//たたく終了
         {
             isXAttack = true;
-            
+            isBossCall = false;
         }
         if (isJump && !isXAttack)
         {
             slider.value = (float)XCount / (float)XMaxCount;
         }
-        if(isJump && !isXAttack && !isYAttack)//たたく中
+        if (isJump && !isXAttack && !isYAttack)//たたく中
         {
             Invoke("ChangeSpriteHit", 1f);
         }
@@ -126,11 +135,11 @@ public class TyutorialManager : MonoBehaviour
             }
         }
 
-
-            //潰す攻撃
-            if (inputAcution.Player.Attack.WasPressedThisFrame() && weapon.isAttack && !weapon.isDashAttack && isJump && isXAttack && YCount <= YMaxCount)
+        //潰す攻撃
+        if (inputAcution.Player.Attack.WasPressedThisFrame() && weapon.isAttack && !weapon.isDashAttack && !isAttack && isJump && isXAttack && YCount < YMaxCount)
         {
             YCount += 1;
+            isAttack = true;
         }
         //もし変形したら下に移動して浮いていない風にする
 
@@ -141,7 +150,7 @@ public class TyutorialManager : MonoBehaviour
         if (YCount >= YMaxCount)//はたく終了
         {
             isYAttack = true;
-            
+
         }
         if (isJump && isXAttack && !isYAttack)//はたく中
         {
@@ -149,5 +158,5 @@ public class TyutorialManager : MonoBehaviour
         }
     }
 
-    
+
 }

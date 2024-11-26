@@ -136,11 +136,14 @@ MonoBehaviour:
   attackFullTime: 41
   comboCount: 0
   comboCountMax: 2
+  XCount: 0
+  YCount: 0
   isAttack: 0
   isDashAttack: 0
   isAttackShake: 0
   hitAudio: {fileID: 8300000, guid: 44d5223c665581141bec4d59a2b8924b, type: 3}
   flutterAudio: {fileID: 8300000, guid: 73497730769af2a4b833cc432f97ffff, type: 3}
+  isDust: 0
 --- !u!50 &4911061348698133264
 Rigidbody2D:
   serializedVersion: 4
@@ -414,6 +417,7 @@ MonoBehaviour:
   jumpPower: 7.8
   dashPower: 10
   life: 10
+  tyutorialJumpCount: 0
   isDead: 0
   isHit: 0
   nowSpeed: 0
