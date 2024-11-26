@@ -45,7 +45,7 @@ public class TyutorialManager : MonoBehaviour
         inputAcution.Enable();
         //開始UI
         uiSpriteRenderer = tutorial_UI.GetComponent<SpriteRenderer>();
-        tutorial_UI.transform.DOScale(toSize, 1f).SetEase(ease);
+        tutorial_UI.transform.DOScale(toSize, 1f).SetEase(ease).SetLink(gameObject);
     }
 
     void ChangeSpriteHit()
@@ -94,7 +94,7 @@ public class TyutorialManager : MonoBehaviour
         if (isJump && !isBossCall)
         {
             Instantiate(Boss, new Vector2(0, -2.5f), Quaternion.identity);
-            tutorial_UI.transform.DOScale(new Vector3(0,0,0), 0.5f).SetEase(ease).SetLoops(2,LoopType.Yoyo);
+            tutorial_UI.transform.DOScale(new Vector3(0,0,0), 0.5f).SetEase(ease).SetLoops(2,LoopType.Yoyo).SetLink(gameObject);
 
             isBossCall = true;
         }
@@ -121,7 +121,7 @@ public class TyutorialManager : MonoBehaviour
         {
             if (!isFinishUI)
             {
-                tutorial_UI.transform.DOScale(new Vector3(0, 0, 0), 1.5f).SetEase(ease).SetLoops(2, LoopType.Yoyo);
+                tutorial_UI.transform.DOScale(new Vector3(0, 0, 0), 1.5f).SetEase(ease).SetLoops(2, LoopType.Yoyo).SetLink(gameObject);
                 isFinishUI = true;
             }
         }

@@ -61,7 +61,7 @@ public class AttackAction : MonoBehaviour
         attackMovePower += upPos;
         dashAttackMovePower += sidePos;
 
-        tween = transform.DOLocalMoveY(0.9f, 1.5f).SetLoops(-1, LoopType.Yoyo);
+        tween = transform.DOLocalMoveY(0.9f, 1.5f).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject);
         audioSource = GetComponent<AudioSource>();
     }
 
@@ -78,7 +78,7 @@ public class AttackAction : MonoBehaviour
     //演出上の上下
     void Move()
     {
-        tween = transform.DOLocalMoveY(1f, 1.5f).SetLoops(-1, LoopType.Yoyo);
+        tween = transform.DOLocalMoveY(1f, 1.5f).SetLoops(-1, LoopType.Yoyo).SetLink(gameObject);
     }
 
     //潰す

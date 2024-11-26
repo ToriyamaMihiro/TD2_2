@@ -13,7 +13,7 @@ public class SizeEase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.DOScale(toSize,1f).SetEase(ease);
+        transform.DOScale(toSize,1f).SetEase(ease).SetLink(gameObject);
     }
 
     // Update is called once per frame
@@ -22,7 +22,7 @@ public class SizeEase : MonoBehaviour
         timer += 1 * Time.deltaTime;
         if (timer > finishTime)
         {
-            transform.DOScale(new Vector3(0,0,0), 1f).SetEase(ease);
+            transform.DOScale(new Vector3(0,0,0), 1f).SetEase(ease).SetLink(gameObject);
             timer = 0;
         }
     }
