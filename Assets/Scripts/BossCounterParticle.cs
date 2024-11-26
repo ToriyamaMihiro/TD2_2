@@ -35,7 +35,7 @@ public class BossCounterParticle : MonoBehaviour
 
         followTargetDistance = Random.Range(0.1f, 0.8f);
         moveSpeed = Random.Range(2f, 4.5f);
-        distancePlus = Random.Range(1f, 3f);
+        distancePlus = Random.Range(1f, 3.2f);
         distance = followTargetDistance;
     }
 

@@ -8,7 +8,7 @@ public class BossAttackAction : MonoBehaviour
     public GameObject LNeedle;
     public GameObject CounterParticle;
 
-    Vector2 defaultPos = new Vector2(-7.5f, 3.1f);
+    Vector2 defaultPos = new Vector2(-7.5f, 4f);
     Vector2 objectScale;
 
     public float MoveSpeed = 5;//横移動の速さ
@@ -391,7 +391,7 @@ public class BossAttackAction : MonoBehaviour
                 if (move.rightTime <= moveTime)
                 {
                     //右に行く
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(rightPos.x, defaultPos.y, transform.position.z), MoveSpeed * Time.deltaTime);
+                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(rightPos.x, defaultPos.y - objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
                 }
                 else if (move.rightTime >= moveTime + 1 && !move.isRight && !move.isLeft)
                 {
@@ -709,7 +709,7 @@ public class BossAttackAction : MonoBehaviour
         counter.FrontTime += 1;
         if (counter.FrontTime == 1)
         {
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 20; i++)
             {
                 randomPosition = new Vector2(Random.Range(-moveRange, moveRange),
               Random.Range(-moveRange, moveRange));

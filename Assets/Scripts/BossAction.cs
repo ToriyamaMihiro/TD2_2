@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class BossAction : MonoBehaviour
 {
+    SpriteRenderer bossRenderer;
 
     int xCount;//x方向から受けた回数、縦に伸びる
     int yCount;//y方向から受けた回数、横に伸びる
@@ -22,6 +23,8 @@ public class BossAction : MonoBehaviour
     public int currentHp;
     //Sliderを入れる
     public Slider slider;
+
+    int hitTime;
 
     float knockBackPower = 1;
 
@@ -49,6 +52,8 @@ public class BossAction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        bossRenderer = gameObject.GetComponent<SpriteRenderer>();
+
         //登場イージング
         transform.DOScale(new Vector3(3, 3, 1), 1.5f).SetEase(ease);
         if (SceneManager.GetActiveScene().name == "Game")
@@ -67,6 +72,7 @@ public class BossAction : MonoBehaviour
         Deformation();
         HitRest();
         Dead();
+        Damage();
         if (SceneManager.GetActiveScene().name == "Game")
         {
             //HP計算
@@ -135,6 +141,32 @@ public class BossAction : MonoBehaviour
     }
 
     //変形の処理
+    void Damage()
+    {
+        if (isHit)
+        {
+            //プレイヤーの色を点滅させて無敵時間だと分かりやすくする
+            float level = Mathf.Abs(Mathf.Sin(Time.time * 4));
+            gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(level, level, level, 1f);
+
+            //毎フレーム呼び出させないため
+            hitTime += 1;
+
+
+            if (hitTime == 1)
+            {
+                Invoke("WaitFor", 0.5f);
+            }
+        }
+    }
+
+    void WaitFor()
+    {
+        //ボスの色を元に戻す
+        bossRenderer.color = new UnityEngine.Color(1f, 1f, 1f, 1f);
+        hitTime = 0;
+    }
+
     void OnTriggerStay2D(Collider2D collision)
     {
         //床に居たらノックバックする
