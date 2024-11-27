@@ -26,7 +26,7 @@ public class TyutorialManager : MonoBehaviour
     bool isStartUI;
 
     int jumpCount;
-    int jumpMaxCount = 1;
+    int jumpMaxCount = 4;
 
     int XCount;
     int XMaxCount = 6;
