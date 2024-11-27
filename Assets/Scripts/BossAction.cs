@@ -46,6 +46,7 @@ public class BossAction : MonoBehaviour
     //音
     private AudioSource audioSource;
     public AudioClip damageAudio;
+    public AudioClip deadAudio;
 
     //イージング
     public Ease ease;
@@ -170,10 +171,16 @@ public class BossAction : MonoBehaviour
         }
         if (currentHp <= 0)
         {
-            isDead = true;
+            if (!isDead)
+            {
+                isDead = true;
+                //音
+                audioSource.PlayOneShot(deadAudio);
+            }
         }
         if (isDead) 
         {
+            
             time += Time.deltaTime;
             if (time < fadeTime)
             {
