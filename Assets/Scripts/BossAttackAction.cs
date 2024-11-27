@@ -300,7 +300,7 @@ public class BossAttackAction : MonoBehaviour
 
                 if (patternCount == 0)
                 {
-                    nowMode = ActionMode.SideTackle;
+                    nowMode = ActionMode.UpDown;
                     isFinish = false;
                 }
                 if (patternCount == 1)
