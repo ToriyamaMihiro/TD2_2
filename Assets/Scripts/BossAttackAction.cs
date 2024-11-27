@@ -13,7 +13,7 @@ public class BossAttackAction : MonoBehaviour
 
     public float MoveSpeed = 5;//横移動の速さ
     float XRange = 7.5f;
-    float YRange = 2.5f;
+    float YRange = 3.5f;
     int wallTime;
     int randomValue;
 
@@ -193,12 +193,12 @@ public class BossAttackAction : MonoBehaviour
             }
             else if (boss.isYDeformation)
             {
-                YRange = 3.2f;
+                YRange = 3.5f;
             }
             else
             {
                 XRange = 7.5f;
-                YRange = 2.5f;
+                YRange = 3.5f;
             }
         }
         //UpDownのときも変形したら範囲を変える
@@ -209,7 +209,7 @@ public class BossAttackAction : MonoBehaviour
         }
         if (boss2.isYDeformation)
         {
-            YRange = 3.2f;
+            YRange = 3.5f;
         }
 
         //Mathf.ClampでX,Yの値それぞれが最小～最大の範囲内に収める。
