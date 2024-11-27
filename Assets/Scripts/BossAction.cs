@@ -161,7 +161,7 @@ public class BossAction : MonoBehaviour
             }
         }
     }
-
+     
     void Dead()
     {
         animator.SetBool("isDead", isDead);//アニメに変更
