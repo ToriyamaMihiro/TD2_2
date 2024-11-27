@@ -174,7 +174,7 @@ public class TyutorialManager : MonoBehaviour
         {
             if (!isOkUI)
             {
-               
+               //OK出す
                 ok_UI.transform.DOScale(new Vector3(4, 4, 1), 1f).SetLink(gameObject);
                 Invoke("OkUI", 1.5f);
                 isOkUI = true;
