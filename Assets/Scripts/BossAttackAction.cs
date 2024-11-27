@@ -74,7 +74,7 @@ public class BossAttackAction : MonoBehaviour
     }
     UpDown upDown;
     int upDownCount;
-    int upDownCountMax = 2;
+    int upDownCountMax = 1;
     int upDownMoveTime = 150;
     int upWaitTime = 100;
     int downWaitTime = 200;
@@ -293,7 +293,7 @@ public class BossAttackAction : MonoBehaviour
 
                 if (patternCount == 0)
                 {
-                    nowMode = ActionMode.UpDown;
+                    nowMode = ActionMode.SideTackle;
                     isFinish = false;
                 }
                 if (patternCount == 1)
@@ -323,7 +323,7 @@ public class BossAttackAction : MonoBehaviour
                 }
                 if (patternCount == 1)
                 {
-                    nowMode = ActionMode.Moving;
+                    nowMode = ActionMode.UpDown;
                     isFinish = false;
                 }
                 if (patternCount == 2)

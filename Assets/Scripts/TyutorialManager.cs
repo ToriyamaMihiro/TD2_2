@@ -60,7 +60,7 @@ public class TyutorialManager : MonoBehaviour
         uiSpriteRenderer.sprite = uiSprite[2];
     }
     void ChangeSpriteFlutter()
-    { 
+    {
         //UIの画像
         uiSpriteRenderer.sprite = uiSprite[1];
     }
@@ -171,7 +171,7 @@ public class TyutorialManager : MonoBehaviour
 
     void Skip()
     {
-       
+
         skipSlider.value = (float)skipTimer / (float)150;
         //押している間ゲージが溜まる
         if (inputAcution.Player.Skip.IsPressed())

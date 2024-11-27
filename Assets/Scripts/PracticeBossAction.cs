@@ -43,6 +43,7 @@ public class PracticeBossAction : MonoBehaviour
             //Ç‹ÇΩïœå`ÇµÇƒÇµÇ‹Ç§ÇÃÇ≈èâä˙âªÇµÇƒÇ®Ç≠
             boss.isXDeformation = false;
             boss.deformationTime = 0;
+            moveTime = 0;
 
         }
 
@@ -54,14 +55,25 @@ public class PracticeBossAction : MonoBehaviour
             transform.position = new Vector3(0, -2.5f, 0);
             transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.InOutCubic).SetLoops(2, LoopType.Yoyo).SetLink(gameObject);
         }
-
-        if (boss.isYDeformation)
+        if (boss.isXDeformation)
         {
             moveTime += 1;
             if (moveTime == 1)
             {
                 //â°í∑Ç…Ç»Ç¡ÇΩÇÁè∞Ç…íÖÇ≠ÇÊÇ§Ç…à⁄ìÆ
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z), 100 * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), 100 * Time.deltaTime);
+               
+            }
+        }
+
+
+       else if (boss.isYDeformation)
+        {
+            moveTime += 1;
+            if (moveTime == 1)
+            {
+                //â°í∑Ç…Ç»Ç¡ÇΩÇÁè∞Ç…íÖÇ≠ÇÊÇ§Ç…à⁄ìÆ
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y - 0.8f, transform.position.z), 100 * Time.deltaTime);
             }
         }
     }

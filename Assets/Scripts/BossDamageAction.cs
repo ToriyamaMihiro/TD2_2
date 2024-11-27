@@ -25,32 +25,36 @@ public class BossDamageAction : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "Tyutorial")
         {
-
-            BossAction boss;
-            GameObject obj1 = GameObject.Find("PracticeBoss(Clone)");
-            boss = obj1.GetComponent<BossAction>();
-
-
-
-            if (boss.isDamageHit)
+            TyutorialManager tyutorial;
+            GameObject objT = GameObject.Find("TyutorialManager");
+            tyutorial = objT.GetComponent<TyutorialManager>();
+            if (tyutorial.isJump)
             {
-                //プレイヤーの色を点滅させて無敵時間だと分かりやすくする
-                gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(1, 1, 1, 0.5f);
 
-                //if (level <= 0.5)
-                //{
-                //    level += 0.05f;
-                //}
+                BossAction boss;
+                GameObject obj1 = GameObject.Find("PracticeBoss(Clone)");
+                boss = obj1.GetComponent<BossAction>();
 
-                //毎フレーム呼び出させないため
+                if (boss.isDamageHit)
+                {
+                    //プレイヤーの色を点滅させて無敵時間だと分かりやすくする
+                    gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(1, 1, 1, 0.5f);
+
+                    //if (level <= 0.5)
+                    //{
+                    //    level += 0.05f;
+                    //}
+
+                    //毎フレーム呼び出させないため
+
+                }
+                else
+                {
+                    bossRenderer.color = new UnityEngine.Color(1f, 1f, 1f, 0f);
+                    hitTime = 0;
+                }
 
             }
-            else
-            {
-                bossRenderer.color = new UnityEngine.Color(1f, 1f, 1f, 0f);
-                hitTime = 0;
-            }
-
         }
 
         if (SceneManager.GetActiveScene().name == "Game")
