@@ -173,6 +173,9 @@ public class BossAttackAction : MonoBehaviour
     void Update()
     {
         BossAction boss = GetComponent<BossAction>();
+        //アニメ
+        animator.SetBool("isAttack", isAttackAnime);//アニメ変更
+       
         if (!boss.isDead)
         {
 
@@ -183,6 +186,10 @@ public class BossAttackAction : MonoBehaviour
             Range();
             AttackChange();
             objectScale = transform.localScale;
+        }
+        else
+        {
+            isAttackAnime = false;
         }
     }
 
@@ -395,12 +402,7 @@ public class BossAttackAction : MonoBehaviour
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         BossAction boss = GetComponent<BossAction>();
-            animator.SetBool("isAttack", isAttackAnime);//アニメ変更
-        //アニメ
-        if (boss.isDead)
-        {
-            isAttackAnime = false;
-        }
+        
 
         //アラート音
         if (isAttackAnime && arartTimer == 0)
