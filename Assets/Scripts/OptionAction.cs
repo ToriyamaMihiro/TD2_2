@@ -29,12 +29,16 @@ public class OptionAction : MonoBehaviour
         if (inputAcution.Player.Left.IsPressed())
         {
             //audioSource.PlayOneShot(selectAudio);//音
+            audioSource.clip = selectAudio;
+            audioSource.Play();
             isRight = false;
         }
 
         if (inputAcution.Player.Right.IsPressed())
         {
             //audioSource.PlayOneShot(selectAudio);//音
+            audioSource.clip = selectAudio;
+            audioSource.Play();
             isRight = true;
         }
         if (isRight)
