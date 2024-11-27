@@ -65,7 +65,7 @@ public class BossAction : MonoBehaviour
 
 
         //登場イージング
-        transform.DOScale(new Vector3(3, 3, 1), 1.5f).SetEase(ease);
+        transform.DOScale(new Vector3(3, 3, 1), 1.5f).SetEase(ease).SetLink(gameObject);
         if (SceneManager.GetActiveScene().name == "Game")
         {
             //Sliderを満タンにする。

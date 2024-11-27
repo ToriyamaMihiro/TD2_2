@@ -74,7 +74,7 @@ public class BossAttackAction : MonoBehaviour
     }
     UpDown upDown;
     int upDownCount;
-    int upDownCountMax = 1;
+    int upDownCountMax = 2;
     int upDownMoveTime = 150;
     int upWaitTime = 100;
     int downWaitTime = 200;
@@ -97,7 +97,7 @@ public class BossAttackAction : MonoBehaviour
 
     Side side;
     int sideCount;
-    int sideCountMax = 1;
+    int sideCountMax = 2;
     int sideWaitTime = 150;
     int sideAttackWaitTime = 220;
     int sideMoveSpeed = 8;
@@ -114,7 +114,7 @@ public class BossAttackAction : MonoBehaviour
 
     int trackBulletTime = 220;
     int trackBulletCount;
-    int trackBulletCountMax = 1;
+    int trackBulletCountMax = 4;
 
     struct CounterAttack
     {
@@ -194,7 +194,7 @@ public class BossAttackAction : MonoBehaviour
             //大きさによって範囲の決定
             if (boss.isXDeformation)
             {
-                XRange = 8.1f;
+                XRange = 8.5f;
             }
             else if (boss.isYDeformation)
             {
@@ -300,7 +300,7 @@ public class BossAttackAction : MonoBehaviour
 
                 if (patternCount == 0)
                 {
-                    nowMode = ActionMode.UpDown;
+                    nowMode = ActionMode.SideTackle;
                     isFinish = false;
                 }
                 if (patternCount == 1)
