@@ -114,6 +114,7 @@ MonoBehaviour:
   varticalBossSize: {x: 1.5, y: 4, z: 1}
   besideBossSize: {x: 4, y: 1.5, z: 1}
   damageAudio: {fileID: 8300000, guid: 972c5bc68bbf29e478a692a73d99082c, type: 3}
+  deadAudio: {fileID: 0}
   ease: 0
   isDamage: 0
   fadeTime: 1
@@ -245,7 +246,7 @@ SpriteMask:
   m_BackSortingLayerID: 0
   m_FrontSortingLayer: 0
   m_BackSortingLayer: 0
-  m_FrontSortingOrder: 1
+  m_FrontSortingOrder: 2
   m_BackSortingOrder: 0
   m_IsCustomRangeActive: 1
   m_SpriteSortPoint: 0
