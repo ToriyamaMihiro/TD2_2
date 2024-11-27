@@ -5,6 +5,7 @@ using System.Drawing;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class BossAction : MonoBehaviour
 {
@@ -50,6 +51,13 @@ public class BossAction : MonoBehaviour
     public Ease ease;
     //演出用変数
     public bool isDamage;
+    //アニメ
+    private Animator animator;
+    private SpriteRenderer render;
+    // フェードアウトするまでの時間(0.5sec)
+    public float fadeTime = 1f;
+    private float time;
+
 
     // Start is called before the first frame update
     void Start()
@@ -66,6 +74,8 @@ public class BossAction : MonoBehaviour
         //現在のHPを最大HPと同じに。
         currentHp = life;
         audioSource = GetComponent<AudioSource>();
+        animator = GetComponent<Animator>();
+        render = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -154,9 +164,27 @@ public class BossAction : MonoBehaviour
 
     void Dead()
     {
+        animator.SetBool("isDead", isDead);//アニメに変更
         if (currentHp <= 0)
         {
             isDead = true;
+        }
+        if (isDead) 
+        {
+            time += Time.deltaTime;
+            if (time < fadeTime)
+            {
+                float alpha = 1.0f - time / fadeTime;
+                UnityEngine.Color color = render.color;
+                color.a = alpha;
+                render.color = color;
+            }
+            else
+            {
+                render.color = new UnityEngine.Color(1, 1, 1, 0);
+            }
+
+            gameObject.transform.localScale = new Vector3(4, 4, 1);
         }
     }
 

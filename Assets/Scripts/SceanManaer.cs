@@ -100,10 +100,15 @@ public class SceanManaer : MonoBehaviour
             }
 
             //プレイヤーかボスが死んだらリザルト画面へ
-            if (player.isDead || boss.isDead)
+            if (player.isDead)
             {
                 Instantiate(SceanChange, new Vector2(0, 0), Quaternion.identity);
                 Invoke("LoadScean", 0.7f);
+            }
+            if (boss.isDead)
+            {
+                Invoke("SceneChangeON", 4f);
+                Invoke("LoadScean", 5f);
             }
         }
 
@@ -132,6 +137,11 @@ public class SceanManaer : MonoBehaviour
                 Invoke("LoadSceanResult", 0.7f);
             }
         }
+    }
+
+    void SceneChangeON()
+    {
+        Instantiate(SceanChange, new Vector2(0, 0), Quaternion.identity);
     }
 
     void LoadScean()
