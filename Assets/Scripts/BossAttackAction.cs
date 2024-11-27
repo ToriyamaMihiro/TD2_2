@@ -43,6 +43,10 @@ public class BossAttackAction : MonoBehaviour
     public AudioClip wallCollideAudio;
     float arartTimer = 0;
 
+    //演出用ストップ時間
+    public float parStopTimer;
+    public bool isParStart;
+
     struct Move
     {
         public int rightTime;
@@ -175,21 +179,36 @@ public class BossAttackAction : MonoBehaviour
         BossAction boss = GetComponent<BossAction>();
         //アニメ
         animator.SetBool("isAttack", isAttackAnime);//アニメ変更
-       
-        if (!boss.isDead)
+        //パーティクル
+        
+        if (parStopTimer > 4f)
         {
-
-            Deformation();
-            AttackManager();
-            Attack();
-            WallStan();
-            Range();
-            AttackChange();
-            objectScale = transform.localScale;
+            isParStart = true;
+            parStopTimer = 4.5f;
         }
         else
         {
-            isAttackAnime = false;
+            parStopTimer += 1 * Time.deltaTime;
+        }
+
+        if (isParStart)
+        {
+
+            if (!boss.isDead)
+            {
+
+                Deformation();
+                AttackManager();
+                Attack();
+                WallStan();
+                Range();
+                AttackChange();
+                objectScale = transform.localScale;
+            }
+            else
+            {
+                isAttackAnime = false;
+            }
         }
     }
 
