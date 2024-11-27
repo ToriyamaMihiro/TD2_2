@@ -196,7 +196,7 @@ public class BossAttackAction : MonoBehaviour
             //大きさによって範囲の決定
             if (boss.isXDeformation)
             {
-                XRange = 8.5f;
+                XRange = 8.3f;
             }
             else if (boss.isYDeformation)
             {

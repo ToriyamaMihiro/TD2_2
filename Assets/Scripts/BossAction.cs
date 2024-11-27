@@ -99,7 +99,7 @@ public class BossAction : MonoBehaviour
         if (isDamageHit)
         {
             damegeTime += 1;
-            if (damegeTime == 12)
+            if (damegeTime == 9)
             {
                 isDamageHit = false;
             }
