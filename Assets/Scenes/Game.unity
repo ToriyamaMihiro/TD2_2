@@ -791,6 +791,7 @@ GameObject:
   - component: {fileID: 343460416}
   - component: {fileID: 343460418}
   - component: {fileID: 343460417}
+  - component: {fileID: 343460419}
   m_Layer: 5
   m_Name: UI_Player
   m_TagString: Untagged
@@ -856,6 +857,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 343460415}
   m_CullTransparentMesh: 1
+--- !u!114 &343460419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343460415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92d917175086e974d8f8f80cc7c467b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  normalSprite: {fileID: 21300000, guid: 0655342d67fa65848bba1bb729352181, type: 3}
+  damageSprite: {fileID: 21300000, guid: daaabf8a01f778f43b87294410718782, type: 3}
 --- !u!1 &410861214
 GameObject:
   m_ObjectHideFlags: 0
