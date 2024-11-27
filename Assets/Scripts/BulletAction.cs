@@ -12,7 +12,7 @@ public class BulletAction : MonoBehaviour
 
     int time;//このオブジェクトが呼び出されてからの時間
 
-    float power = 50;
+    float power = 65;
     // Start is called before the first frame update
     void Start()
     {

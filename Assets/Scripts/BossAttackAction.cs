@@ -91,10 +91,12 @@ public class BossAttackAction : MonoBehaviour
 
         public int TrackWaitTime;//追尾後の上での待機時間
 
+
         public bool isTrackWait;
         public bool isRight;
         public bool isLeft;
         public bool isWait;
+        public bool isStartPos;//最初の位置にきたか
     }
 
     Side side;
@@ -196,7 +198,7 @@ public class BossAttackAction : MonoBehaviour
             //大きさによって範囲の決定
             if (boss.isXDeformation)
             {
-                XRange = 8.3f;
+                XRange = 8.2f;
             }
             else if (boss.isYDeformation)
             {
@@ -577,10 +579,18 @@ public class BossAttackAction : MonoBehaviour
 
             case ActionMode.SideTackle:
 
-                side.LeftTime += 1;
                 Vector2 sidePos = new Vector2(9f, 0);
                 //isAttackAnime = false;
                 //追尾
+                if (transform.position.x <= defaultPos.x + objectScale.x / 2)
+                {
+                    side.isStartPos = true;
+                }
+                //スタートの位置についてから時間を測る
+                if (!isWall && side.isStartPos)
+                {
+                    side.LeftTime += 1;
+                }
                 if (side.LeftTime <= sideAttackWaitTime && !isWall)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(defaultPos.x + objectScale.x / 2, player.transform.position.y + objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
