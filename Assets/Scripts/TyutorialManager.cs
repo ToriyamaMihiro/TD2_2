@@ -19,14 +19,15 @@ public class TyutorialManager : MonoBehaviour
     public Sprite[] uiSprite = new Sprite[3];
     //UIまわり
     public GameObject tutorial_UI;
+    public GameObject ok_UI;
     public Ease ease;
     public Vector3 toSize = new Vector3(2.5f, 2.5f, 1);
     private SpriteRenderer uiSpriteRenderer;
     bool isFinishUI;
-    bool isStartUI;
+    bool isOkUI;
 
     int jumpCount;
-    int jumpMaxCount = 4;
+    int jumpMaxCount = 6;
 
     int XCount;
     int XMaxCount = 6;
@@ -106,7 +107,8 @@ public class TyutorialManager : MonoBehaviour
         {
             Instantiate(Boss, new Vector2(0, -2.5f), Quaternion.identity);
             tutorial_UI.transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(ease).SetLoops(2, LoopType.Yoyo).SetLink(gameObject);
-
+            ok_UI.transform.DOScale(new Vector3(4, 4, 1), 1f).SetLink(gameObject);
+            Invoke("OkUI", 1.5f);
             isBossCall = true;
         }
 
@@ -141,6 +143,8 @@ public class TyutorialManager : MonoBehaviour
             if (!isFinishUI)
             {
                 tutorial_UI.transform.DOScale(new Vector3(0, 0, 0), 1.5f).SetEase(ease).SetLoops(2, LoopType.Yoyo).SetLink(gameObject);
+                ok_UI.transform.DOScale(new Vector3(4, 4, 1), 1f).SetLink(gameObject);
+                Invoke("OkUI", 1.5f);
                 isFinishUI = true;
             }
         }
@@ -166,7 +170,22 @@ public class TyutorialManager : MonoBehaviour
         {
             Invoke("ChangeSpriteFlutter", 1f);
         }
+        if(isJump && isXAttack && isYAttack)
+        {
+            if (!isOkUI)
+            {
+               
+                ok_UI.transform.DOScale(new Vector3(4, 4, 1), 1f).SetLink(gameObject);
+                Invoke("OkUI", 1.5f);
+                isOkUI = true;
+            }
+        }
 
+    }
+
+    void OkUI()
+    {
+        ok_UI.transform.DOScale(new Vector3(0, 0, 1), 1f).SetLink(gameObject);
     }
 
     void Skip()
