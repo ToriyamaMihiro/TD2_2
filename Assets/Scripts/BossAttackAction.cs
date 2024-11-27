@@ -199,7 +199,7 @@ public class BossAttackAction : MonoBehaviour
         //現在のポジションを保持する
         Vector3 currentPos = transform.position;
 
-        if (nowMode != ActionMode.UpDown)
+        if (nowMode != ActionMode.UpDown && nowMode != ActionMode.UpDown)
         {
             BossAction boss = GetComponent<BossAction>();
             //大きさによって範囲の決定
@@ -228,6 +228,24 @@ public class BossAttackAction : MonoBehaviour
             if (boss2.isYDeformation)
             {
                 YRange = 3.5f;
+            }
+        }
+        if (nowMode == ActionMode.TrackBullet)
+        {
+            BossAction boss3 = GetComponent<BossAction>();
+            //大きさによって範囲の決定
+            if (boss3.isXDeformation)
+            {
+                XRange = 8.2f;
+            }
+            else if (boss3.isYDeformation)
+            {
+                YRange = 3.5f;
+            }
+            else
+            {
+                XRange = 7.5f;
+                YRange = 2.7f;
             }
         }
         //Mathf.ClampでX,Yの値それぞれが最小～最大の範囲内に収める。
@@ -746,6 +764,9 @@ public class BossAttackAction : MonoBehaviour
         {
             Instantiate(RNeedle, new Vector2(needlePos.x, -needlePos.y + needlePosInterval * i), Quaternion.identity);
         }
+
+        //全部消えると次の棘が出なくなっちゃうからその対策
+        Instantiate(RNeedle, new Vector2(needlePos.x, -needlePos.y +50 ), Quaternion.identity);
     }
 
     void Counter()
