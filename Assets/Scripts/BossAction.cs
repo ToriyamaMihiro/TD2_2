@@ -276,7 +276,7 @@ public class BossAction : MonoBehaviour
         if (collision.gameObject.tag == "Dust")
         {
             //音
-            audioSource.PlayOneShot(damageAudio, 0.01f);
+            audioSource.PlayOneShot(damageAudio);
             //演出オン
             isDamage = true;
             currentHp = currentHp - dustDamage;
@@ -287,7 +287,7 @@ public class BossAction : MonoBehaviour
         if (collision.gameObject.tag == "Needle")
         {
             //音
-            audioSource.PlayOneShot(damageAudio,0.1f);
+            audioSource.PlayOneShot(damageAudio);
             //演出オン
             isDamage = true;
             currentHp = currentHp - needleDamage;
