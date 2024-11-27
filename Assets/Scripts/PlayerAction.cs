@@ -69,7 +69,7 @@ public class PlayerAction : MonoBehaviour
         Move();
         Jump();
         isGround();
-        DashAttack();
+        //DashAttack();
         Damage();
         Dead();
         Range();

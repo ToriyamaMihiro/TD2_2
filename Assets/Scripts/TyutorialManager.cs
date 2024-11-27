@@ -29,7 +29,7 @@ public class TyutorialManager : MonoBehaviour
     int jumpMaxCount = 1;
 
     int XCount;
-    int XMaxCount = 1;
+    int XMaxCount = 6;
 
     int YCount;
     int YMaxCount = 5;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Unity.Mathematics;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class PracticeBossAction : MonoBehaviour
 {
@@ -24,47 +25,43 @@ public class PracticeBossAction : MonoBehaviour
     {
 
         //初めの練習用の敵は消す
-        if (gameObject.name == "PracticeBoss(Clone)")
-        {
-            TyutorialManager tyutorial;
-            GameObject objT = GameObject.Find("TyutorialManager");
-            tyutorial = objT.GetComponent<TyutorialManager>();
-            if (tyutorial.isXAttack)
-            {
-                time += 1;
-            }
 
-            if (time == 50)
-            {
-                //退場イージング
-                //変形すると0まで行ってくれない
-                transform.DOScale(new Vector3(0, 0, 1), 1.5f).SetEase(Ease.InOutCubic).SetLink(this.gameObject);
-            }
+        TyutorialManager tyutorial;
+        GameObject objT = GameObject.Find("TyutorialManager");
+        tyutorial = objT.GetComponent<TyutorialManager>();
+
+        if (tyutorial.isXAttack)
+        {
+            time += 1;
+        }
+
+        BossAction boss;
+        GameObject obj = GameObject.Find("PracticeBoss(Clone)");
+        boss = obj.GetComponent<BossAction>();
+        if (time == 49)
+        {
+            //また変形してしまうので初期化しておく
+            boss.isXDeformation = false;
+            boss.deformationTime = 0;
 
         }
 
-        //消したら次のボスを呼び出す
-
-        if (transform.localScale.x <= 0)
+        if (time == 50)
         {
-            Instantiate(Boss2, new Vector2(0, -2.5f), Quaternion.identity);
-            Destroy(gameObject);
+            //退場イージング
+            //変形すると0まで行ってくれない
+            transform.localScale = new Vector3(3, 3, 1);
+            transform.position = new Vector3(0, -2.5f, 0);
+            transform.DOScale(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.InOutCubic).SetLoops(2, LoopType.Yoyo).SetLink(gameObject);
         }
 
-        if (gameObject.name == "PracticeBoss2(Clone)")
+        if (boss.isYDeformation)
         {
-            BossAction boss;
-            GameObject obj = GameObject.Find("PracticeBoss2(Clone)");
-            boss = obj.GetComponent<BossAction>();
-
-            if (boss.isYDeformation)
+            moveTime += 1;
+            if (moveTime == 1)
             {
-                moveTime += 1;
-                if (moveTime == 1)
-                {
-                    //横長になったら床に着くように移動
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z), 100 * Time.deltaTime);
-                }
+                //横長になったら床に着くように移動
+                transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z), 100 * Time.deltaTime);
             }
         }
     }

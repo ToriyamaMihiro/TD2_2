@@ -542,8 +542,6 @@ public class BossAttackAction : MonoBehaviour
 
                 if (upDown.isUp)
                 {
-
-
                     transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, defaultPos.y - objectScale.y / 2, transform.position.z), MoveSpeed * Time.deltaTime);
 
                     //定位置まで戻ったら
