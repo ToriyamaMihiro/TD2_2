@@ -702,14 +702,14 @@ public class BossAttackAction : MonoBehaviour
                     }
                 }
 
-                if (trackBullet.IntervalTime >= 200 - (200 / 2.5f) && trackBulletCount < trackBulletCountMax)
+                if (trackBullet.IntervalTime >= trackBulletTime - (200 / 2.5f) && trackBulletCount < trackBulletCountMax)
                 {
 
                     isAttackAnime = true;//ボスアニメ変更
                 }
 
                 //時間になったら弾を出す
-                if (trackBullet.IntervalTime >= 200 && trackBulletCount < trackBulletCountMax)
+                if (trackBullet.IntervalTime >= trackBulletTime && trackBulletCount < trackBulletCountMax)
                 {
                     Instantiate(Bullet, transform.position, Quaternion.identity);
                     trackBullet.IntervalTime = 0;
@@ -744,7 +744,7 @@ public class BossAttackAction : MonoBehaviour
         if (boss.currentHp <= boss.life / 3 && !isLifeLow)
         {
             downWaitTime -= 100;
-            trackBulletTime -= 120;
+            trackBulletTime -= 50;
             moveWaitTime -= 60;
             sideAttackWaitTime -= 50;
             isLifeLow = true;
