@@ -40,30 +40,19 @@ public class BossDamageAction : MonoBehaviour
                     //プレイヤーの色を点滅させて無敵時間だと分かりやすくする
                     gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(1, 1, 1, 0.5f);
 
-<<<<<<< HEAD
                     //if (level <= 0.5)
                     //{
                     //    level += 0.05f;
                     //}
-=======
-            //if (boss.isDamageHit)
-            //{
-            //    //繝励Ξ繧､繝､繝ｼ縺ｮ濶ｲ繧堤せ貊・＆縺帙※辟｡謨ｵ譎る俣縺縺ｨ蛻・°繧翫ｄ縺吶￥縺吶ｋ
-            //    gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(1, 1, 1, 0.5f);
->>>>>>> dead繝懊せ繧｢繝九Γ螟峨∴縺・
 
                     //毎フレーム呼び出させないため
 
-<<<<<<< HEAD
                 }
                 else
                 {
                     bossRenderer.color = new UnityEngine.Color(1f, 1f, 1f, 0f);
                     hitTime = 0;
                 }
-=======
-            //    //豈弱ヵ繝ｬ繝ｼ繝蜻ｼ縺ｳ蜃ｺ縺輔○縺ｪ縺・◆繧・
->>>>>>> dead繝懊せ繧｢繝九Γ螟峨∴縺・
 
             }
         }
@@ -76,7 +65,7 @@ public class BossDamageAction : MonoBehaviour
 
             if (boss.isDamageHit)
             {
-                //繝励Ξ繧､繝､繝ｼ縺ｮ濶ｲ繧堤せ貊・＆縺帙※辟｡謨ｵ譎る俣縺縺ｨ蛻・°繧翫ｄ縺吶￥縺吶ｋ
+                //プレイヤーの色を点滅させて無敵時間だと分かりやすくする
                 gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(1, 1, 1, 0.5f);
 
                 //if (level <= 0.5)
@@ -84,7 +73,7 @@ public class BossDamageAction : MonoBehaviour
                 //    level += 0.05f;
                 //}
 
-                //豈弱ヵ繝ｬ繝ｼ繝蜻ｼ縺ｳ蜃ｺ縺輔○縺ｪ縺・◆繧・
+                //毎フレーム呼び出させないため
 
             }
             else
@@ -93,18 +82,19 @@ public class BossDamageAction : MonoBehaviour
                 hitTime = 0;
             }
 
-            //繝懊せ豁ｻ繧薙□繧蛾乗・縺ｫ縺ｪ繧・
+            //ボス死んだら透明に
             if (boss.isDead)
             {
-                gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(0, 0, 0, 0f);
+                gameObject.GetComponent<SpriteRenderer>().color = new UnityEngine.Color(1, 1, 1, 0f);
             }
         }
     }
 
     void WaitFor()
     {
-        //繝懊せ縺ｮ濶ｲ繧貞・縺ｫ謌ｻ縺・
+        //ボスの色を元に戻す
         bossRenderer.color = new UnityEngine.Color(1f, 1f, 1f, 0f);
         hitTime = 0;
     }
+
 }
