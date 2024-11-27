@@ -7,7 +7,7 @@ using DG.Tweening;
 public class NeedleAction : MonoBehaviour
 {
     int time;//¡‚ÌŠÔ
-    public int maxTime = 300;//Á‚¦‚é‚Ü‚Å‚ÌŠÔ
+    public int maxTime = 700;//Á‚¦‚é‚Ü‚Å‚ÌŠÔ
 
     float startMovePos = 8.6f;
     float endMovePos = 9.6f;

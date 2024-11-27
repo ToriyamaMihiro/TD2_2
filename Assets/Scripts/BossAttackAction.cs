@@ -118,7 +118,7 @@ public class BossAttackAction : MonoBehaviour
 
     int trackBulletTime = 220;
     int trackBulletCount;
-    int trackBulletCountMax = 4;
+    int trackBulletCountMax = 3;
 
     struct CounterAttack
     {

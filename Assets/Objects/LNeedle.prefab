@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b7e722528f721e42b7c0dc0a11f9f0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxTime: 2500
+  maxTime: 3000
 --- !u!58 &4604560341879720362
 CircleCollider2D:
   m_ObjectHideFlags: 0
