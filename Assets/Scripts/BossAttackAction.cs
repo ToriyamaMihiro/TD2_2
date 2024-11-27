@@ -201,17 +201,19 @@ public class BossAttackAction : MonoBehaviour
                 YRange = 3.5f;
             }
         }
-        //UpDownのときも変形したら範囲を変える
-        BossAction boss2 = GetComponent<BossAction>();
-        if (boss2.isXDeformation)
+        if (nowMode == ActionMode.UpDown)
         {
-            XRange = 8.1f;
+            //UpDownのときも変形したら範囲を変える
+            BossAction boss2 = GetComponent<BossAction>();
+            if (boss2.isXDeformation)
+            {
+                // XRange = 8.1f;
+            }
+            if (boss2.isYDeformation)
+            {
+                YRange = 3.5f;
+            }
         }
-        if (boss2.isYDeformation)
-        {
-            YRange = 3.5f;
-        }
-
         //Mathf.ClampでX,Yの値それぞれが最小～最大の範囲内に収める。
         //物理挙動のあるisTriggerにしたいが、床は突き抜けてほしくないので無理やり範囲を決めて落ちないようにする
         currentPos.x = Mathf.Clamp(currentPos.x, -XRange, XRange);
@@ -293,12 +295,12 @@ public class BossAttackAction : MonoBehaviour
 
                 if (patternCount == 0)
                 {
-                    nowMode = ActionMode.SideTackle;
+                    nowMode = ActionMode.UpDown;
                     isFinish = false;
                 }
                 if (patternCount == 1)
                 {
-                    nowMode = ActionMode.UpDown;
+                    nowMode = ActionMode.SideTackle;
                     isFinish = false;
                 }
                 if (patternCount == 2)
@@ -645,16 +647,17 @@ public class BossAttackAction : MonoBehaviour
                 if (isFloorHit)
                 {
                     trackBullet.isWait = true;
-                }
 
-                //もしこの間に変形したらそれに合わせる
-                if (boss.isXDeformation)
-                {
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4 + objectScale.y / 2, transform.position.z), MoveSpeed + 5 * Time.deltaTime);
-                }
-                if (boss.isYDeformation)
-                {
-                    transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4 + objectScale.y / 2, transform.position.z), MoveSpeed + 5 * Time.deltaTime);
+
+                    //もしこの間に変形したらそれに合わせる
+                    if (boss.isXDeformation)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4 + objectScale.y / 2, transform.position.z), MoveSpeed + 5 * Time.deltaTime);
+                    }
+                    if (boss.isYDeformation)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, -4 + objectScale.y / 2, transform.position.z), MoveSpeed + 5 * Time.deltaTime);
+                    }
                 }
 
                 if (trackBullet.IntervalTime >= 200 - (200 / 2.5f) && trackBulletCount < trackBulletCountMax)
