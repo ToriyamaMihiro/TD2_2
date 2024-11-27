@@ -395,12 +395,13 @@ public class BossAttackAction : MonoBehaviour
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         BossAction boss = GetComponent<BossAction>();
-        //アニメ
-        if (!boss.isDead)
-        {
             animator.SetBool("isAttack", isAttackAnime);//アニメ変更
-
+        //アニメ
+        if (boss.isDead)
+        {
+            isAttackAnime = false;
         }
+
         //アラート音
         if (isAttackAnime && arartTimer == 0)
         {
