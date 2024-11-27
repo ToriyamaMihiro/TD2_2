@@ -175,7 +175,7 @@ public class DustAction : MonoBehaviour
         {
             //音
             audioSource.PlayOneShot(kickAudio);
-            if (time >= 60 && !isHit)
+            if (time >= 40 && !isHit)
             {
                 isHit = true;
             }
