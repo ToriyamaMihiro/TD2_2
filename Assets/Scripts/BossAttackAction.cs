@@ -17,6 +17,8 @@ public class BossAttackAction : MonoBehaviour
     int wallTime;
     int randomValue;
 
+    public int deformationTime = 200;//変形から元に戻るまでの時間
+
     bool isFloorHit;
     public bool isFloor;//別スクリプトで使用するノックバックできるかを決める変数
     bool isFinish;//攻撃が終わったか
@@ -172,13 +174,13 @@ public class BossAttackAction : MonoBehaviour
         if (!boss.isDead)
         {
 
-        Deformation();
-        AttackManager();
-        Attack();
-        WallStan();
-        Range();
-        AttackChange();
-        objectScale = transform.localScale;
+            Deformation();
+            AttackManager();
+            Attack();
+            WallStan();
+            Range();
+            AttackChange();
+            objectScale = transform.localScale;
         }
     }
 
@@ -379,7 +381,7 @@ public class BossAttackAction : MonoBehaviour
         {
             isDeformationFinish = false;
         }
-        if (boss.deformationTime >= 200 && isFinish)
+        if (boss.deformationTime >= deformationTime && isFinish)
         {
             transform.localScale = bossSize;
             isDeformationFinish = true;
