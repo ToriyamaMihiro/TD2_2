@@ -6,22 +6,22 @@ using UnityEngine.TestTools;
 
 public class BossCounterParticle : MonoBehaviour
 {
-    //transform‚Å–ˆƒtƒŒ[ƒ€æ“¾‚·‚é‚Æ•‰‰×‚ªŠ|‚©‚éˆ×A•Ê‚ÉQÆ‚ğ•ÛB
+    //transformã§æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å–å¾—ã™ã‚‹ã¨è² è·ãŒæ›ã‹ã‚‹ç‚ºã€åˆ¥ã«å‚ç…§ã‚’ä¿æŒã€‚
     Transform tf;
 
-    //-1.0f‚ÅŒv‰ñ‚èA1.0f‚Å”½Œv‰ñ‚èB
+    //-1.0fã§æ™‚è¨ˆå›ã‚Šã€1.0fã§åæ™‚è¨ˆå›ã‚Šã€‚
     float direction = -1.0f;
 
-    //ˆÚ“®‘¬“x‚Æ‚¢‚¤‚©ˆÚ“®Šp“xB
+    //ç§»å‹•é€Ÿåº¦ã¨ã„ã†ã‹ç§»å‹•è§’åº¦ã€‚
     float moveSpeed;
 
-    //ƒvƒŒƒCƒ„[‚ğ’Ç”ö‚·‚é‘¬“x‚ÌƒŒ[ƒg(‘å‚«‚¢’ö‚‘¬)B
+    //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’è¿½å°¾ã™ã‚‹é€Ÿåº¦ã®ãƒ¬ãƒ¼ãƒˆ(å¤§ãã„ç¨‹é«˜é€Ÿ)ã€‚
     float followRate = 0.1f;
 
-    //’Ç”ö‚·‚éƒ|ƒCƒ“ƒg‚ÌƒvƒŒƒCƒ„[‚©‚ç‚Ì‹——£(‚Â‚Ü‚è¬‚³‚¢’öA‹ß•t‚­)B
+    //è¿½å°¾ã™ã‚‹ãƒã‚¤ãƒ³ãƒˆã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰ã®è·é›¢(ã¤ã¾ã‚Šå°ã•ã„ç¨‹ã€è¿‘ä»˜ã)ã€‚
     float followTargetDistance;
 
-    //ƒJƒEƒ“ƒ^[‚É‚È‚Á‚½‚Æ‚«‚Ç‚ê‚¾‚¯Œ³‚ÌˆÊ’u‚©‚ç—£‚·‚©
+    //ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼ã«ãªã£ãŸã¨ãã©ã‚Œã ã‘å…ƒã®ä½ç½®ã‹ã‚‰é›¢ã™ã‹
     float distancePlus;
 
     float distance;
@@ -47,21 +47,29 @@ public class BossCounterParticle : MonoBehaviour
         GameObject obj = GameObject.Find("Boss");
         boss = obj.GetComponent<BossAttackAction>();
 
-        //ƒJƒEƒ“ƒ^[‚É‚È‚Á‚½‚ç‚©‚ÂŒ³‚Ì‹——£‚Æ‘«‚µ‚½”‚É‚È‚é‚Ü‚Å‚¾‚ñ‚¾‚ñ‹——£‚ğ‰“‚­‚·‚é
+        BossAction bossScript;
+        GameObject objSc = GameObject.Find("Boss");
+        bossScript = objSc.GetComponent<BossAction>();
+
+        //ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼ã«ãªã£ãŸã‚‰ã‹ã¤å…ƒã®è·é›¢ã¨è¶³ã—ãŸæ•°ã«ãªã‚‹ã¾ã§ã ã‚“ã ã‚“è·é›¢ã‚’é ãã™ã‚‹
         if (boss.isCounter && followTargetDistance <= distance + distancePlus)
         {
             followTargetDistance = followTargetDistance + 0.1f;
         }
 
-        //ƒvƒŒƒCƒ„[‚ğˆê’è‚Ì‹——£‚Å’Ç”öB
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸€å®šã®è·é›¢ã§è¿½å°¾ã€‚
         tf.position = Vector3.Lerp(tf.position, boss.transform.position + (tf.position - boss.transform.position).normalized * followTargetDistance, followRate);
-        //ƒvƒŒƒCƒ„[‚ğ’†S‚É‰~‰^“®B
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸­å¿ƒã«å††é‹å‹•ã€‚
         tf.RotateAround(boss.transform.position, Vector3.forward, direction * moveSpeed);
 
         destroyTime += 1;
         if (destroyTime >= boss.counterMaxTime + 40)
         {
             boss.isCounter = false;
+            Destroy(this.gameObject);
+        }
+        if (bossScript.isDead)
+        {
             Destroy(this.gameObject);
         }
 

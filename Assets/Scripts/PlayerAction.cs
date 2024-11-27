@@ -66,13 +66,19 @@ public class PlayerAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
-        Jump();
-        isGround();
-        //DashAttack();
-        Damage();
-        Dead();
-        Range();
+        BossAction boss;
+        GameObject obj = GameObject.Find("Boss");
+        boss = obj.GetComponent<BossAction>();
+        if (!boss.isDead)
+        {
+            Move();
+            Jump();
+            isGround();
+            //DashAttack();
+            Damage();
+            Dead();
+            Range();
+        }
     }
 
     void Move()
