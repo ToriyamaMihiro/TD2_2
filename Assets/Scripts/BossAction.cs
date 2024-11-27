@@ -74,10 +74,16 @@ public class BossAction : MonoBehaviour
         Deformation();
         HitRest();
         Dead();
+        if (SceneManager.GetActiveScene().name == "Tyutorial")
+        {
+            deformationCount = 3;
+        }
         if (SceneManager.GetActiveScene().name == "Game")
         {
             //HP計算
             slider.value = (float)currentHp / (float)life;
+
+            deformationCount = 5;
         }
         //ダメージを受けたときに白くする
         if (isDamageHit)
