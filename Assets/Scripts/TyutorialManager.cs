@@ -118,18 +118,19 @@ public class TyutorialManager : MonoBehaviour
             isAttack = false;
         }
 
-        //押す攻撃
-        if (inputAcution.Player.DashAttack.WasPressedThisFrame() && !weapon.isAttack && weapon.isDashAttack && !isAttack && isJump && XCount < XMaxCount)
+        //押す攻撃しているかつジャンプのチュートリアルが終わっていてXのカウントがマックス以下ならカウントする
+        if (XCount < XMaxCount)
         {
-            XCount += 1;
-            //攻撃中に一回だけカウントするようにする
-            isAttack = true;
+            XCount = weapon.tyutorialXCount;
+            ////攻撃中に一回だけカウントするようにする
+            //isAttack = true;
         }
         if (XCount >= XMaxCount && !isXAttack)//たたく終了
         {
             isXAttack = true;
             isBossCall = false;
         }
+        //もしジャンプのチュートリアルが終わっていて押す攻撃のチュートリアルが終わっていなかったら
         if (isJump && !isXAttack)
         {
             slider.value = (float)XCount / (float)XMaxCount;
@@ -150,10 +151,9 @@ public class TyutorialManager : MonoBehaviour
         }
 
         //潰す攻撃
-        if (inputAcution.Player.Attack.WasPressedThisFrame() && weapon.isAttack && !weapon.isDashAttack && !isAttack && isJump && isXAttack && YCount < YMaxCount)
+        if (YCount < YMaxCount)
         {
-            YCount += 1;
-            isAttack = true;
+            YCount = weapon.tyutorialYCount;
         }
         //もし変形したら下に移動して浮いていない風にする
 
@@ -170,11 +170,11 @@ public class TyutorialManager : MonoBehaviour
         {
             Invoke("ChangeSpriteFlutter", 1f);
         }
-        if(isJump && isXAttack && isYAttack)
+        if (isJump && isXAttack && isYAttack)
         {
             if (!isOkUI)
             {
-               //OK出す
+                //OK出す
                 ok_UI.transform.DOScale(new Vector3(4, 4, 1), 1f).SetLink(gameObject);
                 Invoke("OkUI", 1.5f);
                 isOkUI = true;

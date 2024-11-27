@@ -42,6 +42,7 @@ public class PracticeBossAction : MonoBehaviour
         {
             //‚Ü‚½•ÏŒ`‚µ‚Ä‚µ‚Ü‚¤‚Ì‚Å‰Šú‰»‚µ‚Ä‚¨‚­
             boss.isXDeformation = false;
+            boss.isYDeformation = false;
             boss.deformationTime = 0;
             moveTime = 0;
 

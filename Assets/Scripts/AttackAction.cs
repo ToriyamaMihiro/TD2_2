@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.GraphicsBuffer;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class AttackAction : MonoBehaviour
 {
@@ -34,6 +35,9 @@ public class AttackAction : MonoBehaviour
 
     public int XCount;
     public int YCount;
+
+    public int tyutorialXCount;
+    public int tyutorialYCount;
 
     public bool isAttack;
     public bool isDashAttack;
@@ -105,6 +109,19 @@ public class AttackAction : MonoBehaviour
             //コンボ途切れる時間のリセット
             comboTime = 0;
             comboCount += 1;
+
+            //チュートリアルでのカウント
+            if (SceneManager.GetActiveScene().name == "Tyutorial")
+            {
+                TyutorialManager tyutorial;
+                GameObject objT = GameObject.Find("TyutorialManager");
+                tyutorial = objT.GetComponent<TyutorialManager>();
+
+                if (tyutorial.isJump && tyutorial.isXAttack)
+                {
+                    tyutorialYCount += 1;
+                }
+            }
         }
         if (isAttack)
         {
@@ -137,7 +154,7 @@ public class AttackAction : MonoBehaviour
         if (inputAcution.Player.DashAttack.WasPressedThisFrame() && !isDashAttack && !isAttack && !player.isJump)
         {
             //音
-            audioSource.PlayOneShot(flutterAudio);
+            audioSource.PlayOneShot(flutterAudio,0.1f);
 
             transform.localPosition = startPos;
             //武器の初期位置を上目にする
@@ -163,6 +180,19 @@ public class AttackAction : MonoBehaviour
             //コンボ途切れる時間のリセット
             comboTime = 0;
             comboCount += 1;
+
+            //チュートリアルでのカウント
+            if (SceneManager.GetActiveScene().name == "Tyutorial")
+            {
+                TyutorialManager tyutorial;
+                GameObject objT = GameObject.Find("TyutorialManager");
+                tyutorial = objT.GetComponent<TyutorialManager>();
+
+                if (tyutorial.isJump && !tyutorial.isXAttack)
+                {
+                    tyutorialXCount += 1;
+                }
+            }
         }
         if (isDashAttack)
         {
@@ -241,7 +271,7 @@ public class AttackAction : MonoBehaviour
             //シェイクする
             isAttackShake = true;
             //音
-            audioSource.PlayOneShot(hitAudio);
+            audioSource.PlayOneShot(hitAudio,0.1f);
         }
     }
 }

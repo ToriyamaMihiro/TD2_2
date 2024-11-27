@@ -1185,7 +1185,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: f28bd7ed5f94e934890eb6c7976a9ea3, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.21
+  m_Volume: 0.01
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -2288,6 +2288,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 366140507, guid: c1105026879830a4b914884b2b7d45cb, type: 3}
+      propertyPath: m_Volume
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 4058622806443748808, guid: c1105026879830a4b914884b2b7d45cb, type: 3}
       propertyPath: m_Name
       value: Player
@@ -3634,9 +3638,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 509782949, guid: a4ea72b37b152b148a579c25fae76eff, type: 3}
+      propertyPath: m_Volume
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 6453044997455362952, guid: a4ea72b37b152b148a579c25fae76eff, type: 3}
       propertyPath: life
-      value: 180
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6453044997455362952, guid: a4ea72b37b152b148a579c25fae76eff, type: 3}
       propertyPath: slider

@@ -224,7 +224,7 @@ public class BossAction : MonoBehaviour
                     //コンボでのノックバック
                     Vector3 distination = (transform.position - collision.transform.position).normalized;
                     //音
-                    audioSource.PlayOneShot(damageAudio);
+                    audioSource.PlayOneShot(damageAudio,0.1f);
                     //演出オン
                     isDamage = true;
                     transform.Translate(distination.x * knockBackPower, 0f, 0f);
@@ -276,7 +276,7 @@ public class BossAction : MonoBehaviour
         if (collision.gameObject.tag == "Dust")
         {
             //音
-            audioSource.PlayOneShot(damageAudio);
+            audioSource.PlayOneShot(damageAudio, 0.01f);
             //演出オン
             isDamage = true;
             currentHp = currentHp - dustDamage;
@@ -287,7 +287,7 @@ public class BossAction : MonoBehaviour
         if (collision.gameObject.tag == "Needle")
         {
             //音
-            audioSource.PlayOneShot(damageAudio);
+            audioSource.PlayOneShot(damageAudio,0.1f);
             //演出オン
             isDamage = true;
             currentHp = currentHp - needleDamage;
