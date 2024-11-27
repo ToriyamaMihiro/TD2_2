@@ -3642,6 +3642,10 @@ PrefabInstance:
       propertyPath: slider
       value: 
       objectReference: {fileID: 2130437973}
+    - target: {fileID: 6453044997455362952, guid: a4ea72b37b152b148a579c25fae76eff, type: 3}
+      propertyPath: fadeTime
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6453044997455362965, guid: a4ea72b37b152b148a579c25fae76eff, type: 3}
       propertyPath: m_RootOrder
       value: 10
