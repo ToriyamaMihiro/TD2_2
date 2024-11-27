@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerAction : MonoBehaviour
 {
@@ -66,10 +67,7 @@ public class PlayerAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        BossAction boss;
-        GameObject obj = GameObject.Find("Boss");
-        boss = obj.GetComponent<BossAction>();
-        if (!boss.isDead)
+        if (SceneManager.GetActiveScene().name == "Tyutorial")
         {
             Move();
             Jump();
@@ -79,8 +77,24 @@ public class PlayerAction : MonoBehaviour
             Dead();
             Range();
         }
+        //チュートリアルのときはボスが居ないので
+        if (SceneManager.GetActiveScene().name == "Game")
+        {
+            BossAction boss;
+            GameObject obj = GameObject.Find("Boss");
+            boss = obj.GetComponent<BossAction>();
+            if (!boss.isDead)
+            {
+                Move();
+                Jump();
+                isGround();
+                //DashAttack();
+                Damage();
+                Dead();
+                Range();
+            }
+        }
     }
-
     void Move()
     {
         AttackAction weapon;

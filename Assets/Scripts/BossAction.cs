@@ -164,7 +164,10 @@ public class BossAction : MonoBehaviour
      
     void Dead()
     {
-        animator.SetBool("isDead", isDead);//アニメに変更
+        if (SceneManager.GetActiveScene().name == "Game")
+        {
+            animator.SetBool("isDead", isDead);//アニメに変更
+        }
         if (currentHp <= 0)
         {
             isDead = true;

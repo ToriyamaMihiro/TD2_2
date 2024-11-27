@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3c15e83829632a4db93e6cd559ac812, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 2
+  life: 150
   deformationTime: 0
   currentHp: 0
   slider: {fileID: 0}
@@ -115,6 +115,7 @@ MonoBehaviour:
   damageAudio: {fileID: 0}
   ease: 0
   isDamage: 0
+  fadeTime: 1
 --- !u!114 &-4507875211169450691
 MonoBehaviour:
   m_ObjectHideFlags: 0
