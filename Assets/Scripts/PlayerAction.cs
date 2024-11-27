@@ -176,7 +176,7 @@ public class PlayerAction : MonoBehaviour
         weapon = obj.GetComponent<AttackAction>();
 
         //もし地面についていたらジャンプできる
-        if (inputAcution.Player.Jump.WasPressedThisFrame() && jumpCount < 1)
+        if (inputAcution.Player.Jump.WasPressedThisFrame() && jumpCount < 1 && !weapon.isAttack && !weapon.isDashAttack)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
             jumpCount += 1;
