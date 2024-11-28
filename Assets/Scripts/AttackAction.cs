@@ -154,7 +154,7 @@ public class AttackAction : MonoBehaviour
         if (inputAcution.Player.DashAttack.WasPressedThisFrame() && !isDashAttack && !isAttack && !player.isJump)
         {
             //音
-            audioSource.PlayOneShot(flutterAudio,0.1f);
+            audioSource.PlayOneShot(flutterAudio);
 
             transform.localPosition = startPos;
             //武器の初期位置を上目にする
@@ -271,7 +271,7 @@ public class AttackAction : MonoBehaviour
             //シェイクする
             isAttackShake = true;
             //音
-            audioSource.PlayOneShot(hitAudio,0.1f);
+            audioSource.PlayOneShot(hitAudio);
         }
     }
 }

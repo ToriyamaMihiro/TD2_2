@@ -138,6 +138,8 @@ MonoBehaviour:
   comboCountMax: 2
   XCount: 0
   YCount: 0
+  tyutorialXCount: 0
+  tyutorialYCount: 0
   isAttack: 0
   isDashAttack: 0
   isAttackShake: 0
@@ -177,7 +179,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.436
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
